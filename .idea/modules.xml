@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/CoreLogic/CoreLogic.iml" filepath="$PROJECT_DIR$/CoreLogic/CoreLogic.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GraphicalGame/GraphicalGame.iml" filepath="$PROJECT_DIR$/GraphicalGame/GraphicalGame.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Graphics/Graphics.iml" filepath="$PROJECT_DIR$/Graphics/Graphics.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LinusWars.iml" filepath="$PROJECT_DIR$/LinusWars.iml" />
+    </modules>
+  </component>
+</project>
+

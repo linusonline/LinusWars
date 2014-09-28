@@ -1,0 +1,43 @@
+Starting state
+   Hold down Cancel on terrain -> fade out units
+   Press Enter on terrain -> Main menu (probably bad idea)
+   Press Enter on inactive unit -> Main menu (probably bad idea)
+   Hold down cancel on unit -> Show attackable area
+   Press enter on active unit -> Movement selection
+
+Movement selection
+   Press Cancel -> Starting state
+   Press Enter on reachable, unoccupied tile -> (Move graphical unit), Action menu
+   Press Enter on unreachable tile -> (sound) remain
+   Press Enter on friendly transport -> Transport Load Menu
+   Press Direction to friendly tile inside range -> (extend arrow to tile, reroute if restricted by fuel or movement range), remain
+   Press Direction to enemy tile or tile outside range -> (move cursor, leave arrow as-is), remain
+
+Transport Load Menu
+   Cancel -> Movement Selection
+   Enter -> (load onto transport, finish unit turn), Starting state
+
+Action Menu
+   Press Cancel -> (Move graphical unit back), Movement selection
+   Wait -> (finish unit turn), Starting state
+   Fire -> Attack Selection
+   Supply -> (resupply adjacent friendly units, finish unit turn), Starting state
+   Capture -> (Capture base, finish unit turn), Starting state
+
+Attack Selection
+   Press Direction -> Select next attackable unit
+   Press Cancel -> Action Menu
+   Press Enter -> (execute attack, finish unit turn), Starting state
+
+
+Start of Day
+   Add income from properties
+   Repair units on friendly bases
+   Subtract per-day fuel consumptions
+   Resupply all units on appropriate bases or adjacent to resupply units
+   Check for crashing aircraft or ships
+
+   
+Unit sprites
+    16 x 20
+        

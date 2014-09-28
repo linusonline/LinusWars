@@ -1,0 +1,22 @@
+package se.lolektivet.linus.linuswars.logic;
+
+/**
+ * Created by Linus on 2014-09-18.
+ */
+public enum TerrainType {
+   ROAD,
+   RIVER,
+   SHOAL,
+   PLAINS,
+   WOODS,
+   MOUNTAINS,
+
+   CITY,
+   BASE,
+   AIRPORT,
+   PORT,
+   HQ,
+
+   SEA,
+   REEF
+}
