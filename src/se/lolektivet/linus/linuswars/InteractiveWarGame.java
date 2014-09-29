@@ -28,7 +28,7 @@ public class InteractiveWarGame {
 
    private final MapCoordinateTransformer _coordinateTransformer;
    private Position _cursorPosition;
-   private LogicalUnit _unitUnderAttackCursor = null;
+   private Position _positionUnderAttackCursor = null;
    private final Collection<Position> _positionsToIndicate;
 
    private Image _cursorImage;
@@ -82,11 +82,15 @@ public class InteractiveWarGame {
    }
 
    public void showAttackCursorOnUnit(LogicalUnit logicalUnit) {
-      _unitUnderAttackCursor = logicalUnit;
+      _positionUnderAttackCursor = _logicalWarGame.getPositionOfUnit(logicalUnit);
+   }
+
+   public void showAttackCursorOnPosition(Position position) {
+      _positionUnderAttackCursor = position;
    }
 
    public void hideAttackCursor() {
-      _unitUnderAttackCursor = null;
+      _positionUnderAttackCursor = null;
    }
 
    public void hideGraphicForUnit(LogicalUnit logicalUnit) {
@@ -111,10 +115,9 @@ public class InteractiveWarGame {
          _movementArrowController.draw(x, y, _coordinateTransformer);
       }
       _graphicalWarGame.drawUnits(g, font, x, y);
-      if (_unitUnderAttackCursor != null) {
-         Position position = _logicalWarGame.getPositionOfUnit(_unitUnderAttackCursor);
-         _attackCursor.draw(x + _coordinateTransformer.transform(position.getX()) - 4,
-               y + _coordinateTransformer.transform(position.getY()) - 4);
+      if (_positionUnderAttackCursor != null) {
+         _attackCursor.draw(x + _coordinateTransformer.transform(_positionUnderAttackCursor.getX()) - 4,
+               y + _coordinateTransformer.transform(_positionUnderAttackCursor.getY()) - 4);
       }
       _cursorImage.draw(
             x + _coordinateTransformer.transform(_cursorPosition.getX()),

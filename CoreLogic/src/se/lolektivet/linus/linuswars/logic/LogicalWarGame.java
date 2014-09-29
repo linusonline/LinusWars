@@ -273,6 +273,21 @@ public class LogicalWarGame implements WarGame {
       return attackableUnits;
    }
 
+   public Set<Position> getAdjacentVacantPositionsAfterMove(LogicalUnit movingUnit, Path path) {
+      Position destination = path.getFinalPosition();
+      Collection<Position> adjacentPositions = getAdjacentPositions(destination);
+      Set<Position> adjacentVacantPositions = new HashSet<Position>();
+      for (Position adjacentPosition : adjacentPositions) {
+         if (hasUnitAtPosition(adjacentPosition)) {
+            if (!getUnitAtPosition(adjacentPosition).equals(movingUnit)) {
+               continue;
+            }
+         }
+         adjacentVacantPositions.add(adjacentPosition);
+      }
+      return adjacentVacantPositions;
+   }
+
    private Set<LogicalUnit> getUnitsAttackableFromPosition(LogicalUnit attacker, Position attackingPosition) {
       if (attacker.isRanged()) {
          return getUnitsRemotelyAttackableFromPosition(attacker, attackingPosition);

@@ -6,6 +6,7 @@ import se.lolektivet.linus.linuswars.graphics.ResourceLoader;
 import se.lolektivet.linus.linuswars.logic.Direction;
 import se.lolektivet.linus.linuswars.logic.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.LogicalWarGame;
+import se.lolektivet.linus.linuswars.logic.Position;
 
 import java.util.Set;
 
@@ -16,8 +17,8 @@ public class ActionMenuState implements InteractiveGameState {
    private final InteractiveWarGame _interactiveWarGame;
    private final LogicalWarGame _logicalWarGame;
    private final LogicalUnit _logicalUnit;
-   private GraphicalMenu _theActionMenu;
    private final MovementArrow _movementArrow;
+   private GraphicalMenu _theActionMenu;
    private Set<LogicalUnit> _attackableUnits;
 
    public ActionMenuState(
@@ -48,10 +49,9 @@ public class ActionMenuState implements InteractiveGameState {
             return endMoveAndGoToStartingState();
          case CAPTURE:
             break;
-         case LOAD:
-            break;
          case UNLOAD:
-            break;
+            // TODO: Extra state for selecting which unit to unload (for lander and cruiser)
+            return new SelectUnloadPositionState(_interactiveWarGame, _logicalWarGame, _logicalUnit, _movementArrow, _adjacentVacantPositions);
          case DIVE:
             break;
          case SURFACE:
@@ -83,23 +83,37 @@ public class ActionMenuState implements InteractiveGameState {
       return this;
    }
 
+   private Set<Position> _adjacentVacantPositions;
+
    @Override
    public void setResourceLoader(ResourceLoader loader) {
       if (_theActionMenu == null) {
          _theActionMenu = new GraphicalMenu(loader.getMenuCursorImage());
          Set<LogicalUnit> suppliableUnits = _logicalWarGame.getSuppliableUnitsAfterMove(_logicalUnit, _movementArrow.getPath());
          _attackableUnits = _logicalWarGame.getAttackableUnitsAfterMove(_logicalUnit, _movementArrow.getPath());
-         if (!suppliableUnits.isEmpty()) {
-            _theActionMenu.addItem(ActionMenuItem.SUPPLY.getName(), null);
+         if (isTransportingUnits() && canUnload()) {
+            _theActionMenu.addItem(ActionMenuItem.UNLOAD.getName(), null);
          }
          if (!_attackableUnits.isEmpty()) {
             _theActionMenu.addItem(ActionMenuItem.FIRE.getName(), null);
+         }
+         if (!suppliableUnits.isEmpty()) {
+            _theActionMenu.addItem(ActionMenuItem.SUPPLY.getName(), null);
          }
          _theActionMenu.addItem(ActionMenuItem.WAIT.getName(), null);
          // TODO: "if can capture" -> add "Capture"
          // TODO: "if Sub" -> add "Dive" or "Surface"
          // TODO: "if can unload" -> add "Unload"
       }
+   }
+
+   private boolean isTransportingUnits() {
+      return !_logicalWarGame.getTransportedUnits(_logicalUnit).isEmpty();
+   }
+
+   private boolean canUnload() {
+      _adjacentVacantPositions = _logicalWarGame.getAdjacentVacantPositionsAfterMove(_logicalUnit, _movementArrow.getPath());
+      return !_adjacentVacantPositions.isEmpty();
    }
 
    @Override
