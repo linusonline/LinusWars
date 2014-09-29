@@ -35,6 +35,12 @@ public class SelectAttackState implements InteractiveGameState {
       _attackableUnits = new ArrayList<LogicalUnit>(attackableUnits);
       _currentlySelectedTargetIndex = 0;
       _interactiveWarGame.showAttackCursorOnUnit(getTargetUnit());
+      printAttackInfo();
+   }
+
+   private void printAttackInfo() {
+      int damage = _logicalWarGame.calculateDamageInPercent(_logicalUnit, getTargetUnit());
+      System.out.println("Damage: " + damage + "%");
    }
 
    private LogicalUnit getTargetUnit() {
@@ -45,10 +51,6 @@ public class SelectAttackState implements InteractiveGameState {
    public InteractiveGameState handleExecuteDown() {
       LogicalUnit defendingUnit = getTargetUnit();
       _logicalWarGame.executeAttackMove(_logicalUnit, _movementArrow.getPath(), defendingUnit);
-//      GraphicalUnit graphic = _graphicalWarGame.getGraphicForUnit(_logicalUnit);
-//      if (graphic != null) {
-//         _graphicalWarGame.setUnitPosition(graphic, _movementArrow.getFinalPosition());
-//      }
       _interactiveWarGame.stopIndicatingPositions();
       _interactiveWarGame.hideAttackCursor();
       _interactiveWarGame.setMovementArrowController(null);
@@ -87,6 +89,7 @@ public class SelectAttackState implements InteractiveGameState {
          _currentlySelectedTargetIndex -= _attackableUnits.size();
       }
       _interactiveWarGame.showAttackCursorOnUnit(getTargetUnit());
+      printAttackInfo();
       return this;
    }
 

@@ -394,15 +394,32 @@ public class LogicalWarGame implements WarGame {
    }
 
    private void internalExecuteAttack(LogicalUnit attackingUnit, LogicalUnit defendingUnit) {
+      doDamage(attackingUnit, defendingUnit);
+      if (canCounterAttack(attackingUnit, defendingUnit)) {
+         doDamage(defendingUnit, attackingUnit);
+      }
+      invalidateOptimalPathsCache();
+   }
+
+   private void doDamage(LogicalUnit attackingUnit, LogicalUnit defendingUnit) {
       TerrainType defenderTerrain = _logicalWarMap.getTerrainForTile(getPositionOfUnit(defendingUnit));
       int percentDamageForDefender = _attackLogic.calculateDamageInPercent(attackingUnit, defendingUnit, defenderTerrain, 1.0f, 1.0f);
       subtractDamageForUnit(defendingUnit, percentDamageForDefender);
-      if (unitExists(defendingUnit)) {
-         TerrainType attackerTerrain = _logicalWarMap.getTerrainForTile(getPositionOfUnit(attackingUnit));
-         int percentDamageForAttacker = _attackLogic.calculateDamageInPercent(defendingUnit, attackingUnit, attackerTerrain, 1.0f, 1.0f);
-         subtractDamageForUnit(attackingUnit, percentDamageForAttacker);
+   }
+
+   private boolean canCounterAttack(LogicalUnit attackingUnit, LogicalUnit defendingUnit) {
+      return unitExists(defendingUnit) &&
+            !attackingUnit.isRanged() &&
+            !defendingUnit.isRanged() &&
+            _attackLogic.canAttack(defendingUnit.getType(), attackingUnit.getType());
+   }
+
+   public int calculateDamageInPercent(LogicalUnit attackingUnit, LogicalUnit defendingUnit) {
+      if (!_attackLogic.canAttack(attackingUnit.getType(), defendingUnit.getType())) {
+         throw new LogicException();
       }
-      invalidateOptimalPathsCache();
+      TerrainType defenderTerrain = _logicalWarMap.getTerrainForTile(getPositionOfUnit(defendingUnit));
+      return _attackLogic.calculateDamageInPercent(attackingUnit, defendingUnit, defenderTerrain, 1.0f, 1.0f);
    }
 
    public void executeSupplyMove(LogicalUnit movingUnit, Path path) {
