@@ -27,10 +27,10 @@ public class FuelLogic {
    }
 
    public boolean canResupply(UnitType supplier) {
-      return supplier.equals(UnitType.MD_TANK);
+      return supplier.equals(UnitType.APC);
    }
 
    boolean canResupplyUnit(UnitType supplier, UnitType supplied) {
-      return supplier.equals(UnitType.MD_TANK);
+      return supplier.equals(UnitType.APC);
    }
 }

@@ -19,10 +19,13 @@ public class UnitSprite {
    Image _inactiveRight;
 
    public void init(SpriteSheet unitSpriteSheet) {
+      // All Standing sprites should ping pong
       _standingRightAnimation = new Animation(unitSpriteSheet, 0, 0, 2, 0, true, 500, false);
       _standingRightAnimation.setPingPong(true);
       _standingLeftAnimation = new Animation(unitSpriteSheet, 3, 0, 5, 0, true, 500, false);
       _standingLeftAnimation.setPingPong(true);
+      // Infantry moving sprites must ping pong
+      // Vehicle moving sprites MAY ping pong (?)
       _movingRightAnimation = new Animation(unitSpriteSheet, 0, 1, 2, 1, true, 500, false);
       _movingLeftAnimation = new Animation(unitSpriteSheet, 3, 1, 5, 1, true, 500, false);
       _movingDownAnimation = new Animation(unitSpriteSheet, 0, 2, 2, 2, true, 500, false);
