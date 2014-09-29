@@ -19,7 +19,6 @@ public class ActionMenuState implements InteractiveGameState {
    private GraphicalMenu _theActionMenu;
    private final MovementArrow _movementArrow;
    private Set<LogicalUnit> _attackableUnits;
-   private Set<LogicalUnit> _suppliableUnits;
 
    public ActionMenuState(
          InteractiveWarGame interactiveWarGame,
@@ -88,9 +87,9 @@ public class ActionMenuState implements InteractiveGameState {
    public void setResourceLoader(ResourceLoader loader) {
       if (_theActionMenu == null) {
          _theActionMenu = new GraphicalMenu(loader.getMenuCursorImage());
-         _suppliableUnits = _logicalWarGame.getSuppliableUnitsAfterMove(_logicalUnit, _movementArrow.getPath());
+         Set<LogicalUnit> suppliableUnits = _logicalWarGame.getSuppliableUnitsAfterMove(_logicalUnit, _movementArrow.getPath());
          _attackableUnits = _logicalWarGame.getAttackableUnitsAfterMove(_logicalUnit, _movementArrow.getPath());
-         if (!_suppliableUnits.isEmpty()) {
+         if (!suppliableUnits.isEmpty()) {
             _theActionMenu.addItem(ActionMenuItem.SUPPLY.getName(), null);
          }
          if (!_attackableUnits.isEmpty()) {

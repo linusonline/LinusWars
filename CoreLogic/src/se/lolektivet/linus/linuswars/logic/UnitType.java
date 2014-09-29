@@ -3,26 +3,25 @@ package se.lolektivet.linus.linuswars.logic;
 /**
  * Created by Linus on 2014-09-18.
  */
-public enum UnitType
-{
-    INFANTRY("Infantry"),
-    MECH("Mech"),
-    RECON("Recon"),
-    TANK("Tank"),
-    MD_TANK("MdTank"),
-    APC("Apc"),
-    ARTILLERY("Artillery"),
-    ROCKETS("Rockets"),
-    ANTI_AIR("AntiAir"),
-    MISSILES("Missiles"),
-    B_COPTER("BCopter"),
-    T_COPTER("TCopter"),
-    FIGHTER("Fighter"),
-    BOMBER("Bomber"),
-    LANDER("Lander"),
-    CRUISER("Cruiser"),
-    SUB("Sub"),
-    B_SHIP("BShip");
+public enum UnitType {
+   INFANTRY("Infantry"),
+   MECH("Mech"),
+   RECON("Recon"),
+   TANK("Tank"),
+   MD_TANK("MdTank"),
+   APC("Apc"),
+   ARTILLERY("Artillery"),
+   ROCKETS("Rockets"),
+   ANTI_AIR("AntiAir"),
+   MISSILES("Missiles"),
+   B_COPTER("BCopter"),
+   T_COPTER("TCopter"),
+   FIGHTER("Fighter"),
+   BOMBER("Bomber"),
+   LANDER("Lander"),
+   CRUISER("Cruiser"),
+   SUB("Sub"),
+   B_SHIP("BShip");
 
    private final String _name;
 
@@ -32,5 +31,9 @@ public enum UnitType
 
    public String getName() {
       return _name;
+   }
+
+   public String toString() {
+      return getName();
    }
 }

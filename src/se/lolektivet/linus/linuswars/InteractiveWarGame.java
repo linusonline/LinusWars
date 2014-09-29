@@ -64,6 +64,9 @@ public class InteractiveWarGame {
          _cursorPosition = newCandidatePosition;
          if (_logicalWarGame.hasUnitAtPosition(_cursorPosition)) {
             System.out.println(_logicalWarGame.getUnitAtPosition(_cursorPosition));
+            for (LogicalUnit transportedUnit : _logicalWarGame.getTransportedUnits(_logicalWarGame.getUnitAtPosition(_cursorPosition))) {
+               System.out.println("   Transporting " + transportedUnit.getType());
+            }
          }
       } else {
          throw new CursorOutsideMapException();
@@ -84,6 +87,14 @@ public class InteractiveWarGame {
 
    public void hideAttackCursor() {
       _unitUnderAttackCursor = null;
+   }
+
+   public void hideGraphicForUnit(LogicalUnit logicalUnit) {
+      _graphicalWarGame.hideGraphicForUnit(logicalUnit);
+   }
+
+   public void showGraphicForUnit(LogicalUnit logicalUnit) {
+      _graphicalWarGame.showGraphicForUnit(logicalUnit);
    }
 
    void draw(Graphics g, Font font, int x, int y) {

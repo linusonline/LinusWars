@@ -46,21 +46,55 @@ public class SelectMovementState implements InteractiveGameState {
 
    @Override
    public InteractiveGameState handleExecuteDown() {
-      Position cursorPosition = _interactiveWarGame.getCursorPosition();
-      Faction factionOfMovingUnit = _logicalWarGame.getFactionForUnit(_logicalUnit);
-      boolean selectedUnitIsMovable = _logicalWarGame.getCurrentlyActiveFaction().equals(factionOfMovingUnit);
-
-      if (selectedUnitIsMovable &&
-            _reachablePositions.contains(cursorPosition) &&
-            (!_logicalWarGame.hasUnitAtPosition(cursorPosition) ||
-            _logicalWarGame.getUnitAtPosition(cursorPosition).equals(_logicalUnit))) {
+      if (canDoMove()) {
          // TODO: Animate travel.
          _interactiveWarGame.setPositionOfGraphicForUnit(_logicalUnit, _movementArrow.getFinalPosition());
          _interactiveWarGame.setMovementArrowController(null);
          return new ActionMenuState(_interactiveWarGame, _logicalWarGame, _logicalUnit, _movementArrow);
+      } else if (canDoLoadMove()) {
+         _interactiveWarGame.setPositionOfGraphicForUnit(_logicalUnit, _movementArrow.getFinalPosition());
+         _interactiveWarGame.setMovementArrowController(null);
+         return new LoadMenuState(_interactiveWarGame, _logicalWarGame, _logicalUnit, _movementArrow);
       } else {
          return this;
       }
+   }
+
+   private boolean canDoMove() {
+      return canMoveAtAll() &&
+            (destinationIsVacant() ||
+                  pathIsEmpty());
+   }
+
+   private boolean canDoLoadMove() {
+      return canMoveAtAll() &&
+            (!destinationIsVacant() &&
+                  canLoadOntoUnitAtDestination());
+   }
+
+   private boolean destinationIsVacant() {
+      return !_logicalWarGame.hasUnitAtPosition(_interactiveWarGame.getCursorPosition());
+   }
+
+   private boolean pathIsEmpty() {
+      return _movementArrow.isEmpty();
+   }
+
+   private boolean canLoadOntoUnitAtDestination() {
+      return _logicalWarGame.canLoadOnto(_logicalUnit, _logicalWarGame.getUnitAtPosition(_interactiveWarGame.getCursorPosition()));
+   }
+
+   private boolean canMoveAtAll() {
+      return unitIsMovable() &&
+            destinationIsReachable();
+   }
+
+   private boolean unitIsMovable() {
+      return _logicalWarGame.getCurrentlyActiveFaction().equals(_logicalWarGame.getFactionForUnit(_logicalUnit));
+   }
+
+   private boolean destinationIsReachable() {
+      return _reachablePositions.contains(_interactiveWarGame.getCursorPosition());
    }
 
    @Override

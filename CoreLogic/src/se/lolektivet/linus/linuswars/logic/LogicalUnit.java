@@ -66,8 +66,7 @@ public class LogicalUnit {
       return _movement;
    }
 
-   public UnitType getType()
-   {
+   public UnitType getType() {
       return _type;
    }
 

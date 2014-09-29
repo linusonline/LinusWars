@@ -11,6 +11,7 @@ public class LogicalWarGame implements WarGame {
 
    public interface Listener {
       void unitWasDestroyed(LogicalUnit logicalUnit);
+      void transportedUnitWasDestroyed(LogicalUnit logicalUnit);
    }
 
    public Faction getCurrentlyActiveFaction() {
@@ -27,11 +28,14 @@ public class LogicalWarGame implements WarGame {
    private final MovementLogic _movementLogic;
    private final FuelLogic _fuelLogic;
    private final AttackLogic _attackLogic;
+   private final TransportLogic _transportLogic;
 
    private final Map<LogicalUnit, Position> _positionsOfUnits;
    private final Map<Position, LogicalUnit> _unitsAtPositions;
    private final Map<LogicalUnit, Faction> _factionsOfUnits;
    private final Map<Faction, Collection<LogicalUnit>> _unitsInFaction;
+   private final Map<LogicalUnit, List<LogicalUnit>> _transportedUnits;
+   private final Map<Faction, Collection<LogicalUnit>> _transportedUnitsInFaction;
 
    private final Map<Position, Faction> _factionOwningProperty;
 
@@ -66,13 +70,17 @@ public class LogicalWarGame implements WarGame {
       _movementLogic = new MovementLogic();
       _fuelLogic = new FuelLogic();
       _attackLogic = new AttackLogic();
+      _transportLogic = new TransportLogic();
       _positionsOfUnits = new HashMap<LogicalUnit, Position>();
       _unitsAtPositions = new HashMap<Position, LogicalUnit>();
+      _transportedUnits = new HashMap<LogicalUnit, List<LogicalUnit>>(0);
       _factionsInTurnOrder = new ArrayList<Faction>(factionsInTurnOrder);
       _factionsOfUnits = new HashMap<LogicalUnit, Faction>();
       _unitsInFaction = new HashMap<Faction, Collection<LogicalUnit>>(_factionsInTurnOrder.size());
+      _transportedUnitsInFaction = new HashMap<Faction, Collection<LogicalUnit>>(0);
       for (Faction faction : _factionsInTurnOrder) {
          _unitsInFaction.put(faction, new HashSet<LogicalUnit>());
+         _transportedUnitsInFaction.put(faction, new HashSet<LogicalUnit>(0));
       }
       _currentlyActiveFaction = _factionsInTurnOrder.get(0);
       System.out.println("Current Faction is " + _currentlyActiveFaction.toString());
@@ -87,6 +95,12 @@ public class LogicalWarGame implements WarGame {
 
    public void addListener(Listener listener) {
       _listeners.add(listener);
+   }
+
+   private void fireTransportedUnitDestroyed(LogicalUnit logicalUnit) {
+      for (Listener listener : _listeners) {
+         listener.transportedUnitWasDestroyed(logicalUnit);
+      }
    }
 
    private void fireUnitDestroyed(LogicalUnit logicalUnit) {
@@ -138,11 +152,13 @@ public class LogicalWarGame implements WarGame {
          throw new HqNotSetException();
       }
       _gameStarted = true;
-      activateAllUnitsInCurrentFaction();
+      activateAllNonTransportedUnitsInCurrentFaction();
    }
 
-   private void activateAllUnitsInCurrentFaction() {
-      _unitsLeftToMoveThisTurn.addAll(_unitsInFaction.get(_currentlyActiveFaction));
+   private void activateAllNonTransportedUnitsInCurrentFaction() {
+      Collection<LogicalUnit> nonTransportedUnitsInFaction = new HashSet<LogicalUnit>(_unitsInFaction.get(_currentlyActiveFaction));
+      nonTransportedUnitsInFaction.removeAll(_transportedUnitsInFaction.get(_currentlyActiveFaction));
+      _unitsLeftToMoveThisTurn.addAll(nonTransportedUnitsInFaction);
    }
 
    private boolean allFactionsHaveSetTheirHq() {
@@ -408,7 +424,7 @@ public class LogicalWarGame implements WarGame {
    }
 
    private boolean canCounterAttack(LogicalUnit attackingUnit, LogicalUnit defendingUnit) {
-      return unitExists(defendingUnit) &&
+      return nonTransportedUnitExists(defendingUnit) &&
             !attackingUnit.isRanged() &&
             !defendingUnit.isRanged() &&
             _attackLogic.canAttack(defendingUnit.getType(), attackingUnit.getType());
@@ -459,7 +475,74 @@ public class LogicalWarGame implements WarGame {
       invalidateOptimalPathsCache();
    }
 
-   private boolean unitExists(LogicalUnit logicalUnit) {
+   public void executeUnloadMove(LogicalUnit transport, LogicalUnit unloadingUnit, Path movementPath, Position unloadPosition) {
+      internalExecuteMove(transport, movementPath);
+      unloadUnitFromTransport(transport, unloadingUnit, unloadPosition);
+      _unitsLeftToMoveThisTurn.remove(transport);
+   }
+
+   public void executeLoadMove(LogicalUnit movingUnit, Path path) {
+      LogicalUnit transport = getUnitAtPosition(path.getFinalPosition());
+      if (!canLoadOnto(movingUnit, transport)) {
+         throw new LogicException("Cannot load onto that unit!");
+      }
+      internalExecuteLoadMove(movingUnit, path, transport);
+   }
+
+   private void internalExecuteLoadMove(LogicalUnit movingUnit, Path movementPath, LogicalUnit transport) {
+      loadUnitOntoTransport(movingUnit, transport);
+      subtractFuelForUnitAndPath(movementPath, movingUnit);
+      _unitsLeftToMoveThisTurn.remove(movingUnit);
+   }
+
+   public boolean canLoadOnto(LogicalUnit loadingUnit, LogicalUnit transporter) {
+      return !unitsAreEnemies(loadingUnit, transporter) &&
+            _transportLogic.canTransport(transporter.getType(), loadingUnit.getType()) &&
+            getTransportedUnits(transporter).size() < _transportLogic.getTransportLimit(transporter.getType());
+   }
+
+   public List<LogicalUnit> getTransportedUnits(LogicalUnit transporter) {
+      List<LogicalUnit> unitsOnTransport = _transportedUnits.get(transporter);
+      if (unitsOnTransport == null) {
+         return new ArrayList<LogicalUnit>(0);
+      } else {
+         return new ArrayList<LogicalUnit>(unitsOnTransport);
+      }
+   }
+
+   private void loadUnitOntoTransport(LogicalUnit movingUnit, LogicalUnit transport) {
+      List<LogicalUnit> unitsOnThisTransport = _transportedUnits.get(transport);
+      if (unitsOnThisTransport == null) {
+         unitsOnThisTransport = new ArrayList<LogicalUnit>(1);
+         _transportedUnits.put(transport, unitsOnThisTransport);
+      }
+      unitsOnThisTransport.add(movingUnit);
+      _transportedUnitsInFaction.get(_factionsOfUnits.get(movingUnit)).add(movingUnit);
+
+      Position oldPositionOfMovingUnit = _positionsOfUnits.get(movingUnit);
+      _unitsAtPositions.remove(oldPositionOfMovingUnit);
+      _positionsOfUnits.remove(movingUnit);
+   }
+
+   private void unloadUnitFromTransport(LogicalUnit transport, LogicalUnit unloadingUnit, Position unloadPosition) {
+      removeUnitFromTransport(transport, unloadingUnit);
+      _unitsAtPositions.put(unloadPosition, unloadingUnit);
+      _positionsOfUnits.put(unloadingUnit, unloadPosition);
+   }
+
+   private void removeUnitFromTransport(LogicalUnit transport, LogicalUnit transportedUnit) {
+      List<LogicalUnit> unitsOnThisTransport = _transportedUnits.get(transport);
+      if (!unitsOnThisTransport.contains(transportedUnit)) {
+         throw new LogicException();
+      }
+      unitsOnThisTransport.remove(transportedUnit);
+      if (unitsOnThisTransport.isEmpty()) {
+         _transportedUnits.remove(transport);
+      }
+      _transportedUnitsInFaction.get(_factionsOfUnits.get(transportedUnit)).remove(transportedUnit);
+   }
+
+   private boolean nonTransportedUnitExists(LogicalUnit logicalUnit) {
       return _positionsOfUnits.containsKey(logicalUnit);
    }
 
@@ -471,10 +554,13 @@ public class LogicalWarGame implements WarGame {
       }
    }
 
-   private void destroyUnit(LogicalUnit logicalUnit) {
-      fireUnitDestroyed(logicalUnit);
-      // TODO: Any semantic difference between these methods...?
-      removeUnit(logicalUnit);
+   private void destroyUnit(LogicalUnit destroyedUnit) {
+      fireUnitDestroyed(destroyedUnit);
+      removeUnit(destroyedUnit);
+      for (LogicalUnit transportedUnit : getTransportedUnits(destroyedUnit)) {
+         fireTransportedUnitDestroyed(transportedUnit);
+         removeUnitFromTransport(destroyedUnit, transportedUnit);
+      }
       invalidateOptimalPathsCache();
    }
 
@@ -482,7 +568,7 @@ public class LogicalWarGame implements WarGame {
       _unitsLeftToMoveThisTurn.clear();
       _currentlyActiveFaction = getNextFactionInTurn();
       System.out.println("Current Faction is " + _currentlyActiveFaction.toString());
-      activateAllUnitsInCurrentFaction();
+      activateAllNonTransportedUnitsInCurrentFaction();
       invalidateOptimalPathsCache();
       doBeginningOfTurn();
    }

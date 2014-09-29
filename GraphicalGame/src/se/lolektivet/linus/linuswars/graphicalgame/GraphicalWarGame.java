@@ -7,7 +7,9 @@ import se.lolektivet.linus.linuswars.graphics.HpNumbers;
 import se.lolektivet.linus.linuswars.logic.*;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Linus on 2014-09-26.
@@ -16,6 +18,7 @@ public class GraphicalWarGame implements LogicalWarGame.Listener {
    private final HpNumbers _hpNumbers;
    private final MapCoordinateTransformer _coordinateTransformer;
    private final Map<LogicalUnit, GraphicalUnit> _graphicsForUnits;
+   private final Set<LogicalUnit> _hiddenUnits;
    private final LogicalWarGame _logicalWarGame;
    private GraphicalWarMap _theMap;
 
@@ -24,6 +27,7 @@ public class GraphicalWarGame implements LogicalWarGame.Listener {
       _coordinateTransformer = new MapCoordinateTransformerImpl();
       _logicalWarGame = logicalWarGame;
       _graphicsForUnits = new HashMap<LogicalUnit, GraphicalUnit>();
+      _hiddenUnits = new HashSet<LogicalUnit>(0);
 
       _logicalWarGame.addListener(this);
    }
@@ -42,6 +46,12 @@ public class GraphicalWarGame implements LogicalWarGame.Listener {
       _graphicsForUnits.remove(logicalUnit);
    }
 
+   @Override
+   public void transportedUnitWasDestroyed(LogicalUnit logicalUnit) {
+      _graphicsForUnits.remove(logicalUnit);
+      _hiddenUnits.remove(logicalUnit);
+   }
+
    public void addUnit(GraphicalUnit graphicalUnit, LogicalUnit logicalUnit, Position position) {
       graphicalUnit.setPosition(_coordinateTransformer.transform(position));
       _graphicsForUnits.put(logicalUnit, graphicalUnit);
@@ -57,6 +67,14 @@ public class GraphicalWarGame implements LogicalWarGame.Listener {
 
    private void setUnitPosition(GraphicalUnit graphicalUnit, Position newPosition) {
       graphicalUnit.setPosition(_coordinateTransformer.transform(newPosition));
+   }
+
+   public void hideGraphicForUnit(LogicalUnit logicalUnit) {
+      _hiddenUnits.add(logicalUnit);
+   }
+
+   public void showGraphicForUnit(LogicalUnit logicalUnit) {
+      _hiddenUnits.remove(logicalUnit);
    }
 
    public void makeAllUnitsFaceEnemyHq() {
@@ -83,6 +101,9 @@ public class GraphicalWarGame implements LogicalWarGame.Listener {
 
    public void drawUnits(Graphics g, Font font, int x, int y) {
       for (Map.Entry<LogicalUnit, GraphicalUnit> entry : _graphicsForUnits.entrySet()) {
+         if (unitIsHidden(entry.getKey())) {
+            continue;
+         }
          int hp = entry.getKey().getHp1To10();
          Renderable hpNumber = null;
          if (hp < 10) {
@@ -90,5 +111,9 @@ public class GraphicalWarGame implements LogicalWarGame.Listener {
          }
          entry.getValue().draw(x, y, hpNumber);
       }
+   }
+
+   private boolean unitIsHidden(LogicalUnit logicalUnit) {
+      return _hiddenUnits.contains(logicalUnit);
    }
 }
