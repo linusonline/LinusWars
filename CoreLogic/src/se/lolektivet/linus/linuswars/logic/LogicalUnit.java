@@ -118,10 +118,14 @@ public class LogicalUnit {
    }
 
    public void subtractFuel(int fuelCost) {
-      _fuel -= fuelCost;
-      if (_fuel < 0) {
+      if (_fuel - fuelCost < 0) {
          throw new LogicException("Fuel was set to less than zero!");
       }
+      _fuel -= fuelCost;
+   }
+
+   public void addFuel(int extraFuel) {
+      _fuel = Math.min(extraFuel + _fuel, _maxFuel);
    }
 
    public void resupply() {

@@ -394,6 +394,10 @@ public class LogicalWarGame implements WarGame {
       return _factionsOfUnits.get(logicalUnit);
    }
 
+   private boolean unitsBelongToSameFaction(LogicalUnit unitOne, LogicalUnit unitTwo) {
+      return getFactionForUnit(unitOne).equals(getFactionForUnit(unitTwo));
+   }
+
    @Override
    public void executeMove(LogicalUnit logicalUnit, Path path) {
       internalExecuteMove(logicalUnit, path);
@@ -505,12 +509,12 @@ public class LogicalWarGame implements WarGame {
          throw new LogicException("Cannot load onto that unit!");
       }
       internalExecuteLoadMove(movingUnit, path, transport);
+      _unitsLeftToMoveThisTurn.remove(movingUnit);
    }
 
    private void internalExecuteLoadMove(LogicalUnit movingUnit, Path movementPath, LogicalUnit transport) {
-      loadUnitOntoTransport(movingUnit, transport);
       subtractFuelForUnitAndPath(movementPath, movingUnit);
-      _unitsLeftToMoveThisTurn.remove(movingUnit);
+      loadUnitOntoTransport(movingUnit, transport);
    }
 
    public boolean canLoadOnto(LogicalUnit loadingUnit, LogicalUnit transporter) {
@@ -580,6 +584,32 @@ public class LogicalWarGame implements WarGame {
          removeUnitFromTransport(destroyedUnit, transportedUnit);
       }
       invalidateOptimalPathsCache();
+   }
+
+   public void executeJoinMove(LogicalUnit movingUnit, Path movementPath, LogicalUnit joinedUnit) {
+      // TODO: Check if path is allowed.
+      if (!canJoin(movingUnit, joinedUnit)) {
+         throw new LogicException("Units cannot join!");
+      }
+      internalExecuteJoinMove(movingUnit, joinedUnit);
+      _unitsLeftToMoveThisTurn.remove(movingUnit);
+   }
+
+   private boolean canJoin(LogicalUnit joiningUnit, LogicalUnit joinedUnit) {
+      return unitsBelongToSameFaction(joiningUnit, joinedUnit) &&
+            unitsAreSameType(joiningUnit, joinedUnit) &&
+            joiningUnit.getHp1To10() < 10 &&
+            joinedUnit.getHp1To10() < 10;
+   }
+
+   private boolean unitsAreSameType(LogicalUnit unitOne, LogicalUnit unitTwo) {
+      return unitOne.getType().equals(unitTwo.getType());
+   }
+
+   private void internalExecuteJoinMove(LogicalUnit movingUnit, LogicalUnit joinedUnit) {
+      joinedUnit.setHp1To100(movingUnit.getHp1To100());
+      joinedUnit.addFuel(movingUnit.getFuel());
+      removeUnit(movingUnit);
    }
 
    public void endTurn() {
