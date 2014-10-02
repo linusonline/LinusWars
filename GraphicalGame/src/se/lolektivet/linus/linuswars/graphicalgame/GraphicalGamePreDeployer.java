@@ -1,7 +1,7 @@
 package se.lolektivet.linus.linuswars.graphicalgame;
 
 import se.lolektivet.linus.linuswars.graphics.ResourceLoader;
-import se.lolektivet.linus.linuswars.logic.Faction;
+import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.LogicalWarGame;
 

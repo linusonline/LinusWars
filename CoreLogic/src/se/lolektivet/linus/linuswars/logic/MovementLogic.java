@@ -1,5 +1,7 @@
 package se.lolektivet.linus.linuswars.logic;
 
+import se.lolektivet.linus.linuswars.logic.enums.MovementType;
+import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
 import se.lolektivet.linus.linuswars.logic.pathfinding.PotentiallyInfiniteInteger;
 
 import java.util.HashMap;

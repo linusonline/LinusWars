@@ -1,5 +1,8 @@
 package se.lolektivet.linus.linuswars.logic;
 
+import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
+import se.lolektivet.linus.linuswars.logic.enums.UnitType;
+
 import java.util.HashMap;
 import java.util.Map;
 

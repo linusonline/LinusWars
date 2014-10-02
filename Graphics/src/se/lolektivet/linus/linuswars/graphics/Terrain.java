@@ -3,7 +3,7 @@ package se.lolektivet.linus.linuswars.graphics;
 import org.newdawn.slick.Renderable;
 import org.newdawn.slick.SpriteSheet;
 import se.lolektivet.linus.linuswars.logic.Position;
-import se.lolektivet.linus.linuswars.logic.TerrainTile;
+import se.lolektivet.linus.linuswars.logic.enums.TerrainTile;
 
 import java.util.HashMap;
 import java.util.Map;

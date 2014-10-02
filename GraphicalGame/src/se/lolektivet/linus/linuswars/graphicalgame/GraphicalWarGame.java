@@ -5,6 +5,8 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Renderable;
 import se.lolektivet.linus.linuswars.graphics.HpNumbers;
 import se.lolektivet.linus.linuswars.logic.*;
+import se.lolektivet.linus.linuswars.logic.enums.Direction;
+import se.lolektivet.linus.linuswars.logic.enums.Faction;
 
 import java.util.HashMap;
 import java.util.HashSet;

@@ -2,7 +2,7 @@ package se.lolektivet.linus.linuswars.graphicalgame;
 
 import org.newdawn.slick.Renderable;
 import se.lolektivet.linus.linuswars.graphics.UnitSprite;
-import se.lolektivet.linus.linuswars.logic.Direction;
+import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.Position;
 
 /**

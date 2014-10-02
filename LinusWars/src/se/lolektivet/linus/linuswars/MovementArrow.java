@@ -1,7 +1,7 @@
 package se.lolektivet.linus.linuswars;
 
 import se.lolektivet.linus.linuswars.graphics.MovementArrowSprites;
-import se.lolektivet.linus.linuswars.logic.Direction;
+import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.pathfinding.Path;
 

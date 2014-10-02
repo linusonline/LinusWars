@@ -4,6 +4,7 @@ import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import se.lolektivet.linus.linuswars.graphics.ResourceLoader;
 import se.lolektivet.linus.linuswars.logic.*;
+import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.pathfinding.Path;
 
 import java.util.Collection;

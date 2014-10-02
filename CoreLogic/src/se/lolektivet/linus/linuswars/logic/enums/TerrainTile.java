@@ -1,4 +1,4 @@
-package se.lolektivet.linus.linuswars.logic;
+package se.lolektivet.linus.linuswars.logic.enums;
 
 /**
 * Created by Linus on 2014-09-21.

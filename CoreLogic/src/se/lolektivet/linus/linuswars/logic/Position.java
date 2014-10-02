@@ -1,5 +1,7 @@
 package se.lolektivet.linus.linuswars.logic;
 
+import se.lolektivet.linus.linuswars.logic.enums.Direction;
+
 import java.util.Collection;
 import java.util.HashSet;
 

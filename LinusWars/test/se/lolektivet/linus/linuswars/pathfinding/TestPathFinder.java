@@ -1,7 +1,7 @@
 package se.lolektivet.linus.linuswars.pathfinding;
 
 import junit.framework.TestCase;
-import se.lolektivet.linus.linuswars.logic.Faction;
+import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.LogicalWarGame;
 import se.lolektivet.linus.linuswars.logic.LogicalWarMap;
 import se.lolektivet.linus.linuswars.logic.Position;

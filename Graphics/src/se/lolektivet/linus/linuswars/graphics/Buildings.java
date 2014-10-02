@@ -3,8 +3,8 @@ package se.lolektivet.linus.linuswars.graphics;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Renderable;
 import org.newdawn.slick.SpriteSheet;
-import se.lolektivet.linus.linuswars.logic.Faction;
-import se.lolektivet.linus.linuswars.logic.TerrainType;
+import se.lolektivet.linus.linuswars.logic.enums.Faction;
+import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -3,8 +3,8 @@ package se.lolektivet.linus.linuswars.graphicalgame;
 import se.lolektivet.linus.linuswars.graphics.ResourceLoader;
 import se.lolektivet.linus.linuswars.graphics.UnitSprite;
 import se.lolektivet.linus.linuswars.graphics.Units;
-import se.lolektivet.linus.linuswars.logic.Faction;
-import se.lolektivet.linus.linuswars.logic.UnitType;
+import se.lolektivet.linus.linuswars.logic.enums.Faction;
+import se.lolektivet.linus.linuswars.logic.enums.UnitType;
 
 import java.util.HashMap;
 import java.util.Map;

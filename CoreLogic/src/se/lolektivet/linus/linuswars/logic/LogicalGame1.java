@@ -1,5 +1,8 @@
 package se.lolektivet.linus.linuswars.logic;
 
+import se.lolektivet.linus.linuswars.logic.enums.Faction;
+import se.lolektivet.linus.linuswars.logic.enums.UnitType;
+
 /**
  * Created by Linus on 2014-09-22.
  */

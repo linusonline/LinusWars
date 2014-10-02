@@ -3,6 +3,9 @@ package se.lolektivet.linus.linuswars.graphicalgame;
 import se.lolektivet.linus.linuswars.graphics.Buildings;
 import se.lolektivet.linus.linuswars.graphics.Terrain;
 import se.lolektivet.linus.linuswars.logic.*;
+import se.lolektivet.linus.linuswars.logic.enums.Faction;
+import se.lolektivet.linus.linuswars.logic.enums.TerrainTile;
+import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
 
 /**
  * Created by Linus on 2014-09-22.

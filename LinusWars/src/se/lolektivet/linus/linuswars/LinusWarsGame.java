@@ -10,6 +10,8 @@ import se.lolektivet.linus.linuswars.graphics.HpNumbers;
 import se.lolektivet.linus.linuswars.graphics.ResourceLoader;
 import se.lolektivet.linus.linuswars.graphics.Terrain;
 import se.lolektivet.linus.linuswars.logic.*;
+import se.lolektivet.linus.linuswars.logic.enums.Direction;
+import se.lolektivet.linus.linuswars.logic.enums.Faction;
 
 import java.util.ArrayList;
 import java.util.List;

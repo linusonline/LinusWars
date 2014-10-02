@@ -1,5 +1,8 @@
 package se.lolektivet.linus.linuswars.logic;
 
+import se.lolektivet.linus.linuswars.logic.enums.MovementType;
+import se.lolektivet.linus.linuswars.logic.enums.UnitType;
+
 /**
  * Created by Linus on 2014-09-18.
  */

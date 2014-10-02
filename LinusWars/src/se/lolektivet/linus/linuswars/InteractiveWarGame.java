@@ -8,7 +8,7 @@ import se.lolektivet.linus.linuswars.graphicalgame.GraphicalWarGame;
 import se.lolektivet.linus.linuswars.graphicalgame.MapCoordinateTransformer;
 import se.lolektivet.linus.linuswars.graphicalgame.MapCoordinateTransformerImpl;
 import se.lolektivet.linus.linuswars.graphics.ResourceLoader;
-import se.lolektivet.linus.linuswars.logic.Direction;
+import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.LogicalWarGame;
 import se.lolektivet.linus.linuswars.logic.Position;
