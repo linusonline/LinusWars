@@ -5,7 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/CoreLogic/CoreLogic.iml" filepath="$PROJECT_DIR$/CoreLogic/CoreLogic.iml" />
       <module fileurl="file://$PROJECT_DIR$/GraphicalGame/GraphicalGame.iml" filepath="$PROJECT_DIR$/GraphicalGame/GraphicalGame.iml" />
       <module fileurl="file://$PROJECT_DIR$/Graphics/Graphics.iml" filepath="$PROJECT_DIR$/Graphics/Graphics.iml" />
-      <module fileurl="file://$PROJECT_DIR$/LinusWars.iml" filepath="$PROJECT_DIR$/LinusWars.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LinusWars/LinusWars.iml" filepath="$PROJECT_DIR$/LinusWars/LinusWars.iml" />
     </modules>
   </component>
 </project>
