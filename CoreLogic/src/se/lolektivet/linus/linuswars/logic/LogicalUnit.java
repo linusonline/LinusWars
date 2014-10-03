@@ -61,6 +61,7 @@ public class LogicalUnit {
       return _hp / 10;
    }
 
+   // Core method
    void setHp1To100(int hp) {
       _hp = hp;
    }
@@ -117,6 +118,7 @@ public class LogicalUnit {
       return _baseMaxAttackRange;
    }
 
+   // Core method
    public void subtractFuel(int fuelCost) {
       if (_fuel - fuelCost < 0) {
          throw new LogicException("Fuel was set to less than zero!");
@@ -124,10 +126,12 @@ public class LogicalUnit {
       _fuel -= fuelCost;
    }
 
+   // Core method
    public void addFuel(int extraFuel) {
       _fuel = Math.min(extraFuel + _fuel, _maxFuel);
    }
 
+   // Core method
    public void resupply() {
       _fuel = _maxFuel;
       _ammo = _maxAmmo;

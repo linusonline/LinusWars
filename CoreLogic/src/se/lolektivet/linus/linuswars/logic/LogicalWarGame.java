@@ -86,6 +86,8 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
       }
    }
 
+   // Listening
+
    public void addListener(Listener listener) {
       _listeners.add(listener);
    }
@@ -101,6 +103,8 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
          listener.unitWasDestroyed(logicalUnit);
       }
    }
+
+   // Setup
 
    @Override
    public void setFactionForProperty(Position positionOfProperty, Faction faction) {
@@ -118,6 +122,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
       _factionOwningProperty.put(positionOfProperty, faction);
    }
 
+   @Override
    public void addUnit(LogicalUnit unit, Position position, Faction faction) {
       if (_unitsAtPositions.containsKey(position)) {
          throw new UnitCollisionException();
@@ -134,6 +139,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
       _factionsOfUnits.put(unit, faction);
    }
 
+   @Override
    public void callGameStart() {
       if (!allFactionsHaveSetTheirHq()) {
          throw new HqNotSetException();
@@ -152,44 +158,20 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
       return _hqsOfFactions.size() == _factionsInTurnOrder.size();
    }
 
-   public Position getHqPosition(Faction faction) {
-      return _hqsOfFactions.get(faction);
-   }
-
-   public List<Faction> getFactionsInGame() {
-      return new ArrayList<Faction>(_factionsInTurnOrder);
-   }
-
-   public Faction getCurrentlyActiveFaction() {
-      return _currentlyActiveFaction;
-   }
-
-   public Collection<LogicalUnit> getAllUnits() {
-      return new HashSet<LogicalUnit>(_factionsOfUnits.keySet());
-   }
-
-   private void removeUnit(LogicalUnit unit) {
-      Position position = _positionsOfUnits.get(unit);
-      Faction faction = _factionsOfUnits.get(unit);
-      _factionsOfUnits.remove(unit);
-      _positionsOfUnits.remove(unit);
-      _unitsAtPositions.remove(position);
-      _unitsInFaction.get(faction).remove(unit);
-   }
-
+   // Fuel and map query
    PotentiallyInfiniteInteger getFuelCostForUnitOnTile(LogicalUnit travellingUnit, Position tile) {
       return _fuelLogic.getFuelCostForMovementTypeOnTerrainType(travellingUnit.getMovementType(), _logicalWarMap.getTerrainForTile(tile));
    }
 
+   // Movement & map query
    PotentiallyInfiniteInteger getTravelCostForUnitOnTile(LogicalUnit travellingUnit, Position tile) {
-      LogicalUnit destinationUnit = _unitsAtPositions.get(tile);
-      if (destinationUnit != null && unitsAreEnemies(travellingUnit, destinationUnit)) {
+      if (hasUnitAtPosition(tile) && unitsAreEnemies(travellingUnit, getUnitAtPosition(tile))) {
          return PotentiallyInfiniteInteger.infinite();
-      } else {
-         return _movementLogic.getTravelCostForMovementTypeOnTerrainType(travellingUnit.getMovementType(), _logicalWarMap.getTerrainForTile(tile));
       }
+      return _movementLogic.getTravelCostForMovementTypeOnTerrainType(travellingUnit.getMovementType(), _logicalWarMap.getTerrainForTile(tile));
    }
 
+   // Extended query
    public Collection<Position> getAdjacentPositions(Position position) {
       Collection<Position> adjacentPositions = position.getAdjacentPositions();
       Collection<Position> adjacentPositionsInsideMap = new HashSet<Position>(2);
@@ -201,6 +183,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
       return adjacentPositionsInsideMap;
    }
 
+   // Extended query
    private Set<LogicalUnit> getAdjacentUnits(Position position) {
       Collection<Position> adjacentPositions = getAdjacentPositions(position);
       Set<LogicalUnit> adjacentUnits = new HashSet<LogicalUnit>(4);
@@ -210,24 +193,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
       return adjacentUnits;
    }
 
-   public LogicalUnit getUnitAtPosition(Position position) {
-      if (!hasUnitAtPosition(position)) {
-         throw new UnitNotFoundException();
-      }
-      return _unitsAtPositions.get(position);
-   }
-
-   public Position getPositionOfUnit(LogicalUnit logicalUnit) {
-      if (!hasUnit(logicalUnit)) {
-         throw new UnitNotFoundException();
-      }
-      return _positionsOfUnits.get(logicalUnit);
-   }
-
-   private boolean hasUnit(LogicalUnit logicalUnit) {
-      return _positionsOfUnits.containsKey(logicalUnit);
-   }
-
+   // Extended query
    public Set<LogicalUnit> getSuppliableUnitsAfterMove(LogicalUnit supplier, Path path) {
       Position destination = path.getFinalPosition();
       Set<LogicalUnit> suppliableUnits;
@@ -235,11 +201,13 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
       return suppliableUnits;
    }
 
+   // Extended query
    private Set<LogicalUnit> getUnitsSuppliableFromPosition(LogicalUnit supplier, Position supplyingPosition) {
       Set<LogicalUnit> adjacentUnits = getAdjacentUnits(supplyingPosition);
       return getUnitsSuppliableByUnit(adjacentUnits, supplier);
    }
 
+   // Fuel query (plus todo)
    private Set<LogicalUnit> getUnitsSuppliableByUnit(Set<LogicalUnit> targetUnits, LogicalUnit supplier) {
       Set<LogicalUnit> suppliableUnits = new HashSet<LogicalUnit>(0);
       for (LogicalUnit targetUnit : targetUnits) {
@@ -253,6 +221,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
       return suppliableUnits;
    }
 
+   // Extended query
    public Set<LogicalUnit> getAttackableUnitsAfterMove(LogicalUnit attackingUnit, Path path) {
       Position destination = path.getFinalPosition();
       Set<LogicalUnit> attackableUnits;
@@ -279,6 +248,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
       return adjacentVacantPositions;
    }
 
+   // Extended query
    private Set<LogicalUnit> getUnitsAttackableFromPosition(LogicalUnit attacker, Position attackingPosition) {
       if (attacker.isRanged()) {
          return getUnitsRemotelyAttackableFromPosition(attacker, attackingPosition);
@@ -289,6 +259,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
       }
    }
 
+   // Extended query
    private Set<LogicalUnit> getUnitsRemotelyAttackableFromPosition(LogicalUnit attacker, Position attackingPosition) {
       Set<Position> targetPositions = getPositionsRemotelyAttackableFromPosition(attackingPosition, attacker.getBaseMinAttackRange(), attacker.getBaseMaxAttackRange());
       Set<LogicalUnit> targetUnits = getUnitsOnPositions(targetPositions);
@@ -296,17 +267,18 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
       return attackableTargetUnits;
    }
 
+   // Basic or Extended query
    private Set<LogicalUnit> getUnitsOnPositions(Collection<Position> positions) {
       Set<LogicalUnit> units = new HashSet<LogicalUnit>();
       for (Position position : positions) {
-         LogicalUnit logicalUnit = _unitsAtPositions.get(position);
-         if (logicalUnit != null) {
-            units.add(logicalUnit);
+         if (hasUnitAtPosition(position)) {
+            units.add(getUnitAtPosition(position));
          }
       }
       return units;
    }
 
+   // Extended query
    private Set<Position> getPositionsRemotelyAttackableFromPosition(Position attackingPosition, int minRange, int maxRange) {
       Set<Position> attackablePositions = new HashSet<Position>(0);
       for (int range = minRange; range <= maxRange; range++) {
@@ -315,6 +287,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
       return attackablePositions;
    }
 
+   // Extended query
    private Collection<Position> getPositionsXStepsAwayFrom(Position origin, int nrOfSteps) {
       Collection<Position> positions = new HashSet<Position>(0);
       int x = origin.getX();
@@ -342,6 +315,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
       return positions;
    }
 
+   // Extended query
    private void addPositionIfInsideMap(int x, int y, Collection<Position> positions) {
       Position position = new Position(x, y);
       if (isPositionInsideMap(position)) {
@@ -349,11 +323,13 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
       }
    }
 
+   // Extended query
    private Set<LogicalUnit> getUnitsDirectlyAttackableFromPosition(LogicalUnit attacker, Position attackingPosition) {
       Set<LogicalUnit> adjacentUnits = getAdjacentUnits(attackingPosition);
       return getUnitsAttackableByUnit(adjacentUnits, attacker);
    }
 
+   // Attack query (plus todo)
    private Set<LogicalUnit> getUnitsAttackableByUnit(Set<LogicalUnit> targetUnits, LogicalUnit attacker) {
       Set<LogicalUnit> attackableUnits = new HashSet<LogicalUnit>(0);
       for (LogicalUnit targetUnit : targetUnits) {
@@ -367,21 +343,19 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
       return attackableUnits;
    }
 
+   // Extended query
    private boolean unitsAreEnemies(LogicalUnit oneUnit, LogicalUnit otherUnit) {
       return !getFactionForUnit(oneUnit).equals(getFactionForUnit(otherUnit));
    }
 
+   // Extended operation
    private void addUnitFromPositionToList(Collection<LogicalUnit> unitList, Position position) {
-      LogicalUnit logicalUnit = _unitsAtPositions.get(position);
-      if (logicalUnit != null) {
-         unitList.add(logicalUnit);
+      if (hasUnitAtPosition(position)) {
+         unitList.add(getUnitAtPosition(position));
       }
    }
 
-   public Faction getFactionForUnit(LogicalUnit logicalUnit) {
-      return _factionsOfUnits.get(logicalUnit);
-   }
-
+   // Extended query
    private boolean unitsBelongToSameFaction(LogicalUnit unitOne, LogicalUnit unitTwo) {
       return getFactionForUnit(unitOne).equals(getFactionForUnit(unitTwo));
    }
@@ -604,6 +578,16 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
       removeUnit(movingUnit);
    }
 
+   private void removeUnit(LogicalUnit unit) {
+      Position position = _positionsOfUnits.get(unit);
+      Faction faction = _factionsOfUnits.get(unit);
+      _factionsOfUnits.remove(unit);
+      _positionsOfUnits.remove(unit);
+      _unitsAtPositions.remove(position);
+      _unitsInFaction.get(faction).remove(unit);
+   }
+
+   @Override
    public void endTurn() {
       _unitsLeftToMoveThisTurn.clear();
       _currentlyActiveFaction = getNextFactionInTurn();
@@ -638,23 +622,17 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
       // Question: Should resupply or healing be prioritized when not enough funds for both?
    }
 
+   // Extended query
    public boolean hasActiveUnitAtPosition(Position position) {
-      LogicalUnit unit = _unitsAtPositions.get(position);
-      return unit != null && !unitHasMovedThisTurn(unit);
+      return hasUnitAtPosition(position) && !unitHasMovedThisTurn(getUnitAtPosition(position));
    }
 
+   // Extended query
    private boolean unitHasMovedThisTurn(LogicalUnit unit) {
-       return unitBelongsToCurrentlyActiveFaction(unit) && !_unitsLeftToMoveThisTurn.contains(unit);
+       return unitBelongsToCurrentlyActiveFaction(unit) && !unitCanStillMoveThisTurn(unit);
    }
 
-   private boolean unitBelongsToCurrentlyActiveFaction(LogicalUnit unit) {
-      return _factionsOfUnits.get(unit).equals(_currentlyActiveFaction);
-   }
-
-   public boolean hasUnitAtPosition(Position position) {
-      return _unitsAtPositions.get(position) != null;
-   }
-
+   @Deprecated
    public Set<Position> getAllReachablePoints(LogicalUnit travellingUnit) {
       return _queries.getAllReachablePoints(travellingUnit);
    }
@@ -673,8 +651,70 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
       return _logicalWarMap;
    }
 
+   // Map query
    public boolean isPositionInsideMap(Position position) {
       return _logicalWarMap.isPositionInsideMap(position);
+   }
+
+   // Basic query
+   public Position getHqPosition(Faction faction) {
+      return _hqsOfFactions.get(faction);
+   }
+
+   // Basic query
+   public List<Faction> getFactionsInGame() {
+      return new ArrayList<Faction>(_factionsInTurnOrder);
+   }
+
+   // Basic query
+   public Faction getCurrentlyActiveFaction() {
+      return _currentlyActiveFaction;
+   }
+
+   // Basic query
+   public Collection<LogicalUnit> getAllUnits() {
+      return new HashSet<LogicalUnit>(_factionsOfUnits.keySet());
+   }
+
+   // Basic query
+   public LogicalUnit getUnitAtPosition(Position position) {
+      if (!hasUnitAtPosition(position)) {
+         throw new UnitNotFoundException();
+      }
+      return _unitsAtPositions.get(position);
+   }
+
+   // Basic query
+   public Position getPositionOfUnit(LogicalUnit logicalUnit) {
+      if (!hasUnit(logicalUnit)) {
+         throw new UnitNotFoundException();
+      }
+      return _positionsOfUnits.get(logicalUnit);
+   }
+
+   // Basic query
+   private boolean hasUnit(LogicalUnit logicalUnit) {
+      return _positionsOfUnits.containsKey(logicalUnit);
+   }
+
+   // Basic query
+   public Faction getFactionForUnit(LogicalUnit logicalUnit) {
+      return _factionsOfUnits.get(logicalUnit);
+   }
+
+   // Basic query
+   private boolean unitCanStillMoveThisTurn(LogicalUnit logicalUnit) {
+      return _unitsLeftToMoveThisTurn.contains(logicalUnit);
+   }
+
+   // Basic query
+   private boolean unitBelongsToCurrentlyActiveFaction(LogicalUnit unit) {
+      return _factionsOfUnits.get(unit).equals(_currentlyActiveFaction);
+   }
+
+   // Basic query
+   public boolean hasUnitAtPosition(Position position) {
+      return _unitsAtPositions.get(position) != null;
    }
 
    private class NoSuppliableUnitsInRangeException extends LogicException {
