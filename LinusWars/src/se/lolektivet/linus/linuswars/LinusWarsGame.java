@@ -35,14 +35,36 @@ public class LinusWarsGame extends BasicGame {
 
    private Font _mainFont;
 
+   private LogicalWarGame createGameFromMapAndFactions(LogicalWarMap logicalWarMap, List<Faction> factions) {
+      LogicalWarGame logicalWarGame = new LogicalWarGame(logicalWarMap, factions);
+      List<Position> hqs = logicalWarMap.findHqs();
+      int factionIndex = 0;
+      for (Position hqPosition : hqs) {
+         if (factionIndex >= factions.size()) {
+            throw new RuntimeException("This map needs " + hqs.size() + " factions, but you only supplied " + factions.size());
+         }
+         logicalWarGame.setFactionForProperty(hqPosition, factions.get(factionIndex));
+         factionIndex++;
+      }
+      if (factionIndex < factions.size()) {
+         throw new RuntimeException("This map only accepts " + hqs.size() + " factions, but you supplied " + factions.size());
+      }
+      return logicalWarGame;
+   }
+
    @Override
    public void init(GameContainer gc) throws SlickException {
-      LogicalWarMap logicalWarMap = new LogicalWarMap();
-      GraphicalWarMap graphicalWarMap = new GraphicalWarMap(logicalWarMap);
+      _mainFont = new SpriteSheetFont(new SpriteSheet(_resourceLoader.getFontSpriteSheet(), 7, 14), ' ');
+      HpNumbers hpNumbers = new HpNumbers();
+      hpNumbers.init(_resourceLoader);
+
       Terrain terrain = new Terrain();
       Buildings buildings = new Buildings();
       terrain.init(_resourceLoader);
       buildings.init(_resourceLoader);
+
+      LogicalWarMap logicalWarMap = new LogicalWarMap();
+      GraphicalWarMap graphicalWarMap = new GraphicalWarMap(logicalWarMap);
       MapMaker mapMaker = new GraphicalAndLogicalMapMaker(logicalWarMap, graphicalWarMap, terrain, buildings);
       Map1 map1 = new Map1(mapMaker);
       map1.create();
@@ -50,14 +72,7 @@ public class LinusWarsGame extends BasicGame {
       List<Faction> factions = new ArrayList<Faction>(2);
       factions.add(Faction.ORANGE_STAR);
       factions.add(Faction.BLUE_MOON);
-      LogicalWarGame logicalWarGame = new LogicalWarGame(logicalWarMap, factions);
-      List<Position> hqs = logicalWarMap.findHqs();
-      logicalWarGame.setFactionForProperty(hqs.get(0), Faction.ORANGE_STAR);
-      logicalWarGame.setFactionForProperty(hqs.get(1), Faction.BLUE_MOON);
-
-      _mainFont = new SpriteSheetFont(new SpriteSheet(_resourceLoader.getFontSpriteSheet(), 7, 14), ' ');
-      HpNumbers hpNumbers = new HpNumbers();
-      hpNumbers.init(_resourceLoader);
+      LogicalWarGame logicalWarGame = createGameFromMapAndFactions(logicalWarMap, factions);
 
       GraphicalWarGame graphicalWarGame = new GraphicalWarGame(hpNumbers, logicalWarGame);
       graphicalWarGame.setMap(graphicalWarMap);

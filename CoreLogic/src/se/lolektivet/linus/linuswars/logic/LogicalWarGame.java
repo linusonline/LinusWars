@@ -10,7 +10,7 @@ import java.util.*;
 /**
  * Created by Linus on 2014-09-19.
  */
-public class LogicalWarGame implements WarGameMoves {
+public class LogicalWarGame implements WarGameMoves, WarGameSetup {
 
    public interface Listener {
       void unitWasDestroyed(LogicalUnit logicalUnit);
@@ -48,11 +48,6 @@ public class LogicalWarGame implements WarGameMoves {
 
    private final Collection<Listener> _listeners;
 
-   @Deprecated
-   private Map<Position, PathWithCost> _cachedOptimalPathsForTravellingUnit;
-   @Deprecated
-   private LogicalUnit _unitForWhichOptimalPathsAreCached;
-
    private final WarGameQueries _queries;
 
    public LogicalWarGame(LogicalWarMap logicalWarMap, List<Faction> factionsInTurnOrder) {
@@ -84,6 +79,13 @@ public class LogicalWarGame implements WarGameMoves {
       findHqs();
    }
 
+   private void findHqs() {
+      Collection<Position> positionsOfHqs = _logicalWarMap.findHqs();
+      for (Position hqPosition : positionsOfHqs) {
+         _positionsOfHqs.put(hqPosition, Faction.NEUTRAL);
+      }
+   }
+
    public void addListener(Listener listener) {
       _listeners.add(listener);
    }
@@ -100,13 +102,7 @@ public class LogicalWarGame implements WarGameMoves {
       }
    }
 
-   private void findHqs() {
-      Collection<Position> positionsOfHqs = _logicalWarMap.findHqs();
-      for (Position hqPosition : positionsOfHqs) {
-         _positionsOfHqs.put(hqPosition, Faction.NEUTRAL);
-      }
-   }
-
+   @Override
    public void setFactionForProperty(Position positionOfProperty, Faction faction) {
       if (_gameStarted) {
          throw new IllegalStateException("setFactionForProperty not allowed after game start!");

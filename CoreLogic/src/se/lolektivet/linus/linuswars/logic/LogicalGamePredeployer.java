@@ -7,10 +7,10 @@ import se.lolektivet.linus.linuswars.logic.enums.UnitType;
  * Created by Linus on 2014-09-22.
  */
 public class LogicalGamePredeployer {
-   private final LogicalWarGame _logicalWarGame;
+   private final WarGameSetup _logicalWarGame;
    private final LogicalUnitFactory _unitFactory;
 
-   public LogicalGamePredeployer(LogicalWarGame logicalWarGame) {
+   public LogicalGamePredeployer(WarGameSetup logicalWarGame) {
       _logicalWarGame = logicalWarGame;
       _unitFactory = new LogicalUnitFactory();
    }
