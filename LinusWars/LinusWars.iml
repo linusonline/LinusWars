@@ -11,9 +11,9 @@
     <orderEntry type="module" module-name="CoreLogic" />
     <orderEntry type="module" module-name="Graphics" />
     <orderEntry type="module" module-name="GraphicalGame" />
-    <orderEntry type="library" name="Slick2D" level="project" />
     <orderEntry type="library" scope="TEST" name="junit" level="project" />
     <orderEntry type="library" name="lwjgl" level="project" />
+    <orderEntry type="library" name="slick" level="project" />
   </component>
 </module>
 
