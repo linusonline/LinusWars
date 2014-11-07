@@ -485,7 +485,11 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
    public boolean canLoadOnto(LogicalUnit loadingUnit, LogicalUnit transporter) {
       return !unitsAreEnemies(loadingUnit, transporter) &&
             _transportLogic.canTransport(transporter.getType(), loadingUnit.getType()) &&
-            getTransportedUnits(transporter).size() < _transportLogic.getTransportLimit(transporter.getType());
+            !transportIsFull(transporter);
+   }
+
+   private boolean transportIsFull(LogicalUnit transporter) {
+      return getTransportedUnits(transporter).size() >= _transportLogic.getTransportLimit(transporter.getType());
    }
 
    public List<LogicalUnit> getTransportedUnits(LogicalUnit transporter) {

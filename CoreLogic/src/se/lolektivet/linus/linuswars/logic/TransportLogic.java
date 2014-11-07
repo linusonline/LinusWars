@@ -59,8 +59,12 @@ public class TransportLogic {
       _transportLimits.put(UnitType.CRUISER, 2);
    }
 
+   private boolean isTransportType(UnitType unitType) {
+      return _transportCapabilities.containsKey(unitType);
+   }
+
    public boolean canTransport(UnitType transporter, UnitType passenger) {
-      return _transportCapabilities.get(transporter).contains(passenger);
+      return isTransportType(transporter) && _transportCapabilities.get(transporter).contains(passenger);
    }
 
    public int getTransportLimit(UnitType transporter) {
