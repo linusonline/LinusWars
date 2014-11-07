@@ -3,6 +3,8 @@ package se.lolektivet.linus.linuswars;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import se.lolektivet.linus.linuswars.graphics.ResourceLoader;
+import se.lolektivet.linus.linuswars.logic.WarGameMoves;
+import se.lolektivet.linus.linuswars.logic.WarGameQueries;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.LogicalWarGame;
@@ -16,7 +18,8 @@ import java.util.Set;
  */
 public class SelectAttackState implements InteractiveGameState {
    private final InteractiveWarGame _interactiveWarGame;
-   private final LogicalWarGame _logicalWarGame;
+   private WarGameQueries _warGameQueries;
+   private WarGameMoves _warGameMoves;
    private final LogicalUnit _logicalUnit;
    private final MovementArrow _movementArrow;
    private final List<LogicalUnit> _attackableUnits;
@@ -24,12 +27,14 @@ public class SelectAttackState implements InteractiveGameState {
    private GraphicalMenu _fireOrNothingMenu;
 
    public SelectAttackState(InteractiveWarGame interactiveWarGame,
-                            LogicalWarGame logicalWarGame,
+                            WarGameQueries warGameQueries,
+                            WarGameMoves warGameMoves,
                             LogicalUnit logicalUnit,
                             MovementArrow movementArrow,
                             Set<LogicalUnit> attackableUnits) {
       _interactiveWarGame = interactiveWarGame;
-      _logicalWarGame = logicalWarGame;
+      _warGameQueries = warGameQueries;
+      _warGameMoves = warGameMoves;
       _logicalUnit = logicalUnit;
       _movementArrow = movementArrow;
       _attackableUnits = new ArrayList<LogicalUnit>(attackableUnits);
@@ -39,7 +44,7 @@ public class SelectAttackState implements InteractiveGameState {
    }
 
    private void printAttackInfo() {
-      int damage = _logicalWarGame.calculateDamageInPercent(_logicalUnit, getTargetUnit());
+      int damage = _warGameQueries.calculateDamageInPercent(_logicalUnit, getTargetUnit());
       System.out.println("Damage: " + damage + "%");
    }
 
@@ -50,12 +55,12 @@ public class SelectAttackState implements InteractiveGameState {
    @Override
    public InteractiveGameState handleExecuteDown() {
       LogicalUnit defendingUnit = getTargetUnit();
-      _logicalWarGame.executeAttackMove(_logicalUnit, _movementArrow.getPath(), defendingUnit);
+      _warGameMoves.executeAttackMove(_logicalUnit, _movementArrow.getPath(), defendingUnit);
       _interactiveWarGame.stopIndicatingPositions();
       _interactiveWarGame.hideAttackCursor();
       _interactiveWarGame.setMovementArrowController(null);
       // TODO: Check if game was won!
-      return new StartingState(_interactiveWarGame, _logicalWarGame);
+      return new StartingState(_interactiveWarGame, _warGameQueries, _warGameMoves);
    }
 
    @Override
@@ -66,7 +71,7 @@ public class SelectAttackState implements InteractiveGameState {
    @Override
    public InteractiveGameState handleCancel() {
       _interactiveWarGame.hideAttackCursor();
-      return new ActionMenuState(_interactiveWarGame, _logicalWarGame, _logicalUnit, _movementArrow);
+      return new ActionMenuState(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
    }
 
    @Override

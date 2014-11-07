@@ -1,7 +1,10 @@
 package se.lolektivet.linus.linuswars.logic;
 
+import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.pathfinding.*;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,12 +13,14 @@ import java.util.Set;
  */
 public class WarGameQueriesImpl implements WarGameQueries {
    private final LogicalWarGame _logicalWarGame;
+   private final BasicWarGameQueries _basicWarGameQueries;
 
    private Map<Position, PathWithCost> _cachedOptimalPathsForTravellingUnit;
    private LogicalUnit _unitForWhichOptimalPathsAreCached;
 
    public WarGameQueriesImpl(LogicalWarGame logicalWarGame) {
       _logicalWarGame = logicalWarGame;
+      _basicWarGameQueries = logicalWarGame;
    }
 
    @Override
@@ -82,7 +87,83 @@ public class WarGameQueriesImpl implements WarGameQueries {
    }
 
    @Override
+   public boolean hasActiveUnitAtPosition(Position position) {
+      return _basicWarGameQueries.hasUnitAtPosition(position) && !unitHasMovedThisTurn(_basicWarGameQueries.getUnitAtPosition(position));
+   }
+
+   private boolean unitHasMovedThisTurn(LogicalUnit unit) {
+      return _basicWarGameQueries.unitBelongsToCurrentlyActiveFaction(unit) && !_basicWarGameQueries.unitCanStillMoveThisTurn(unit);
+   }
+
+   @Override
+   public boolean unitBelongsToCurrentlyActiveFaction(LogicalUnit unit) {
+      return _basicWarGameQueries.unitBelongsToCurrentlyActiveFaction(unit);
+   }
+
+   @Override
+   public boolean unitCanStillMoveThisTurn(LogicalUnit logicalUnit) {
+      return _basicWarGameQueries.unitCanStillMoveThisTurn(logicalUnit);
+   }
+
+   @Override
    public boolean hasUnitAtPosition(Position position) {
-      return false;
+      return _basicWarGameQueries.hasUnitAtPosition(position);
+   }
+
+   @Override
+   public LogicalUnit getUnitAtPosition(Position position) {
+      return _basicWarGameQueries.getUnitAtPosition(position);
+   }
+
+   @Override
+   public Position getPositionOfUnit(LogicalUnit logicalUnit) {
+      return _basicWarGameQueries.getPositionOfUnit(logicalUnit);
+   }
+
+   @Override
+   public Faction getCurrentlyActiveFaction() {
+      return _basicWarGameQueries.getCurrentlyActiveFaction();
+   }
+
+   @Override
+   public Faction getFactionForUnit(LogicalUnit logicalUnit) {
+      return _basicWarGameQueries.getFactionForUnit(logicalUnit);
+   }
+
+   @Override
+   public List<LogicalUnit> getTransportedUnits(LogicalUnit transporter) {
+      return _basicWarGameQueries.getTransportedUnits(transporter);
+   }
+
+   @Override
+   public boolean canLoadOnto(LogicalUnit loadingUnit, LogicalUnit transporter) {
+      return _basicWarGameQueries.canLoadOnto(loadingUnit, transporter);
+   }
+
+   @Override
+   public int calculateDamageInPercent(LogicalUnit attackingUnit, LogicalUnit defendingUnit) {
+      return _basicWarGameQueries.calculateDamageInPercent(attackingUnit, defendingUnit);
+   }
+
+   // TODO: Pull up implementation of extended queries from LogicalWarGame
+
+   @Override
+   public Collection<Position> getAdjacentPositions(Position position) {
+      return _basicWarGameQueries.getAdjacentPositions(position);
+   }
+
+   @Override
+   public Set<LogicalUnit> getSuppliableUnitsAfterMove(LogicalUnit supplier, Path path) {
+      return _basicWarGameQueries.getSuppliableUnitsAfterMove(supplier, path);
+   }
+
+   @Override
+   public Set<LogicalUnit> getAttackableUnitsAfterMove(LogicalUnit attackingUnit, Path path) {
+      return _basicWarGameQueries.getAttackableUnitsAfterMove(attackingUnit, path);
+   }
+
+   @Override
+   public Set<Position> getAdjacentVacantPositionsAfterMove(LogicalUnit movingUnit, Path path) {
+      return _basicWarGameQueries.getAdjacentVacantPositionsAfterMove(movingUnit, path);
    }
 }

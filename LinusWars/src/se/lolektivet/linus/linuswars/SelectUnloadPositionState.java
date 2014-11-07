@@ -3,10 +3,8 @@ package se.lolektivet.linus.linuswars;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import se.lolektivet.linus.linuswars.graphics.ResourceLoader;
+import se.lolektivet.linus.linuswars.logic.*;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
-import se.lolektivet.linus.linuswars.logic.LogicalUnit;
-import se.lolektivet.linus.linuswars.logic.LogicalWarGame;
-import se.lolektivet.linus.linuswars.logic.Position;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,15 +15,22 @@ import java.util.Set;
  */
 public class SelectUnloadPositionState implements InteractiveGameState {
    private final InteractiveWarGame _interactiveWarGame;
-   private final LogicalWarGame _logicalWarGame;
+   private final WarGameQueries _warGameQueries;
+   private final WarGameMoves _warGameMoves;
    private final LogicalUnit _logicalUnit;
    private final MovementArrow _movementArrow;
    private final List<Position> _candidatePositions;
    private int _currentlySelectedPositionIndex;
 
-   public SelectUnloadPositionState(InteractiveWarGame interactiveWarGame, LogicalWarGame logicalWarGame, LogicalUnit logicalUnit, MovementArrow movementArrow, Set<Position> vacantPositions) {
+   public SelectUnloadPositionState(InteractiveWarGame interactiveWarGame,
+                                    WarGameQueries warGameQueries,
+                                    WarGameMoves warGameMoves,
+                                    LogicalUnit logicalUnit,
+                                    MovementArrow movementArrow,
+                                    Set<Position> vacantPositions) {
       _interactiveWarGame = interactiveWarGame;
-      _logicalWarGame = logicalWarGame;
+      _warGameQueries = warGameQueries;
+      _warGameMoves = warGameMoves;
       _logicalUnit = logicalUnit;
       _movementArrow = movementArrow;
       _candidatePositions = new ArrayList<Position>(vacantPositions);
@@ -39,19 +44,19 @@ public class SelectUnloadPositionState implements InteractiveGameState {
 
    private LogicalUnit getUnloadingUnit() {
       // TODO: Proper unit selection state
-      return _logicalWarGame.getTransportedUnits(_logicalUnit).get(0);
+      return _warGameQueries.getTransportedUnits(_logicalUnit).get(0);
    }
 
    @Override
    public InteractiveGameState handleExecuteDown() {
       LogicalUnit unloadingUnit = getUnloadingUnit();
       Position unloadingPosition = _candidatePositions.get(_currentlySelectedPositionIndex);
-      _logicalWarGame.executeUnloadMove(_logicalUnit, unloadingUnit, _movementArrow.getPath(), unloadingPosition);
+      _warGameMoves.executeUnloadMove(_logicalUnit, unloadingUnit, _movementArrow.getPath(), unloadingPosition);
       _interactiveWarGame.stopIndicatingPositions();
       _interactiveWarGame.hideAttackCursor();
       _interactiveWarGame.showGraphicForUnit(unloadingUnit);
       _interactiveWarGame.setPositionOfGraphicForUnit(unloadingUnit, unloadingPosition);
-      return new StartingState(_interactiveWarGame, _logicalWarGame);
+      return new StartingState(_interactiveWarGame, _warGameQueries, _warGameMoves);
    }
 
    @Override
@@ -62,7 +67,7 @@ public class SelectUnloadPositionState implements InteractiveGameState {
    @Override
    public InteractiveGameState handleCancel() {
       _interactiveWarGame.hideAttackCursor();
-      return new ActionMenuState(_interactiveWarGame, _logicalWarGame, _logicalUnit, _movementArrow);
+      return new ActionMenuState(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
    }
 
    @Override

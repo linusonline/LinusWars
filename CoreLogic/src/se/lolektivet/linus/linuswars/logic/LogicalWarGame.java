@@ -10,7 +10,7 @@ import java.util.*;
 /**
  * Created by Linus on 2014-09-19.
  */
-public class LogicalWarGame implements WarGameMoves, WarGameSetup {
+public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQueries {
 
    public interface Listener {
       void unitWasDestroyed(LogicalUnit logicalUnit);
@@ -48,7 +48,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
 
    private final Collection<Listener> _listeners;
 
-   private final WarGameQueries _queries;
+   private WarGameQueries _queries;
 
    public LogicalWarGame(LogicalWarMap logicalWarMap, List<Faction> factionsInTurnOrder) {
       _logicalWarMap = logicalWarMap;
@@ -75,8 +75,11 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
       _gameStarted = false;
       _unitsLeftToMoveThisTurn = new HashSet<LogicalUnit>();
       _listeners = new HashSet<Listener>(0);
-      _queries = new WarGameQueriesImpl(this);
       findHqs();
+   }
+
+   public void setQueries(WarGameQueries warGameQueries) {
+      _queries = warGameQueries;
    }
 
    private void findHqs() {
@@ -172,6 +175,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
    }
 
    // Extended query
+   @Override
    public Collection<Position> getAdjacentPositions(Position position) {
       Collection<Position> adjacentPositions = position.getAdjacentPositions();
       Collection<Position> adjacentPositionsInsideMap = new HashSet<Position>(2);
@@ -194,6 +198,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
    }
 
    // Extended query
+   @Deprecated
    public Set<LogicalUnit> getSuppliableUnitsAfterMove(LogicalUnit supplier, Path path) {
       Position destination = path.getFinalPosition();
       Set<LogicalUnit> suppliableUnits;
@@ -222,6 +227,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
    }
 
    // Extended query
+   @Deprecated
    public Set<LogicalUnit> getAttackableUnitsAfterMove(LogicalUnit attackingUnit, Path path) {
       Position destination = path.getFinalPosition();
       Set<LogicalUnit> attackableUnits;
@@ -233,6 +239,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
       return attackableUnits;
    }
 
+   @Override
    public Set<Position> getAdjacentVacantPositionsAfterMove(LogicalUnit movingUnit, Path path) {
       Position destination = path.getFinalPosition();
       Collection<Position> adjacentPositions = getAdjacentPositions(destination);
@@ -295,17 +302,17 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
       for (int stepCount = 0; stepCount < nrOfSteps; stepCount++) {
          x++;
          y++;
-         addPositionIfInsideMap(x, y,positions);
+         addPositionIfInsideMap(x, y, positions);
       }
       for (int stepCount = 0; stepCount < nrOfSteps; stepCount++) {
          x--;
          y++;
-         addPositionIfInsideMap(x, y,positions);
+         addPositionIfInsideMap(x, y, positions);
       }
       for (int stepCount = 0; stepCount < nrOfSteps; stepCount++) {
          x--;
          y--;
-         addPositionIfInsideMap(x, y,positions);
+         addPositionIfInsideMap(x, y, positions);
       }
       for (int stepCount = 0; stepCount < nrOfSteps; stepCount++) {
          x++;
@@ -414,6 +421,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
             _attackLogic.canAttack(defendingUnit.getType(), attackingUnit.getType());
    }
 
+   @Override
    public int calculateDamageInPercent(LogicalUnit attackingUnit, LogicalUnit defendingUnit) {
       if (!_attackLogic.canAttack(attackingUnit.getType(), defendingUnit.getType())) {
          throw new LogicException();
@@ -482,6 +490,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
       loadUnitOntoTransport(movingUnit, transport);
    }
 
+   @Override
    public boolean canLoadOnto(LogicalUnit loadingUnit, LogicalUnit transporter) {
       return !unitsAreEnemies(loadingUnit, transporter) &&
             _transportLogic.canTransport(transporter.getType(), loadingUnit.getType()) &&
@@ -492,6 +501,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
       return getTransportedUnits(transporter).size() >= _transportLogic.getTransportLimit(transporter.getType());
    }
 
+   @Override
    public List<LogicalUnit> getTransportedUnits(LogicalUnit transporter) {
       List<LogicalUnit> unitsOnTransport = _transportedUnits.get(transporter);
       if (unitsOnTransport == null) {
@@ -671,6 +681,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
    }
 
    // Basic query
+   @Override
    public Faction getCurrentlyActiveFaction() {
       return _currentlyActiveFaction;
    }
@@ -681,6 +692,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
    }
 
    // Basic query
+   @Override
    public LogicalUnit getUnitAtPosition(Position position) {
       if (!hasUnitAtPosition(position)) {
          throw new UnitNotFoundException();
@@ -689,6 +701,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
    }
 
    // Basic query
+   @Override
    public Position getPositionOfUnit(LogicalUnit logicalUnit) {
       if (!hasUnit(logicalUnit)) {
          throw new UnitNotFoundException();
@@ -702,21 +715,25 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup {
    }
 
    // Basic query
+   @Override
    public Faction getFactionForUnit(LogicalUnit logicalUnit) {
       return _factionsOfUnits.get(logicalUnit);
    }
 
    // Basic query
-   private boolean unitCanStillMoveThisTurn(LogicalUnit logicalUnit) {
+   @Override
+   public boolean unitCanStillMoveThisTurn(LogicalUnit logicalUnit) {
       return _unitsLeftToMoveThisTurn.contains(logicalUnit);
    }
 
    // Basic query
-   private boolean unitBelongsToCurrentlyActiveFaction(LogicalUnit unit) {
+   @Override
+   public boolean unitBelongsToCurrentlyActiveFaction(LogicalUnit unit) {
       return _factionsOfUnits.get(unit).equals(_currentlyActiveFaction);
    }
 
    // Basic query
+   @Override
    public boolean hasUnitAtPosition(Position position) {
       return _unitsAtPositions.get(position) != null;
    }

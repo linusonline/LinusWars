@@ -3,31 +3,32 @@ package se.lolektivet.linus.linuswars;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import se.lolektivet.linus.linuswars.graphics.ResourceLoader;
+import se.lolektivet.linus.linuswars.logic.*;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
-import se.lolektivet.linus.linuswars.logic.LogicalUnit;
-import se.lolektivet.linus.linuswars.logic.LogicalWarGame;
 
 /**
  * Created by Linus on 2014-09-19.
  */
 public class StartingState implements InteractiveGameState {
    private final InteractiveWarGame _interactiveWarGame;
-   private final LogicalWarGame _logicalWarGame;
+   private final WarGameQueries _warGameQueries;
+   private final WarGameMoves _warGameMoves;
    private boolean _executeHasBeenPressed = false;
 
-   public StartingState(InteractiveWarGame interactiveWarGame, LogicalWarGame logicalWarGame) {
+   public StartingState(InteractiveWarGame interactiveWarGame, WarGameQueries warGameQueries, WarGameMoves warGameMoves) {
       _interactiveWarGame = interactiveWarGame;
-      _logicalWarGame = logicalWarGame;
+      _warGameMoves = warGameMoves;
+      _warGameQueries = warGameQueries;
    }
 
    @Override
    public InteractiveGameState handleExecuteDown() {
       _executeHasBeenPressed = true;
-      if (_logicalWarGame.hasActiveUnitAtPosition(_interactiveWarGame.getCursorPosition())) {
-         LogicalUnit logicalUnit = _logicalWarGame.getUnitAtPosition(_interactiveWarGame.getCursorPosition());
-         return new SelectMovementState(_interactiveWarGame, _logicalWarGame, logicalUnit);
+      if (_warGameQueries.hasActiveUnitAtPosition(_interactiveWarGame.getCursorPosition())) {
+         LogicalUnit logicalUnit = _warGameQueries.getUnitAtPosition(_interactiveWarGame.getCursorPosition());
+         return new SelectMovementState(_interactiveWarGame, _warGameQueries, _warGameMoves, logicalUnit);
       } else {
-         return new QuickMenuState(_interactiveWarGame, _logicalWarGame);
+         return new QuickMenuState(_interactiveWarGame, _warGameQueries, _warGameMoves);
       }
    }
 

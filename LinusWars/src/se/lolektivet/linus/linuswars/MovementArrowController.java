@@ -4,8 +4,8 @@ import se.lolektivet.linus.linuswars.graphicalgame.MapCoordinateTransformer;
 import se.lolektivet.linus.linuswars.graphics.MovementArrowSprites;
 import se.lolektivet.linus.linuswars.graphics.ResourceLoader;
 import se.lolektivet.linus.linuswars.logic.LogicalUnit;
-import se.lolektivet.linus.linuswars.logic.LogicalWarGame;
 import se.lolektivet.linus.linuswars.logic.Position;
+import se.lolektivet.linus.linuswars.logic.WarGameQueries;
 
 import java.util.Collection;
 
@@ -15,14 +15,14 @@ import java.util.Collection;
 public class MovementArrowController {
    private MovementArrow _movementArrow;
    private final LogicalUnit _movingUnit;
-   private final LogicalWarGame _logicalWarGame;
+   private WarGameQueries _warGameQueries;
    private final InteractiveWarGame _interactiveWarGame;
    private MovementArrowSprites _movementArrowSprites;
 
-   public MovementArrowController(MovementArrow movementArrow, LogicalUnit movingUnit, LogicalWarGame logicalWarGame, InteractiveWarGame interactiveWarGame) {
+   public MovementArrowController(MovementArrow movementArrow, LogicalUnit movingUnit, WarGameQueries warGameQueries, InteractiveWarGame interactiveWarGame) {
       _movementArrow = movementArrow;
       _movingUnit = movingUnit;
-      _logicalWarGame = logicalWarGame;
+      _warGameQueries = warGameQueries;
       _interactiveWarGame = interactiveWarGame;
    }
 
@@ -38,7 +38,7 @@ public class MovementArrowController {
    public boolean canExtendMovementArrowToCursorPosition() {
       Position cursorPosition = _interactiveWarGame.getCursorPosition();
       Collection<Position> positionsAdjacentToArrowHead =
-            _logicalWarGame.getAdjacentPositions(_movementArrow.getFinalPosition());
+            _warGameQueries.getAdjacentPositions(_movementArrow.getFinalPosition());
       if (!positionsAdjacentToArrowHead.contains(cursorPosition)) {
          return false;
       }
@@ -51,7 +51,7 @@ public class MovementArrowController {
       if (positionIsOnArrowPath(cursorPosition)) {
          return false;
       }
-      return _logicalWarGame.isPathAllowedForUnit(_movementArrow.getPath(), _movingUnit);
+      return _warGameQueries.isPathAllowedForUnit(_movementArrow.getPath(), _movingUnit);
    }
 
    private boolean positionIsOnArrowPath(Position position) {

@@ -14,7 +14,8 @@ import java.util.Collection;
  */
 public class SelectMovementState implements InteractiveGameState {
    private final InteractiveWarGame _interactiveWarGame;
-   private final LogicalWarGame _logicalWarGame;
+   private final WarGameQueries _warGameQueries;
+   private final WarGameMoves _warGameMoves;
    private final LogicalUnit _logicalUnit;
    private Collection<Position> _reachablePositions;
    private MovementArrow _movementArrow;
@@ -22,27 +23,28 @@ public class SelectMovementState implements InteractiveGameState {
 
    public SelectMovementState(
          InteractiveWarGame interactiveWarGame,
-         LogicalWarGame logicalWarGame,
+         WarGameQueries warGameQueries, WarGameMoves warGameMoves,
          LogicalUnit logicalUnit,
          MovementArrow movementArrow) {
       _interactiveWarGame = interactiveWarGame;
-      _logicalWarGame = logicalWarGame;
+      _warGameQueries = warGameQueries;
+      _warGameMoves = warGameMoves;
       _logicalUnit = logicalUnit;
       _movementArrow = movementArrow;
-      _movementArrowController = new MovementArrowController(_movementArrow, _logicalUnit, _logicalWarGame, _interactiveWarGame);
+      _movementArrowController = new MovementArrowController(_movementArrow, _logicalUnit, _warGameQueries, _interactiveWarGame);
       _interactiveWarGame.setMovementArrowController(_movementArrowController);
       resetGraphicalUnit();
    }
 
    public SelectMovementState(
          InteractiveWarGame interactiveWarGame,
-         LogicalWarGame logicalWarGame,
+         WarGameQueries warGameQueries, WarGameMoves warGameMoves,
          LogicalUnit logicalUnit) {
-      this(interactiveWarGame, logicalWarGame, logicalUnit, new MovementArrow(logicalWarGame.getPositionOfUnit(logicalUnit)));
+      this(interactiveWarGame, warGameQueries, warGameMoves, logicalUnit, new MovementArrow(warGameQueries.getPositionOfUnit(logicalUnit)));
    }
 
    private void resetGraphicalUnit() {
-      _interactiveWarGame.setPositionOfGraphicForUnit(_logicalUnit, _logicalWarGame.getPositionOfUnit(_logicalUnit));
+      _interactiveWarGame.setPositionOfGraphicForUnit(_logicalUnit, _warGameQueries.getPositionOfUnit(_logicalUnit));
    }
 
    @Override
@@ -51,11 +53,11 @@ public class SelectMovementState implements InteractiveGameState {
          // TODO: Animate travel.
          _interactiveWarGame.setPositionOfGraphicForUnit(_logicalUnit, _movementArrow.getFinalPosition());
          _interactiveWarGame.setMovementArrowController(null);
-         return new ActionMenuState(_interactiveWarGame, _logicalWarGame, _logicalUnit, _movementArrow);
+         return new ActionMenuState(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
       } else if (canDoLoadMove()) {
          _interactiveWarGame.setPositionOfGraphicForUnit(_logicalUnit, _movementArrow.getFinalPosition());
          _interactiveWarGame.setMovementArrowController(null);
-         return new LoadMenuState(_interactiveWarGame, _logicalWarGame, _logicalUnit, _movementArrow);
+         return new LoadMenuState(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
       } else {
          return this;
       }
@@ -74,7 +76,7 @@ public class SelectMovementState implements InteractiveGameState {
    }
 
    private boolean destinationIsVacant() {
-      return !_logicalWarGame.hasUnitAtPosition(_interactiveWarGame.getCursorPosition());
+      return !_warGameQueries.hasUnitAtPosition(_interactiveWarGame.getCursorPosition());
    }
 
    private boolean pathIsEmpty() {
@@ -82,7 +84,7 @@ public class SelectMovementState implements InteractiveGameState {
    }
 
    private boolean canLoadOntoUnitAtDestination() {
-      return _logicalWarGame.canLoadOnto(_logicalUnit, _logicalWarGame.getUnitAtPosition(_interactiveWarGame.getCursorPosition()));
+      return _warGameQueries.canLoadOnto(_logicalUnit, _warGameQueries.getUnitAtPosition(_interactiveWarGame.getCursorPosition()));
    }
 
    private boolean canMoveAtAll() {
@@ -91,7 +93,7 @@ public class SelectMovementState implements InteractiveGameState {
    }
 
    private boolean unitIsMovable() {
-      return _logicalWarGame.getCurrentlyActiveFaction().equals(_logicalWarGame.getFactionForUnit(_logicalUnit));
+      return _warGameQueries.getCurrentlyActiveFaction().equals(_warGameQueries.getFactionForUnit(_logicalUnit));
    }
 
    private boolean destinationIsReachable() {
@@ -107,7 +109,7 @@ public class SelectMovementState implements InteractiveGameState {
    public InteractiveGameState handleCancel() {
       _interactiveWarGame.stopIndicatingPositions();
       _interactiveWarGame.setMovementArrowController(null);
-      return new StartingState(_interactiveWarGame, _logicalWarGame);
+      return new StartingState(_interactiveWarGame, _warGameQueries, _warGameMoves);
    }
 
    @Override
@@ -124,7 +126,7 @@ public class SelectMovementState implements InteractiveGameState {
          if (_movementArrowController.canExtendMovementArrowToCursorPosition()) {
             _movementArrow.addPoint(newCursorPosition);
          } else {
-            Path optimalPath = _logicalWarGame.getOptimalPathForUnitToDestination(_logicalUnit, newCursorPosition);
+            Path optimalPath = _warGameQueries.getOptimalPathForUnitToDestination(_logicalUnit, newCursorPosition);
             _movementArrow = new MovementArrow(optimalPath);
             _movementArrow.build();
             _movementArrowController.setMovementArrow(_movementArrow);
@@ -136,7 +138,7 @@ public class SelectMovementState implements InteractiveGameState {
 
    @Override
    public void setResourceLoader(ResourceLoader loader) {
-      _reachablePositions = _logicalWarGame.getAllReachablePoints(_logicalUnit);
+      _reachablePositions = _warGameQueries.getAllReachablePoints(_logicalUnit);
       _interactiveWarGame.indicateSelectedPositions(_reachablePositions);
       _movementArrowController.init(loader);
    }

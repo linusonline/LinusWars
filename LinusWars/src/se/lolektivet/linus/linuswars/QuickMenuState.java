@@ -3,6 +3,8 @@ package se.lolektivet.linus.linuswars;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import se.lolektivet.linus.linuswars.graphics.ResourceLoader;
+import se.lolektivet.linus.linuswars.logic.WarGameMoves;
+import se.lolektivet.linus.linuswars.logic.WarGameQueries;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.LogicalWarGame;
 
@@ -11,13 +13,15 @@ import se.lolektivet.linus.linuswars.logic.LogicalWarGame;
  */
 public class QuickMenuState implements InteractiveGameState {
    private final InteractiveWarGame _interactiveWarGame;
-   private final LogicalWarGame _logicalWarGame;
+   private final WarGameQueries _warGameQueries;
+   private final WarGameMoves _warGameMoves;
    private GraphicalMenu _theMenu;
    private ResourceLoader _resourceLoader;
 
-   public QuickMenuState(InteractiveWarGame interactiveWarGame, LogicalWarGame logicalWarGame) {
+   public QuickMenuState(InteractiveWarGame interactiveWarGame, WarGameQueries warGameQueries, WarGameMoves warGameMoves) {
       _interactiveWarGame = interactiveWarGame;
-      _logicalWarGame = logicalWarGame;
+      _warGameQueries = warGameQueries;
+      _warGameMoves = warGameMoves;
    }
 
    @Override
@@ -26,7 +30,7 @@ public class QuickMenuState implements InteractiveGameState {
       QuickMenuItem menuItem = QuickMenuItem.fromName(menuItemText);
       switch (menuItem) {
          case END_TURN:
-            _logicalWarGame.endTurn();
+            _warGameMoves.endTurn();
             // TODO: Play end-of-turn animations, change some graphics and bg sound.
             System.out.println("Turn ended!");
             break;
@@ -34,7 +38,7 @@ public class QuickMenuState implements InteractiveGameState {
             break;
          default:
       }
-      return new StartingState(_interactiveWarGame, _logicalWarGame);
+      return new StartingState(_interactiveWarGame, _warGameQueries, _warGameMoves);
    }
 
    @Override
@@ -44,7 +48,7 @@ public class QuickMenuState implements InteractiveGameState {
 
    @Override
    public InteractiveGameState handleCancel() {
-      return new StartingState(_interactiveWarGame, _logicalWarGame);
+      return new StartingState(_interactiveWarGame, _warGameQueries, _warGameMoves);
    }
 
    @Override
