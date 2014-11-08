@@ -16,22 +16,22 @@ import java.util.Set;
 /**
  * Created by Linus on 2014-09-26.
  */
-public class GraphicalWarGame implements LogicalWarGame.Listener {
+public class GraphicalWarGame implements WarGameListener {
    private final HpNumbers _hpNumbers;
    private final MapCoordinateTransformer _coordinateTransformer;
    private final Map<LogicalUnit, GraphicalUnit> _graphicsForUnits;
    private final Set<LogicalUnit> _hiddenUnits;
-   private final LogicalWarGame _logicalWarGame;
+   private final WarGameQueries _warGameQueries;
    private GraphicalWarMap _theMap;
 
-   public GraphicalWarGame(HpNumbers hpNumbers, LogicalWarGame logicalWarGame) {
+   public GraphicalWarGame(HpNumbers hpNumbers, WarGameQueries warGameQueries) {
       _hpNumbers = hpNumbers;
       _coordinateTransformer = new MapCoordinateTransformerImpl();
-      _logicalWarGame = logicalWarGame;
+      _warGameQueries = warGameQueries;
       _graphicsForUnits = new HashMap<LogicalUnit, GraphicalUnit>();
       _hiddenUnits = new HashSet<LogicalUnit>(0);
 
-      _logicalWarGame.addListener(this);
+      _warGameQueries.addListener(this);
    }
 
    public void setMap(GraphicalWarMap map) {
@@ -86,11 +86,11 @@ public class GraphicalWarGame implements LogicalWarGame.Listener {
    }
 
    public void makeUnitFaceEnemyHq(LogicalUnit logicalUnit) {
-      Faction friendlyFaction = _logicalWarGame.getFactionForUnit(logicalUnit);
-      Position friendlyHq = _logicalWarGame.getHqPosition(friendlyFaction);
-      for (Faction otherFaction : _logicalWarGame.getFactionsInGame()) {
+      Faction friendlyFaction = _warGameQueries.getFactionForUnit(logicalUnit);
+      Position friendlyHq = _warGameQueries.getHqPosition(friendlyFaction);
+      for (Faction otherFaction : _warGameQueries.getFactionsInGame()) {
          if (!friendlyFaction.equals(otherFaction)) {
-            Position enemyHq = _logicalWarGame.getHqPosition(otherFaction);
+            Position enemyHq = _warGameQueries.getHqPosition(otherFaction);
             Direction directionToFace = enemyHq.getX() < friendlyHq.getX() ? Direction.LEFT : Direction.RIGHT;
             _graphicsForUnits.get(logicalUnit).setDirection(directionToFace);
          }

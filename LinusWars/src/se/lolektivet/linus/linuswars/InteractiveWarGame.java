@@ -8,10 +8,10 @@ import se.lolektivet.linus.linuswars.graphicalgame.GraphicalWarGame;
 import se.lolektivet.linus.linuswars.graphicalgame.MapCoordinateTransformer;
 import se.lolektivet.linus.linuswars.graphicalgame.MapCoordinateTransformerImpl;
 import se.lolektivet.linus.linuswars.graphics.ResourceLoader;
-import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.LogicalUnit;
-import se.lolektivet.linus.linuswars.logic.LogicalWarGame;
 import se.lolektivet.linus.linuswars.logic.Position;
+import se.lolektivet.linus.linuswars.logic.WarGameQueries;
+import se.lolektivet.linus.linuswars.logic.enums.Direction;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -23,8 +23,8 @@ public class InteractiveWarGame {
 
    class CursorOutsideMapException extends Exception {}
 
-   private final LogicalWarGame _logicalWarGame;
-   private GraphicalWarGame _graphicalWarGame;
+   private final WarGameQueries _warGameQueries;
+   private final GraphicalWarGame _graphicalWarGame;
 
    private final MapCoordinateTransformer _coordinateTransformer;
    private Position _cursorPosition;
@@ -35,10 +35,10 @@ public class InteractiveWarGame {
    private Animation _attackCursor;
    private MovementArrowController _movementArrowController;
 
-   public InteractiveWarGame(GraphicalWarGame graphicalWarGame, LogicalWarGame logicalWarGame) {
+   public InteractiveWarGame(GraphicalWarGame graphicalWarGame, WarGameQueries warGameQueries) {
       _cursorPosition = new Position(0, 0);
       _coordinateTransformer = new MapCoordinateTransformerImpl();
-      _logicalWarGame = logicalWarGame;
+      _warGameQueries = warGameQueries;
       _positionsToIndicate = new HashSet<Position>();
       _graphicalWarGame = graphicalWarGame;
    }
@@ -60,11 +60,11 @@ public class InteractiveWarGame {
 
    void moveCursor(Direction direction) throws CursorOutsideMapException {
       Position newCandidatePosition = _cursorPosition.getPositionAfterStep(direction);
-      if (_logicalWarGame.isPositionInsideMap(newCandidatePosition)) {
+      if (_warGameQueries.isPositionInsideMap(newCandidatePosition)) {
          _cursorPosition = newCandidatePosition;
-         if (_logicalWarGame.hasUnitAtPosition(_cursorPosition)) {
-            System.out.println(_logicalWarGame.getUnitAtPosition(_cursorPosition));
-            for (LogicalUnit transportedUnit : _logicalWarGame.getTransportedUnits(_logicalWarGame.getUnitAtPosition(_cursorPosition))) {
+         if (_warGameQueries.hasUnitAtPosition(_cursorPosition)) {
+            System.out.println(_warGameQueries.getUnitAtPosition(_cursorPosition));
+            for (LogicalUnit transportedUnit : _warGameQueries.getTransportedUnits(_warGameQueries.getUnitAtPosition(_cursorPosition))) {
                System.out.println("   Transporting " + transportedUnit.getType());
             }
          }
@@ -82,7 +82,7 @@ public class InteractiveWarGame {
    }
 
    public void showAttackCursorOnUnit(LogicalUnit logicalUnit) {
-      _positionUnderAttackCursor = _logicalWarGame.getPositionOfUnit(logicalUnit);
+      _positionUnderAttackCursor = _warGameQueries.getPositionOfUnit(logicalUnit);
    }
 
    public void showAttackCursorOnPosition(Position position) {

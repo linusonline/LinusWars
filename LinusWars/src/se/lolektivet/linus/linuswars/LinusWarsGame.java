@@ -76,9 +76,9 @@ public class LinusWarsGame extends BasicGame {
       WarGameQueries warGameQueries = new WarGameQueriesImpl(logicalWarGame);
       logicalWarGame.setQueries(warGameQueries);
 
-      GraphicalWarGame graphicalWarGame = new GraphicalWarGame(hpNumbers, logicalWarGame);
+      GraphicalWarGame graphicalWarGame = new GraphicalWarGame(hpNumbers, warGameQueries);
       graphicalWarGame.setMap(graphicalWarMap);
-      _interactiveWarGame = new InteractiveWarGame(graphicalWarGame, logicalWarGame);
+      _interactiveWarGame = new InteractiveWarGame(graphicalWarGame, warGameQueries);
       _interactiveWarGame.init(_resourceLoader);
 
       LogicalGame1 logicalGamePredeployer = new LogicalGame1(logicalWarGame);

@@ -1,7 +1,7 @@
 package se.lolektivet.linus.linuswars.logic;
 
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
-import se.lolektivet.linus.linuswars.logic.pathfinding.Path;
+import se.lolektivet.linus.linuswars.logic.pathfinding.PotentiallyInfiniteInteger;
 
 import java.util.Collection;
 import java.util.List;
@@ -11,6 +11,9 @@ import java.util.Set;
  * Created by Linus on 2014-11-07.
  */
 public interface BasicWarGameQueries {
+
+   void addListener(WarGameListener listener);
+
    boolean unitBelongsToCurrentlyActiveFaction(LogicalUnit unit);
    boolean unitCanStillMoveThisTurn(LogicalUnit logicalUnit);
 
@@ -18,8 +21,11 @@ public interface BasicWarGameQueries {
    LogicalUnit getUnitAtPosition(Position position);
    Position getPositionOfUnit(LogicalUnit logicalUnit);
 
+   List<Faction> getFactionsInGame();
    Faction getCurrentlyActiveFaction();
    Faction getFactionForUnit(LogicalUnit logicalUnit);
+
+   Position getHqPosition(Faction faction);
 
    List<LogicalUnit> getTransportedUnits(LogicalUnit transporter);
 
@@ -30,12 +36,18 @@ public interface BasicWarGameQueries {
    int calculateDamageInPercent(LogicalUnit attackingUnit, LogicalUnit defendingUnit);
 
    // Map logic
-   public boolean isPositionInsideMap(Position position);
+   boolean isPositionInsideMap(Position position);
 
    // Attack logic
    Set<LogicalUnit> getUnitsAttackableByUnit(Set<LogicalUnit> targetUnits, LogicalUnit attacker);
 
-   // Extended
+   // Fuel and map
+   PotentiallyInfiniteInteger getFuelCostForUnitOnTile(LogicalUnit travellingUnit, Position tile);
+
+   // Movement and map
+   PotentiallyInfiniteInteger getTravelCostForUnitOnTile(LogicalUnit travellingUnit, Position tile);
+
+      // Extended
    Set<LogicalUnit> getAdjacentUnits(Position position);
    Collection<Position> getAdjacentPositions(Position position);
    Set<LogicalUnit> getUnitsSuppliableFromPosition(LogicalUnit supplier, Position supplyingPosition);

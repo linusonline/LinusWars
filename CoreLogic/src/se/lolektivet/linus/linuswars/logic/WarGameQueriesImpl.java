@@ -9,14 +9,13 @@ import java.util.*;
  * Created by Linus on 2014-10-02.
  */
 public class WarGameQueriesImpl implements WarGameQueries {
-   private final LogicalWarGame _logicalWarGame;
+
    private final BasicWarGameQueries _basicWarGameQueries;
 
    private Map<Position, PathWithCost> _cachedOptimalPathsForTravellingUnit;
    private LogicalUnit _unitForWhichOptimalPathsAreCached;
 
-   public WarGameQueriesImpl(LogicalWarGame logicalWarGame) {
-      _logicalWarGame = logicalWarGame;
+   public WarGameQueriesImpl(BasicWarGameQueries logicalWarGame) {
       _basicWarGameQueries = logicalWarGame;
    }
 
@@ -70,8 +69,8 @@ public class WarGameQueriesImpl implements WarGameQueries {
       return new CostCalculator() {
          @Override
          public Cost getCostForPosition(Position position) {
-            PotentiallyInfiniteInteger movementCost = _logicalWarGame.getTravelCostForUnitOnTile(logicalUnit, position);
-            PotentiallyInfiniteInteger fuelCost = _logicalWarGame.getFuelCostForUnitOnTile(logicalUnit, position);
+            PotentiallyInfiniteInteger movementCost = _basicWarGameQueries.getTravelCostForUnitOnTile(logicalUnit, position);
+            PotentiallyInfiniteInteger fuelCost = _basicWarGameQueries.getFuelCostForUnitOnTile(logicalUnit, position);
             return new Cost(movementCost, fuelCost);
          }
       };
@@ -90,6 +89,11 @@ public class WarGameQueriesImpl implements WarGameQueries {
 
    private boolean unitHasMovedThisTurn(LogicalUnit unit) {
       return _basicWarGameQueries.unitBelongsToCurrentlyActiveFaction(unit) && !_basicWarGameQueries.unitCanStillMoveThisTurn(unit);
+   }
+
+   @Override
+   public void addListener(WarGameListener listener) {
+      _basicWarGameQueries.addListener(listener);
    }
 
    @Override
@@ -118,6 +122,11 @@ public class WarGameQueriesImpl implements WarGameQueries {
    }
 
    @Override
+   public List<Faction> getFactionsInGame() {
+      return _basicWarGameQueries.getFactionsInGame();
+   }
+
+   @Override
    public Faction getCurrentlyActiveFaction() {
       return _basicWarGameQueries.getCurrentlyActiveFaction();
    }
@@ -125,6 +134,11 @@ public class WarGameQueriesImpl implements WarGameQueries {
    @Override
    public Faction getFactionForUnit(LogicalUnit logicalUnit) {
       return _basicWarGameQueries.getFactionForUnit(logicalUnit);
+   }
+
+   @Override
+   public Position getHqPosition(Faction faction) {
+      return _basicWarGameQueries.getHqPosition(faction);
    }
 
    @Override
@@ -192,6 +206,16 @@ public class WarGameQueriesImpl implements WarGameQueries {
    @Override
    public Set<LogicalUnit> getUnitsAttackableByUnit(Set<LogicalUnit> targetUnits, LogicalUnit attacker) {
       return _basicWarGameQueries.getUnitsAttackableByUnit(targetUnits, attacker);
+   }
+
+   @Override
+   public PotentiallyInfiniteInteger getFuelCostForUnitOnTile(LogicalUnit travellingUnit, Position tile) {
+      return _basicWarGameQueries.getFuelCostForUnitOnTile(travellingUnit, tile);
+   }
+
+   @Override
+   public PotentiallyInfiniteInteger getTravelCostForUnitOnTile(LogicalUnit travellingUnit, Position tile) {
+      return _basicWarGameQueries.getTravelCostForUnitOnTile(travellingUnit, tile);
    }
 
    private Set<LogicalUnit> getUnitsAttackableFromPosition(LogicalUnit attacker, Position attackingPosition) {

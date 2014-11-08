@@ -7,7 +7,7 @@ import se.lolektivet.linus.linuswars.logic.enums.UnitType;
  * Created by Linus on 2014-09-22.
  */
 public class LogicalGame1 extends LogicalGamePredeployer {
-   public LogicalGame1(LogicalWarGame logicalWarGame) {
+   public LogicalGame1(WarGameSetup logicalWarGame) {
       super(logicalWarGame);
    }
 

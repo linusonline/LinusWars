@@ -12,11 +12,6 @@ import java.util.*;
  */
 public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQueries {
 
-   public interface Listener {
-      void unitWasDestroyed(LogicalUnit logicalUnit);
-      void transportedUnitWasDestroyed(LogicalUnit logicalUnit);
-   }
-
    class UnitCollisionException extends RuntimeException {}
    class UnitNotFoundException extends RuntimeException {}
    class FactionAlreadySetException extends RuntimeException {}
@@ -46,7 +41,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
    private boolean _gameStarted;
    private Collection<LogicalUnit> _unitsLeftToMoveThisTurn;
 
-   private final Collection<Listener> _listeners;
+   private final Collection<WarGameListener> _listeners;
 
    private WarGameQueries _queries;
 
@@ -74,7 +69,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
       _positionsOfHqs = new HashMap<Position, Faction>(_factionsInTurnOrder.size());
       _gameStarted = false;
       _unitsLeftToMoveThisTurn = new HashSet<LogicalUnit>();
-      _listeners = new HashSet<Listener>(0);
+      _listeners = new HashSet<WarGameListener>(0);
       findHqs();
    }
 
@@ -90,19 +85,19 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
    }
 
    // Listening
-
-   public void addListener(Listener listener) {
+   @Override
+   public void addListener(WarGameListener listener) {
       _listeners.add(listener);
    }
 
    private void fireTransportedUnitDestroyed(LogicalUnit logicalUnit) {
-      for (Listener listener : _listeners) {
+      for (WarGameListener listener : _listeners) {
          listener.transportedUnitWasDestroyed(logicalUnit);
       }
    }
 
    private void fireUnitDestroyed(LogicalUnit logicalUnit) {
-      for (Listener listener : _listeners) {
+      for (WarGameListener listener : _listeners) {
          listener.unitWasDestroyed(logicalUnit);
       }
    }
@@ -162,12 +157,14 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
    }
 
    // Fuel and map query
-   PotentiallyInfiniteInteger getFuelCostForUnitOnTile(LogicalUnit travellingUnit, Position tile) {
+   @Override
+   public PotentiallyInfiniteInteger getFuelCostForUnitOnTile(LogicalUnit travellingUnit, Position tile) {
       return _fuelLogic.getFuelCostForMovementTypeOnTerrainType(travellingUnit.getMovementType(), _logicalWarMap.getTerrainForTile(tile));
    }
 
    // Movement & map query
-   PotentiallyInfiniteInteger getTravelCostForUnitOnTile(LogicalUnit travellingUnit, Position tile) {
+   @Override
+   public PotentiallyInfiniteInteger getTravelCostForUnitOnTile(LogicalUnit travellingUnit, Position tile) {
       if (hasUnitAtPosition(tile) && _queries.unitsAreEnemies(travellingUnit, getUnitAtPosition(tile))) {
          return PotentiallyInfiniteInteger.infinite();
       }
@@ -239,11 +236,6 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
       if (hasUnitAtPosition(position)) {
          unitList.add(getUnitAtPosition(position));
       }
-   }
-
-   // Extended query
-   private boolean unitsBelongToSameFaction(LogicalUnit unitOne, LogicalUnit unitTwo) {
-      return getFactionForUnit(unitOne).equals(getFactionForUnit(unitTwo));
    }
 
    @Override
@@ -461,6 +453,11 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
             joinedUnit.getHp1To10() < 10;
    }
 
+   // Extended query
+   private boolean unitsBelongToSameFaction(LogicalUnit unitOne, LogicalUnit unitTwo) {
+      return getFactionForUnit(unitOne).equals(getFactionForUnit(unitTwo));
+   }
+
    private boolean unitsAreSameType(LogicalUnit unitOne, LogicalUnit unitTwo) {
       return unitOne.getType().equals(unitTwo.getType());
    }
@@ -526,11 +523,13 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
    }
 
    // Basic query
+   @Override
    public Position getHqPosition(Faction faction) {
       return _hqsOfFactions.get(faction);
    }
 
    // Basic query
+   @Override
    public List<Faction> getFactionsInGame() {
       return new ArrayList<Faction>(_factionsInTurnOrder);
    }

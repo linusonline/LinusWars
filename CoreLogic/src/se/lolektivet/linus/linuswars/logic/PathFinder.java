@@ -11,8 +11,6 @@ import java.util.*;
  */
 public class PathFinder {
    private final LogicalUnit _travellingUnit;
-   @Deprecated
-   private LogicalWarGame _logicalWarGame;
    private WarGameQueries _warGameQueries;
    private final CostCalculator _costCalculator;
    private Cost _limit;

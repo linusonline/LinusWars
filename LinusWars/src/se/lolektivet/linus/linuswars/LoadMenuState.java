@@ -3,11 +3,10 @@ package se.lolektivet.linus.linuswars;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import se.lolektivet.linus.linuswars.graphics.ResourceLoader;
+import se.lolektivet.linus.linuswars.logic.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.WarGameMoves;
 import se.lolektivet.linus.linuswars.logic.WarGameQueries;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
-import se.lolektivet.linus.linuswars.logic.LogicalUnit;
-import se.lolektivet.linus.linuswars.logic.LogicalWarGame;
 
 /**
  * Created by Linus on 2014-09-29.

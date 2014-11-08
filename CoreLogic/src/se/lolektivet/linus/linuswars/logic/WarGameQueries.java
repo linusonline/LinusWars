@@ -9,6 +9,7 @@ import java.util.Set;
  * Created by Linus on 2014-10-02.
  */
 public interface WarGameQueries extends BasicWarGameQueries {
+
    // For re-routing travel arrow when user is selecting path.
    Path getOptimalPathForUnitToDestination(LogicalUnit travellingUnit, Position destination);
    // For showing all reachable points for a unit.
