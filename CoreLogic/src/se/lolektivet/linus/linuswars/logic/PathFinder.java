@@ -11,22 +11,24 @@ import java.util.*;
  */
 public class PathFinder {
    private final LogicalUnit _travellingUnit;
-   private final LogicalWarGame _logicalWarGame;
+   @Deprecated
+   private LogicalWarGame _logicalWarGame;
+   private WarGameQueries _warGameQueries;
    private final CostCalculator _costCalculator;
    private Cost _limit;
 
    private final List<PathWithCost> _pathsToExplore = new ArrayList<PathWithCost>(0);
    private final Map<Position, List<PathWithCost>> _optimalPathsFound = new HashMap<Position, List<PathWithCost>>(1);
 
-   public PathFinder(LogicalUnit travellingUnit, LogicalWarGame logicalWarGame, CostCalculator costCalculator) {
+   public PathFinder(LogicalUnit travellingUnit, WarGameQueries warGameQueries, CostCalculator costCalculator) {
       _travellingUnit = travellingUnit;
-      _logicalWarGame = logicalWarGame;
+      _warGameQueries = warGameQueries;
       _costCalculator = costCalculator;
    }
 
    Map<Position, PathWithCost> getOptimalPathsToAllReachablePoints(Cost limit) {
       _limit = limit;
-      calculateOptimalPathsToAllReachablePoints(_logicalWarGame.getPositionOfUnit(_travellingUnit));
+      calculateOptimalPathsToAllReachablePoints(_warGameQueries.getPositionOfUnit(_travellingUnit));
       Map<Position, PathWithCost> optimalPaths = new HashMap<Position, PathWithCost>(_optimalPathsFound.size());
       for (Map.Entry<Position, List<PathWithCost>> entry : _optimalPathsFound.entrySet()) {
          optimalPaths.put(entry.getKey(), getBestPathInATie(entry.getValue()));
@@ -67,7 +69,7 @@ public class PathFinder {
 
    private Collection<PathWithCost> getPathsThatContinueThisPathOneStep(PathWithCost path) {
       Collection<PathWithCost> nextStepPaths = new HashSet<PathWithCost>(4);
-      Collection<Position> nextSteps = _logicalWarGame.getAdjacentPositions(path.getFinalPosition());
+      Collection<Position> nextSteps = _warGameQueries.getAdjacentPositions(path.getFinalPosition());
       for (Position step : nextSteps) {
          PathWithCost nextStepPath = new PathWithCost(path);
          Cost additionalCost = _costCalculator.getCostForPosition(step);

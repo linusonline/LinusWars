@@ -18,5 +18,9 @@ public interface WarGameQueries extends BasicWarGameQueries {
    void invalidateOptimalPathsCache();
 
    boolean hasActiveUnitAtPosition(Position position);
+   Set<Position> getAdjacentVacantPositionsAfterMove(LogicalUnit movingUnit, Path path);
+   Set<LogicalUnit> getAttackableUnitsAfterMove(LogicalUnit attackingUnit, Path path);
+   boolean unitsAreEnemies(LogicalUnit oneUnit, LogicalUnit otherUnit);
+   Set<LogicalUnit> getSuppliableUnitsAfterMove(LogicalUnit supplier, Path path);
 
 }

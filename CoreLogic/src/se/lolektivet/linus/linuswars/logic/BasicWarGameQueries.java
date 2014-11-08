@@ -29,10 +29,14 @@ public interface BasicWarGameQueries {
    // Map and attack logic
    int calculateDamageInPercent(LogicalUnit attackingUnit, LogicalUnit defendingUnit);
 
-   // Extended
-   Collection<Position> getAdjacentPositions(Position position);
-   Set<LogicalUnit> getSuppliableUnitsAfterMove(LogicalUnit supplier, Path path);
-   Set<LogicalUnit> getAttackableUnitsAfterMove(LogicalUnit attackingUnit, Path path);
-   Set<Position> getAdjacentVacantPositionsAfterMove(LogicalUnit movingUnit, Path path);
+   // Map logic
+   public boolean isPositionInsideMap(Position position);
 
+   // Attack logic
+   Set<LogicalUnit> getUnitsAttackableByUnit(Set<LogicalUnit> targetUnits, LogicalUnit attacker);
+
+   // Extended
+   Set<LogicalUnit> getAdjacentUnits(Position position);
+   Collection<Position> getAdjacentPositions(Position position);
+   Set<LogicalUnit> getUnitsSuppliableFromPosition(LogicalUnit supplier, Position supplyingPosition);
 }
