@@ -61,8 +61,8 @@ public class QuickMenuState implements InteractiveGameState {
       if (_resourceLoader == null) {
          _resourceLoader = loader;
          _theMenu = new GraphicalMenu(_resourceLoader.getMenuCursorImage());
-         _theMenu.addItem(QuickMenuItem.END_TURN.getName(), null);
-         _theMenu.addItem(QuickMenuItem.NOTHING.getName(), null);
+         _theMenu.addItem(QuickMenuItem.END_TURN.getName());
+         _theMenu.addItem(QuickMenuItem.NOTHING.getName());
       }
    }
 

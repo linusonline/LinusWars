@@ -5,5 +5,6 @@ package se.lolektivet.linus.linuswars.logic;
 */
 public interface WarGameListener {
    void unitWasDestroyed(LogicalUnit logicalUnit);
+   void unitJoined(LogicalUnit logicalUnit);
    void transportedUnitWasDestroyed(LogicalUnit logicalUnit);
 }

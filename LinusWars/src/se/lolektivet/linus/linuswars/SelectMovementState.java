@@ -58,6 +58,10 @@ public class SelectMovementState implements InteractiveGameState {
          _interactiveWarGame.setPositionOfGraphicForUnit(_logicalUnit, _movementArrow.getFinalPosition());
          _interactiveWarGame.setMovementArrowController(null);
          return new LoadMenuState(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
+      } else if (canDoJoinMove()) {
+         _interactiveWarGame.setPositionOfGraphicForUnit(_logicalUnit, _movementArrow.getFinalPosition());
+         _interactiveWarGame.setMovementArrowController(null);
+         return new JoinMenuState(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
       } else {
          return this;
       }
@@ -66,7 +70,7 @@ public class SelectMovementState implements InteractiveGameState {
    private boolean canDoMove() {
       return canMoveAtAll() &&
             (destinationIsVacant() ||
-                  pathIsEmpty());
+                  selfSelected());
    }
 
    private boolean canDoLoadMove() {
@@ -75,16 +79,26 @@ public class SelectMovementState implements InteractiveGameState {
                   canLoadOntoUnitAtDestination());
    }
 
+   private boolean canDoJoinMove() {
+      return canMoveAtAll() &&
+            (!destinationIsVacant() &&
+            canJoinWithUnitAtDestination());
+   }
+
    private boolean destinationIsVacant() {
       return !_warGameQueries.hasUnitAtPosition(_interactiveWarGame.getCursorPosition());
    }
 
-   private boolean pathIsEmpty() {
+   private boolean selfSelected() {
       return _movementArrow.isEmpty();
    }
 
    private boolean canLoadOntoUnitAtDestination() {
       return _warGameQueries.canLoadOnto(_logicalUnit, _warGameQueries.getUnitAtPosition(_interactiveWarGame.getCursorPosition()));
+   }
+
+   private boolean canJoinWithUnitAtDestination() {
+      return _warGameQueries.canJoinWith(_logicalUnit, _warGameQueries.getUnitAtPosition(_interactiveWarGame.getCursorPosition()));
    }
 
    private boolean canMoveAtAll() {

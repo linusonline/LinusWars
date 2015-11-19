@@ -93,15 +93,15 @@ public class ActionMenuState implements InteractiveGameState {
          Set<LogicalUnit> suppliableUnits = _warGameQueries.getSuppliableUnitsAfterMove(_logicalUnit, _movementArrow.getPath());
          _attackableUnits = _warGameQueries.getAttackableUnitsAfterMove(_logicalUnit, _movementArrow.getPath());
          if (isTransportingUnits() && canUnload()) {
-            _theActionMenu.addItem(ActionMenuItem.UNLOAD.getName(), null);
+            _theActionMenu.addItem(ActionMenuItem.UNLOAD.getName());
          }
          if (!_attackableUnits.isEmpty()) {
-            _theActionMenu.addItem(ActionMenuItem.FIRE.getName(), null);
+            _theActionMenu.addItem(ActionMenuItem.FIRE.getName());
          }
          if (!suppliableUnits.isEmpty()) {
-            _theActionMenu.addItem(ActionMenuItem.SUPPLY.getName(), null);
+            _theActionMenu.addItem(ActionMenuItem.SUPPLY.getName());
          }
-         _theActionMenu.addItem(ActionMenuItem.WAIT.getName(), null);
+         _theActionMenu.addItem(ActionMenuItem.WAIT.getName());
          // TODO: "if can capture" -> add "Capture"
          // TODO: "if Sub" -> add "Dive" or "Surface"
          // TODO: "if can unload" -> add "Unload"

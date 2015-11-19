@@ -9,6 +9,7 @@ public enum ActionMenuItem {
    SUPPLY("Supply"),
    CAPTURE("Capture"),
    LOAD("Load"),
+   JOIN("Join"),
    UNLOAD("Unload"),
    DIVE("Dive"),
    SURFACE("Surface");

@@ -152,6 +152,11 @@ public class WarGameQueriesImpl implements WarGameQueries {
    }
 
    @Override
+   public boolean canJoinWith(LogicalUnit joiningUnit, LogicalUnit joinedUnit) {
+      return _basicWarGameQueries.canJoinWith(joiningUnit, joinedUnit);
+   }
+
+   @Override
    public int calculateDamageInPercent(LogicalUnit attackingUnit, LogicalUnit defendingUnit) {
       return _basicWarGameQueries.calculateDamageInPercent(attackingUnit, defendingUnit);
    }

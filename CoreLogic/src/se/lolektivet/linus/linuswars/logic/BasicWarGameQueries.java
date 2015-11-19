@@ -32,6 +32,8 @@ public interface BasicWarGameQueries {
       // Transport extended
    boolean canLoadOnto(LogicalUnit loadingUnit, LogicalUnit transporter);
 
+   boolean canJoinWith(LogicalUnit joiningUnit, LogicalUnit joinedUnit);
+
    // Map and attack logic
    int calculateDamageInPercent(LogicalUnit attackingUnit, LogicalUnit defendingUnit);
 

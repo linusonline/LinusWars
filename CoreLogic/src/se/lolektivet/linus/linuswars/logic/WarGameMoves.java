@@ -19,6 +19,6 @@ public interface WarGameMoves {
    void executeSupplyMove(LogicalUnit movingUnit, Path path);
    void executeLoadMove(LogicalUnit movingUnit, Path path);
    void executeUnloadMove(LogicalUnit transport, LogicalUnit unloadingUnit, Path movementPath, Position unloadPosition);
-   void executeJoinMove(LogicalUnit movingUnit, Path movementPath, LogicalUnit joinedUnit);
+   void executeJoinMove(LogicalUnit movingUnit, Path movementPath);
    void endTurn();
 }

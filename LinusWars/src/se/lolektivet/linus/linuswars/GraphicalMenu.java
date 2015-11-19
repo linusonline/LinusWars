@@ -47,6 +47,10 @@ public class GraphicalMenu {
       _position = position;
    }
 
+   void addItem(String text) {
+      addItem(text, null);
+   }
+
    void addItem(String text, Image icon) {
       _textForItems.add(text);
       _iconsForItems.add(icon);

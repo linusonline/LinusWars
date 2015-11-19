@@ -102,6 +102,12 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
       }
    }
 
+   private void fireUnitJoined(LogicalUnit logicalUnit) {
+      for (WarGameListener listener : _listeners) {
+         listener.unitJoined(logicalUnit);
+      }
+   }
+
    // Setup
 
    @Override
@@ -368,6 +374,13 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
             !transportIsFull(transporter);
    }
 
+   @Override
+   public boolean canJoinWith(LogicalUnit joiningUnit, LogicalUnit joinedUnit) {
+      return !_queries.unitsAreEnemies(joiningUnit, joinedUnit) &&
+            joiningUnit.getType().equals(joinedUnit.getType()) &&
+            joiningUnit.isDamaged() && joinedUnit.isDamaged();
+   }
+
    private boolean transportIsFull(LogicalUnit transporter) {
       return getTransportedUnits(transporter).size() >= _transportLogic.getTransportLimit(transporter.getType());
    }
@@ -437,12 +450,14 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
    }
 
    @Override
-   public void executeJoinMove(LogicalUnit movingUnit, Path movementPath, LogicalUnit joinedUnit) {
+   public void executeJoinMove(LogicalUnit movingUnit, Path movementPath) {
+      LogicalUnit joinedUnit = getUnitAtPosition(movementPath.getFinalPosition());
       // TODO: Check if path is allowed.
       if (!canJoin(movingUnit, joinedUnit)) {
          throw new LogicException("Units cannot join!");
       }
       internalExecuteJoinMove(movingUnit, joinedUnit);
+      _unitsLeftToMoveThisTurn.remove(joinedUnit);
       _unitsLeftToMoveThisTurn.remove(movingUnit);
    }
 
@@ -463,8 +478,9 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
    }
 
    private void internalExecuteJoinMove(LogicalUnit movingUnit, LogicalUnit joinedUnit) {
-      joinedUnit.setHp1To100(movingUnit.getHp1To100());
+      joinedUnit.setHp1To100(Math.min(movingUnit.getHp1To100() + joinedUnit.getHp1To100(), 100));
       joinedUnit.addFuel(movingUnit.getFuel());
+      fireUnitJoined(movingUnit);
       removeUnit(movingUnit);
    }
 

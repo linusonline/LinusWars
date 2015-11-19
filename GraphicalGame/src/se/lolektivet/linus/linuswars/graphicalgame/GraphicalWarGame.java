@@ -49,6 +49,12 @@ public class GraphicalWarGame implements WarGameListener {
    }
 
    @Override
+   public void unitJoined(LogicalUnit logicalUnit) {
+      _graphicsForUnits.remove(logicalUnit);
+      _hiddenUnits.remove(logicalUnit);
+   }
+
+   @Override
    public void transportedUnitWasDestroyed(LogicalUnit logicalUnit) {
       _graphicsForUnits.remove(logicalUnit);
       _hiddenUnits.remove(logicalUnit);

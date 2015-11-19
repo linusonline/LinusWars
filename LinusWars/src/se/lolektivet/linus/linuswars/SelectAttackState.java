@@ -101,7 +101,7 @@ public class SelectAttackState implements InteractiveGameState {
    public void setResourceLoader(ResourceLoader loader) {
       if (_fireOrNothingMenu == null) {
          _fireOrNothingMenu = new GraphicalMenu(loader.getMenuCursorImage());
-         _fireOrNothingMenu.addItem(ActionMenuItem.FIRE.getName(), null);
+         _fireOrNothingMenu.addItem(ActionMenuItem.FIRE.getName());
       }
    }
 

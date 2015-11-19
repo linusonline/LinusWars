@@ -12,16 +12,17 @@ public class LogicalGame1 extends LogicalGamePredeployer {
    }
 
    public void preDeploy() {
-      addNewUnit(UnitType.MD_TANK, new Position(1, 1), Faction.ORANGE_STAR);
-      addNewUnit(UnitType.APC, new Position(2, 2), Faction.ORANGE_STAR);
-      addNewUnit(UnitType.ARTILLERY, new Position(3, 3), Faction.ORANGE_STAR);
-      addNewUnit(UnitType.INFANTRY, new Position(4, 4), Faction.ORANGE_STAR);
-      addNewUnit(UnitType.MECH, new Position(4, 3), Faction.ORANGE_STAR);
+      addNewUnit(UnitType.MD_TANK, new Position(3, 1), Faction.ORANGE_STAR);
+      addNewUnit(UnitType.APC, new Position(4, 2), Faction.ORANGE_STAR);
+      addNewUnit(UnitType.ARTILLERY, new Position(5, 3), Faction.ORANGE_STAR);
+      addNewUnit(UnitType.INFANTRY, new Position(6, 4), Faction.ORANGE_STAR);
+      addNewUnit(UnitType.MECH, new Position(7, 3), Faction.ORANGE_STAR, 50);
+      addNewUnit(UnitType.MECH, new Position(7, 4), Faction.ORANGE_STAR, 30);
 
-      addNewUnit(UnitType.MD_TANK, new Position(10, 1), Faction.BLUE_MOON);
-      addNewUnit(UnitType.APC, new Position(11, 2), Faction.BLUE_MOON);
-      addNewUnit(UnitType.ARTILLERY, new Position(12, 3), Faction.BLUE_MOON);
-      addNewUnit(UnitType.INFANTRY, new Position(13, 4), Faction.BLUE_MOON);
-      addNewUnit(UnitType.MECH, new Position(13, 3), Faction.BLUE_MOON);
+      addNewUnit(UnitType.MD_TANK, new Position(8, 1), Faction.BLUE_MOON);
+      addNewUnit(UnitType.APC, new Position(9, 2), Faction.BLUE_MOON);
+      addNewUnit(UnitType.ARTILLERY, new Position(10, 3), Faction.BLUE_MOON);
+      addNewUnit(UnitType.INFANTRY, new Position(11, 4), Faction.BLUE_MOON);
+      addNewUnit(UnitType.MECH, new Position(12, 3), Faction.BLUE_MOON);
    }
 }

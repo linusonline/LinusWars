@@ -66,6 +66,10 @@ public class LogicalUnit {
       _hp = hp;
    }
 
+   boolean isDamaged() {
+      return getHp1To10() < 10;
+   }
+
    MovementType getMovementType() {
       return _movement;
    }

@@ -9,21 +9,22 @@ import se.lolektivet.linus.linuswars.logic.WarGameQueries;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 
 /**
- * Created by Linus on 2014-09-29.
+ * Created by Linus on 2015-11-19.
  */
-public class LoadMenuState implements InteractiveGameState {
-   private GraphicalMenu _theLoadMenu;
+public class JoinMenuState implements InteractiveGameState  {
+   private GraphicalMenu _theJoinMenu;
    private final InteractiveWarGame _interactiveWarGame;
    private final WarGameQueries _warGameQueries;
    private final WarGameMoves _warGameMoves;
    private final LogicalUnit _logicalUnit;
    private final MovementArrow _movementArrow;
 
-   public LoadMenuState(InteractiveWarGame interactiveWarGame,
-                        WarGameQueries warGameQueries,
-                        WarGameMoves warGameMoves,
-                        LogicalUnit logicalUnit,
-                        MovementArrow movementArrow) {
+   public JoinMenuState(
+         InteractiveWarGame interactiveWarGame,
+         WarGameQueries warGameQueries,
+         WarGameMoves warGameMoves,
+         LogicalUnit logicalUnit,
+         MovementArrow movementArrow) {
       _interactiveWarGame = interactiveWarGame;
       _warGameQueries = warGameQueries;
       _warGameMoves = warGameMoves;
@@ -33,14 +34,19 @@ public class LoadMenuState implements InteractiveGameState {
 
    @Override
    public InteractiveGameState handleExecuteDown() {
-      _warGameMoves.executeLoadMove(_logicalUnit, _movementArrow.getPath());
-      _interactiveWarGame.hideGraphicForUnit(_logicalUnit);
+      _warGameMoves.executeJoinMove(_logicalUnit, _movementArrow.getPath());
       return endMoveAndGoToStartingState();
    }
 
    @Override
    public InteractiveGameState handleExecuteUp() {
       return this;
+   }
+
+   private InteractiveGameState endMoveAndGoToStartingState() {
+      _interactiveWarGame.stopIndicatingPositions();
+      _interactiveWarGame.setMovementArrowController(null);
+      return new StartingState(_interactiveWarGame, _warGameQueries, _warGameMoves);
    }
 
    @Override
@@ -53,23 +59,18 @@ public class LoadMenuState implements InteractiveGameState {
       return this;
    }
 
-   private InteractiveGameState endMoveAndGoToStartingState() {
-      _interactiveWarGame.stopIndicatingPositions();
-      _interactiveWarGame.setMovementArrowController(null);
-      return new StartingState(_interactiveWarGame, _warGameQueries, _warGameMoves);
-   }
-
    @Override
    public void setResourceLoader(ResourceLoader loader) {
-      if (_theLoadMenu == null) {
-         _theLoadMenu = new GraphicalMenu(loader.getMenuCursorImage());
+      if (_theJoinMenu == null) {
+         _theJoinMenu = new GraphicalMenu(loader.getMenuCursorImage());
       }
-      _theLoadMenu.addItem(ActionMenuItem.LOAD.getName());
+      _theJoinMenu.addItem(ActionMenuItem.JOIN.getName());
+
    }
 
    @Override
    public void draw(Graphics g, Font font, int x, int y) {
       _interactiveWarGame.draw(g, font, 0, 0);
-      _theLoadMenu.draw(g, font);
+      _theJoinMenu.draw(g, font);
    }
 }
