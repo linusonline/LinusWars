@@ -9,6 +9,8 @@ import se.lolektivet.linus.linuswars.graphics.*;
 import se.lolektivet.linus.linuswars.logic.*;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
+import se.lolektivet.linus.linuswars.maps.GameSetup1;
+import se.lolektivet.linus.linuswars.maps.Map1;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,8 +74,10 @@ public class LinusWarsGame extends BasicGame {
       _interactiveWarGame = new InteractiveWarGame(graphicalWarGame, warGameQueries);
       _interactiveWarGame.init(_allSprites);
 
-      LogicalGame1 logicalGamePredeployer = new LogicalGame1(logicalWarGame);
-      logicalGamePredeployer.preDeploy();
+      // Deploy logical units
+      new GameSetup1().preDeploy(new LogicalGamePredeployer(logicalWarGame, new LogicalUnitFactory()));
+
+      // Deploy graphical units
       GraphicalGamePreDeployer graphicalGamePreDeployer = new GraphicalGamePreDeployer();
       graphicalGamePreDeployer.init(_allSprites);
       graphicalGamePreDeployer.preDeploy(logicalWarGame, graphicalWarGame);

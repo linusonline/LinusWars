@@ -6,7 +6,7 @@ import se.lolektivet.linus.linuswars.logic.LogicalWarGame;
 import se.lolektivet.linus.linuswars.logic.LogicalWarMap;
 import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.LogicalMapMaker;
-import se.lolektivet.linus.linuswars.logic.Map1;
+import se.lolektivet.linus.linuswars.maps.Map1;
 import se.lolektivet.linus.linuswars.logic.MapMaker;
 
 import java.util.ArrayList;

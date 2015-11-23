@@ -1,5 +1,6 @@
-package se.lolektivet.linus.linuswars.logic;
+package se.lolektivet.linus.linuswars.maps;
 
+import se.lolektivet.linus.linuswars.logic.MapMaker;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainTile;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainType;

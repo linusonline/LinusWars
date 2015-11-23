@@ -137,6 +137,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
       if (_gameStarted) {
          throw new IllegalStateException("addUnit not allowed after game start!");
       }
+      // TODO: Throw on infinite movement cost for unit at position
       _unitsAtPositions.put(position, unit);
       _positionsOfUnits.put(unit, position);
       _unitsInFaction.get(faction).add(unit);
