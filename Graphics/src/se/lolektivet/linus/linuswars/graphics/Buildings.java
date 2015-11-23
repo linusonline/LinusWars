@@ -14,26 +14,26 @@ import java.util.Map;
 /**
  * Created by Linus on 2014-09-21.
  */
-public class Buildings {
+class Buildings {
    private SpriteSheet _spriteSheet;
    private final Map<Faction, Integer> _spriteRowForFaction;
    private final Map<TerrainType, Integer> _spriteColumnForBuildingType;
    private final List<TerrainType> _allowedTypes;
 
-   public Buildings() {
-      _spriteRowForFaction = new HashMap<Faction, Integer>(6);
+   Buildings() {
+      _spriteRowForFaction = new HashMap<>(6);
       _spriteRowForFaction.put(Faction.ORANGE_STAR, 0);
       _spriteRowForFaction.put(Faction.GREEN_EARTH, 1);
       _spriteRowForFaction.put(Faction.BLUE_MOON, 2);
       _spriteRowForFaction.put(Faction.YELLOW_COMET, 3);
       _spriteRowForFaction.put(Faction.BLACK_HOLE, 4);
-      _spriteColumnForBuildingType = new HashMap<TerrainType, Integer>(5);
+      _spriteColumnForBuildingType = new HashMap<>(5);
       _spriteColumnForBuildingType.put(TerrainType.HQ, 0);
       _spriteColumnForBuildingType.put(TerrainType.CITY, 1);
       _spriteColumnForBuildingType.put(TerrainType.BASE, 3);
       _spriteColumnForBuildingType.put(TerrainType.AIRPORT, 5);
       _spriteColumnForBuildingType.put(TerrainType.PORT, 7);
-      _allowedTypes = new ArrayList<TerrainType>(5);
+      _allowedTypes = new ArrayList<>(5);
       _allowedTypes.add(TerrainType.HQ);
       _allowedTypes.add(TerrainType.CITY);
       _allowedTypes.add(TerrainType.BASE);
@@ -41,11 +41,11 @@ public class Buildings {
       _allowedTypes.add(TerrainType.PORT);
    }
 
-   public void init(ResourceLoader resourceLoader) {
+   void init(ResourceLoader resourceLoader) {
       _spriteSheet = new SpriteSheet(resourceLoader.getBuildingsSpriteSheet(), 19, 31);
    }
 
-   public Renderable getBuildingSprite(TerrainType buildingType, Faction faction) {
+   Renderable getBuildingSprite(TerrainType buildingType, Faction faction) {
       if (!_allowedTypes.contains(buildingType)) {
          throw new SpriteNotFoundException();
       }

@@ -21,8 +21,8 @@ public class GraphicalWarMap {
    private MapCoordinateTransformer _transformer;
 
    public GraphicalWarMap(LogicalWarMap logicalWarMap) {
-      _buildingSprites = new HashMap<Position, Renderable>();
-      _terrainSprites = new HashMap<Position, Renderable>();
+      _buildingSprites = new HashMap<>();
+      _terrainSprites = new HashMap<>();
       _logicalWarMap = logicalWarMap;
    }
 

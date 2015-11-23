@@ -5,10 +5,7 @@ import se.lolektivet.linus.linuswars.graphicalgame.GraphicalAndLogicalMapMaker;
 import se.lolektivet.linus.linuswars.graphicalgame.GraphicalGamePreDeployer;
 import se.lolektivet.linus.linuswars.graphicalgame.GraphicalWarGame;
 import se.lolektivet.linus.linuswars.graphicalgame.GraphicalWarMap;
-import se.lolektivet.linus.linuswars.graphics.Buildings;
-import se.lolektivet.linus.linuswars.graphics.HpNumbers;
-import se.lolektivet.linus.linuswars.graphics.ResourceLoader;
-import se.lolektivet.linus.linuswars.graphics.Terrain;
+import se.lolektivet.linus.linuswars.graphics.*;
 import se.lolektivet.linus.linuswars.logic.*;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
@@ -25,11 +22,10 @@ public class LinusWarsGame extends BasicGame {
    private InteractiveWarGame _interactiveWarGame;
    private InteractiveGameState _gameState;
    private final Object _gameStateLock;
-   private final ResourceLoader _resourceLoader;
+   private Sprites _allSprites;
 
    public LinusWarsGame(String gamename) {
       super(gamename);
-      _resourceLoader = new ResourceLoader();
       _gameStateLock = new Object();
    }
 
@@ -54,37 +50,32 @@ public class LinusWarsGame extends BasicGame {
 
    @Override
    public void init(GameContainer gc) throws SlickException {
-      _mainFont = new SpriteSheetFont(new SpriteSheet(_resourceLoader.getFontSpriteSheet(), 7, 14), ' ');
-      HpNumbers hpNumbers = new HpNumbers();
-      hpNumbers.init(_resourceLoader);
-
-      Terrain terrain = new Terrain();
-      Buildings buildings = new Buildings();
-      terrain.init(_resourceLoader);
-      buildings.init(_resourceLoader);
+      _allSprites = Sprites.initializeSprites();
+      _mainFont = _allSprites.getMainFont();
 
       LogicalWarMap logicalWarMap = new LogicalWarMap();
       GraphicalWarMap graphicalWarMap = new GraphicalWarMap(logicalWarMap);
-      MapMaker mapMaker = new GraphicalAndLogicalMapMaker(logicalWarMap, graphicalWarMap, terrain, buildings);
+      MapMaker mapMaker = new GraphicalAndLogicalMapMaker(_allSprites, logicalWarMap, graphicalWarMap);
       Map1 map1 = new Map1(mapMaker);
       map1.create();
 
-      List<Faction> factions = new ArrayList<Faction>(2);
+      List<Faction> factions = new ArrayList<>(2);
       factions.add(Faction.ORANGE_STAR);
       factions.add(Faction.BLUE_MOON);
       LogicalWarGame logicalWarGame = createGameFromMapAndFactions(logicalWarMap, factions);
       WarGameQueries warGameQueries = new WarGameQueriesImpl(logicalWarGame);
       logicalWarGame.setQueries(warGameQueries);
 
-      GraphicalWarGame graphicalWarGame = new GraphicalWarGame(hpNumbers, warGameQueries);
+      GraphicalWarGame graphicalWarGame = new GraphicalWarGame(warGameQueries);
+      graphicalWarGame.init(_allSprites);
       graphicalWarGame.setMap(graphicalWarMap);
       _interactiveWarGame = new InteractiveWarGame(graphicalWarGame, warGameQueries);
-      _interactiveWarGame.init(_resourceLoader);
+      _interactiveWarGame.init(_allSprites);
 
       LogicalGame1 logicalGamePredeployer = new LogicalGame1(logicalWarGame);
       logicalGamePredeployer.preDeploy();
       GraphicalGamePreDeployer graphicalGamePreDeployer = new GraphicalGamePreDeployer();
-      graphicalGamePreDeployer.init(_resourceLoader);
+      graphicalGamePreDeployer.init(_allSprites);
       graphicalGamePreDeployer.preDeploy(logicalWarGame, graphicalWarGame);
 
       logicalWarGame.callGameStart();
@@ -120,7 +111,7 @@ public class LinusWarsGame extends BasicGame {
                newGameState = _gameState;
          }
          _gameState = newGameState;
-         _gameState.setResourceLoader(_resourceLoader);
+         _gameState.setSprites(_allSprites);
       }
       System.out.println(_gameState);
    }
@@ -148,7 +139,7 @@ public class LinusWarsGame extends BasicGame {
       // g.drawString("Howdy!", 10, 10);
       // _img.draw();
       graphics.scale(2.0f, 2.0f);
-      _gameState.draw(graphics, _mainFont, 0, 0);
+      _gameState.draw(gc, graphics, _mainFont, 0, 0);
    }
 
    public static void main(String[] args) {

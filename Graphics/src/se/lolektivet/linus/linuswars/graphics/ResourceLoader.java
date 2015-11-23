@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created by Linus on 2014-09-19.
  */
-public class ResourceLoader {
+class ResourceLoader {
 
    private final Map<String, Image> _imageCache;
 
@@ -19,44 +19,48 @@ public class ResourceLoader {
       }
    }
 
-   public ResourceLoader() {
-      _imageCache = new HashMap<String, Image>(0);
+   ResourceLoader() {
+      _imageCache = new HashMap<>(0);
    }
 
-   public Image getCursorImage() {
+   Image getCursorImage() {
       return getImage("res/Cursor.png");
    }
 
-   public Image getMenuCursorImage() {
+   Image getMenuCursorImage() {
       return getImage("res/menucursor.png");
    }
 
-   public Image getAttackCursorSheet() {
+   Image getAttackCursorSheet() {
       return getImage("res/attackcursor.png");
    }
 
-   public Image getUnitSpriteSheet(String unitName, String factionName) {
+   Image getUnitSpriteSheet(String unitName, String factionName) {
       return getImage("res/" + unitName + "-" + factionName + ".png");
    }
 
-   public Image getFontSpriteSheet() {
+   Image getFontSpriteSheet() {
       return getImage("res/spritefont.png");
    }
 
-   public Image getHpNumbersSpriteSheet() {
+   Image getHpNumbersSpriteSheet() {
       return getImage("res/hpnumbers.png");
    }
 
-   public Image getMovementArrowSpriteSheet() {
+   Image getMovementArrowSpriteSheet() {
       return getImage("res/movearrow.png");
    }
 
-   public Image getBuildingsSpriteSheet() {
+   Image getBuildingsSpriteSheet() {
       return getImage("res/buildings.png");
    }
 
-   public Image getTerrainSpriteSheet() {
+   Image getTerrainSpriteSheet() {
       return getImage("res/Landscape.png");
+   }
+
+   Image getMoneyCounterImage() {
+      return getImage("res/goldplate.png");
    }
 
    private Image getImage(String path) {

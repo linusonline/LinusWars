@@ -7,7 +7,7 @@ import org.newdawn.slick.geom.Shape;
 import se.lolektivet.linus.linuswars.graphicalgame.GraphicalWarGame;
 import se.lolektivet.linus.linuswars.graphicalgame.MapCoordinateTransformer;
 import se.lolektivet.linus.linuswars.graphicalgame.MapCoordinateTransformerImpl;
-import se.lolektivet.linus.linuswars.graphics.ResourceLoader;
+import se.lolektivet.linus.linuswars.graphics.Sprites;
 import se.lolektivet.linus.linuswars.logic.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.WarGameQueries;
@@ -31,7 +31,7 @@ public class InteractiveWarGame {
    private Position _positionUnderAttackCursor = null;
    private final Collection<Position> _positionsToIndicate;
 
-   private Image _cursorImage;
+   private Renderable _cursorImage;
    private Animation _attackCursor;
    private MovementArrowController _movementArrowController;
 
@@ -39,15 +39,13 @@ public class InteractiveWarGame {
       _cursorPosition = new Position(0, 0);
       _coordinateTransformer = new MapCoordinateTransformerImpl();
       _warGameQueries = warGameQueries;
-      _positionsToIndicate = new HashSet<Position>();
+      _positionsToIndicate = new HashSet<>();
       _graphicalWarGame = graphicalWarGame;
    }
 
-   public void init(ResourceLoader resourceLoader) {
-      Image attackCursorImage = resourceLoader.getAttackCursorSheet();
-      SpriteSheet attackCursorSheet = new SpriteSheet(attackCursorImage, 30, 29);
-      _attackCursor = new Animation(attackCursorSheet, 500);
-      _cursorImage = resourceLoader.getCursorImage();
+   public void init(Sprites sprites) {
+      _attackCursor = sprites.getAttackCursor();
+      _cursorImage = sprites.getCursor();
    }
 
    public void setMovementArrowController(MovementArrowController movementArrowController) {
@@ -101,7 +99,7 @@ public class InteractiveWarGame {
       _graphicalWarGame.showGraphicForUnit(logicalUnit);
    }
 
-   void draw(Graphics g, Font font, int x, int y) {
+   void draw(GameContainer gc, Graphics g, Font font, int x, int y) {
       _graphicalWarGame.drawMap(g, font, x, y);
       for (Position indicatedPosition : _positionsToIndicate) {
          Shape fillShape = new Rectangle(
@@ -119,6 +117,7 @@ public class InteractiveWarGame {
          _attackCursor.draw(x + _coordinateTransformer.transform(_positionUnderAttackCursor.getX()) - 4,
                y + _coordinateTransformer.transform(_positionUnderAttackCursor.getY()) - 4);
       }
+      _graphicalWarGame.drawHud(gc, g, font, x, y);
       _cursorImage.draw(
             x + _coordinateTransformer.transform(_cursorPosition.getX()),
             y + _coordinateTransformer.transform(_cursorPosition.getY()));

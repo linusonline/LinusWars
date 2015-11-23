@@ -18,5 +18,13 @@ public enum TerrainType {
    HQ,
 
    SEA,
-   REEF
+   REEF;
+
+   boolean isBuilding() {
+      return equals(CITY) ||
+            equals(BASE) ||
+            equals(AIRPORT) ||
+            equals(PORT) ||
+            equals(HQ);
+   }
 }

@@ -1,8 +1,9 @@
 package se.lolektivet.linus.linuswars;
 
 import org.newdawn.slick.Font;
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import se.lolektivet.linus.linuswars.graphics.ResourceLoader;
+import se.lolektivet.linus.linuswars.graphics.Sprites;
 import se.lolektivet.linus.linuswars.logic.WarGameMoves;
 import se.lolektivet.linus.linuswars.logic.WarGameQueries;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
@@ -15,7 +16,7 @@ public class QuickMenuState implements InteractiveGameState {
    private final WarGameQueries _warGameQueries;
    private final WarGameMoves _warGameMoves;
    private GraphicalMenu _theMenu;
-   private ResourceLoader _resourceLoader;
+   private Sprites _sprites;
 
    public QuickMenuState(InteractiveWarGame interactiveWarGame, WarGameQueries warGameQueries, WarGameMoves warGameMoves) {
       _interactiveWarGame = interactiveWarGame;
@@ -57,18 +58,18 @@ public class QuickMenuState implements InteractiveGameState {
    }
 
    @Override
-   public void setResourceLoader(ResourceLoader loader) {
-      if (_resourceLoader == null) {
-         _resourceLoader = loader;
-         _theMenu = new GraphicalMenu(_resourceLoader.getMenuCursorImage());
+   public void setSprites(Sprites sprites) {
+      if (_sprites == null) {
+         _sprites = sprites;
+         _theMenu = new GraphicalMenu(_sprites.getMenuCursor());
          _theMenu.addItem(QuickMenuItem.END_TURN.getName());
          _theMenu.addItem(QuickMenuItem.NOTHING.getName());
       }
    }
 
    @Override
-   public void draw(Graphics graphics, Font font, int x, int y) {
-      _interactiveWarGame.draw(graphics, font, 0, 0);
+   public void draw(GameContainer gc, Graphics graphics, Font font, int x, int y) {
+      _interactiveWarGame.draw(gc, graphics, font, 0, 0);
       if (_theMenu != null) {
          _theMenu.draw(graphics, font);
       }

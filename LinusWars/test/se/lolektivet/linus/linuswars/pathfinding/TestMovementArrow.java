@@ -2,9 +2,9 @@ package se.lolektivet.linus.linuswars.pathfinding;
 
 import junit.framework.TestCase;
 import se.lolektivet.linus.linuswars.MovementArrow;
+import se.lolektivet.linus.linuswars.graphics.MovementArrowSection;
 import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.pathfinding.Path;
-import se.lolektivet.linus.linuswars.graphics.MovementArrowSprites;
 
 import java.util.List;
 
@@ -25,9 +25,9 @@ public class TestMovementArrow extends TestCase {
       path.addPoint(new Position(0, 1));
       MovementArrow movementArrow = new MovementArrow(path);
       movementArrow.build();
-      List<MovementArrowSprites.ArrowSection> arrowList =  movementArrow.getSpriteList();
+      List<MovementArrowSection> arrowList =  movementArrow.getSpriteList();
       assertTrue(arrowList.size() == 1);
-      assertTrue(arrowList.get(0).equals(MovementArrowSprites.ArrowSection.END_S));
+      assertTrue(arrowList.get(0).equals(MovementArrowSection.END_S));
    }
 
    public void testOneStepNorth() {
@@ -35,9 +35,9 @@ public class TestMovementArrow extends TestCase {
       path.addPoint(new Position(1, 0));
       MovementArrow movementArrow = new MovementArrow(path);
       movementArrow.build();
-      List<MovementArrowSprites.ArrowSection> arrowList =  movementArrow.getSpriteList();
+      List<MovementArrowSection> arrowList =  movementArrow.getSpriteList();
       assertTrue(arrowList.size() == 1);
-      assertTrue(arrowList.get(0).equals(MovementArrowSprites.ArrowSection.END_N));
+      assertTrue(arrowList.get(0).equals(MovementArrowSection.END_N));
    }
 
    public void testTwoDown() {
@@ -46,10 +46,10 @@ public class TestMovementArrow extends TestCase {
       path.addPoint(new Position(0, 2));
       MovementArrow movementArrow = new MovementArrow(path);
       movementArrow.build();
-      List<MovementArrowSprites.ArrowSection> arrowList =  movementArrow.getSpriteList();
+      List<MovementArrowSection> arrowList =  movementArrow.getSpriteList();
       assertTrue(arrowList.size() == 2);
-      assertTrue(arrowList.get(0).equals(MovementArrowSprites.ArrowSection.VERTICAL));
-      assertTrue(arrowList.get(1).equals(MovementArrowSprites.ArrowSection.END_S));
+      assertTrue(arrowList.get(0).equals(MovementArrowSection.VERTICAL));
+      assertTrue(arrowList.get(1).equals(MovementArrowSection.END_S));
    }
 
    public void testTwoRight() {
@@ -58,10 +58,10 @@ public class TestMovementArrow extends TestCase {
       path.addPoint(new Position(2, 0));
       MovementArrow movementArrow = new MovementArrow(path);
       movementArrow.build();
-      List<MovementArrowSprites.ArrowSection> arrowList =  movementArrow.getSpriteList();
+      List<MovementArrowSection> arrowList =  movementArrow.getSpriteList();
       assertTrue(arrowList.size() == 2);
-      assertTrue(arrowList.get(0).equals(MovementArrowSprites.ArrowSection.HORIZONTAL));
-      assertTrue(arrowList.get(1).equals(MovementArrowSprites.ArrowSection.END_E));
+      assertTrue(arrowList.get(0).equals(MovementArrowSection.HORIZONTAL));
+      assertTrue(arrowList.get(1).equals(MovementArrowSection.END_E));
    }
 
    public void testBendSE() {
@@ -70,10 +70,10 @@ public class TestMovementArrow extends TestCase {
       path.addPoint(new Position(1, 1));
       MovementArrow movementArrow = new MovementArrow(path);
       movementArrow.build();
-      List<MovementArrowSprites.ArrowSection> arrowList =  movementArrow.getSpriteList();
+      List<MovementArrowSection> arrowList =  movementArrow.getSpriteList();
       assertTrue(arrowList.size() == 2);
-      assertTrue(arrowList.get(0).equals(MovementArrowSprites.ArrowSection.BEND_S_TO_W));
-      assertTrue(arrowList.get(1).equals(MovementArrowSprites.ArrowSection.END_S));
+      assertTrue(arrowList.get(0).equals(MovementArrowSection.BEND_S_TO_W));
+      assertTrue(arrowList.get(1).equals(MovementArrowSection.END_S));
    }
 
    public void testBendNW() {
@@ -82,10 +82,10 @@ public class TestMovementArrow extends TestCase {
       path.addPoint(new Position(0, 0));
       MovementArrow movementArrow = new MovementArrow(path);
       movementArrow.build();
-      List<MovementArrowSprites.ArrowSection> arrowList =  movementArrow.getSpriteList();
+      List<MovementArrowSection> arrowList =  movementArrow.getSpriteList();
       assertTrue(arrowList.size() == 2);
-      assertTrue(arrowList.get(0).equals(MovementArrowSprites.ArrowSection.BEND_S_TO_W));
-      assertTrue(arrowList.get(1).equals(MovementArrowSprites.ArrowSection.END_W));
+      assertTrue(arrowList.get(0).equals(MovementArrowSection.BEND_S_TO_W));
+      assertTrue(arrowList.get(1).equals(MovementArrowSection.END_W));
    }
 
    public void testBacktrack() {
@@ -95,9 +95,9 @@ public class TestMovementArrow extends TestCase {
       MovementArrow movementArrow = new MovementArrow(path);
       movementArrow.build();
       movementArrow.addPoint(new Position(1, 0));
-      List<MovementArrowSprites.ArrowSection> arrowList =  movementArrow.getSpriteList();
+      List<MovementArrowSection> arrowList =  movementArrow.getSpriteList();
       assertTrue(arrowList.size() == 1);
-      assertTrue(arrowList.get(0).equals(MovementArrowSprites.ArrowSection.END_E));
+      assertTrue(arrowList.get(0).equals(MovementArrowSection.END_E));
    }
 
    public void testBacktrackBend() {
@@ -107,9 +107,9 @@ public class TestMovementArrow extends TestCase {
       MovementArrow movementArrow = new MovementArrow(path);
       movementArrow.build();
       movementArrow.addPoint(new Position(1, 0));
-      List<MovementArrowSprites.ArrowSection> arrowList =  movementArrow.getSpriteList();
+      List<MovementArrowSection> arrowList =  movementArrow.getSpriteList();
       assertTrue(arrowList.size() == 1);
-      assertTrue(arrowList.get(0).equals(MovementArrowSprites.ArrowSection.END_E));
+      assertTrue(arrowList.get(0).equals(MovementArrowSection.END_E));
    }
 
    public void testBuildFromScratch() {
@@ -117,9 +117,9 @@ public class TestMovementArrow extends TestCase {
       MovementArrow movementArrow = new MovementArrow(path);
       movementArrow.build();
       movementArrow.addPoint(new Position(1, 0));
-      List<MovementArrowSprites.ArrowSection> arrowList =  movementArrow.getSpriteList();
+      List<MovementArrowSection> arrowList =  movementArrow.getSpriteList();
       assertTrue(arrowList.size() == 1);
-      assertTrue(arrowList.get(0).equals(MovementArrowSprites.ArrowSection.END_E));
+      assertTrue(arrowList.get(0).equals(MovementArrowSection.END_E));
    }
 
 }

@@ -1,8 +1,9 @@
 package se.lolektivet.linus.linuswars;
 
 import org.newdawn.slick.Font;
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import se.lolektivet.linus.linuswars.graphics.ResourceLoader;
+import se.lolektivet.linus.linuswars.graphics.Sprites;
 import se.lolektivet.linus.linuswars.logic.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.WarGameMoves;
 import se.lolektivet.linus.linuswars.logic.WarGameQueries;
@@ -98,9 +99,9 @@ public class SelectAttackState implements InteractiveGameState {
    }
 
    @Override
-   public void setResourceLoader(ResourceLoader loader) {
+   public void setSprites(Sprites sprites) {
       if (_fireOrNothingMenu == null) {
-         _fireOrNothingMenu = new GraphicalMenu(loader.getMenuCursorImage());
+         _fireOrNothingMenu = new GraphicalMenu(sprites.getMenuCursor());
          _fireOrNothingMenu.addItem(ActionMenuItem.FIRE.getName());
       }
    }
@@ -111,8 +112,8 @@ public class SelectAttackState implements InteractiveGameState {
    }
 
    @Override
-   public void draw(Graphics graphics, Font font, int x, int y) {
-      _interactiveWarGame.draw(graphics, font, 0, 0);
+   public void draw(GameContainer gc, Graphics graphics, Font font, int x, int y) {
+      _interactiveWarGame.draw(gc, graphics, font, 0, 0);
       _fireOrNothingMenu.draw(graphics, font);
    }
 }

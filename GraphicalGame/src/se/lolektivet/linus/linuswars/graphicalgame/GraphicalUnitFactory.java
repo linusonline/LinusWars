@@ -1,8 +1,7 @@
 package se.lolektivet.linus.linuswars.graphicalgame;
 
-import se.lolektivet.linus.linuswars.graphics.ResourceLoader;
+import se.lolektivet.linus.linuswars.graphics.Sprites;
 import se.lolektivet.linus.linuswars.graphics.UnitSprite;
-import se.lolektivet.linus.linuswars.graphics.Units;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.UnitType;
 
@@ -14,19 +13,18 @@ import java.util.Map;
  */
 public class GraphicalUnitFactory {
 
-   private Units _unitSpriteLoader;
+   private Sprites _sprites;
    private final Map<Faction, Map<UnitType, UnitSprite>> _unitSpriteCache;
 
    public GraphicalUnitFactory() {
-      _unitSpriteCache = new HashMap<Faction, Map<UnitType, UnitSprite>>();
+      _unitSpriteCache = new HashMap<>();
       for (Faction faction : Faction.values()) {
-         _unitSpriteCache.put(faction, new HashMap<UnitType, UnitSprite>());
+         _unitSpriteCache.put(faction, new HashMap<>());
       }
    }
 
-   public void init(ResourceLoader resourceLoader) {
-      _unitSpriteLoader = new Units();
-      _unitSpriteLoader.init(resourceLoader);
+   public void init(Sprites sprites) {
+      _sprites = sprites;
    }
 
    public GraphicalUnit getGraphicalUnit(Faction unitFaction, UnitType unitType) {
@@ -44,6 +42,6 @@ public class GraphicalUnitFactory {
    }
 
    private UnitSprite loadUnitSprite(Faction unitFaction, UnitType unitType) {
-      return _unitSpriteLoader.getUnitSprite(unitFaction, unitType);
+      return _sprites.getUnitSprite(unitFaction, unitType);
    }
 }

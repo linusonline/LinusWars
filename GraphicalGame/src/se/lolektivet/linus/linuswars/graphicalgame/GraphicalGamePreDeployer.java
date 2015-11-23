@@ -1,9 +1,9 @@
 package se.lolektivet.linus.linuswars.graphicalgame;
 
-import se.lolektivet.linus.linuswars.graphics.ResourceLoader;
-import se.lolektivet.linus.linuswars.logic.enums.Faction;
+import se.lolektivet.linus.linuswars.graphics.Sprites;
 import se.lolektivet.linus.linuswars.logic.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.LogicalWarGame;
+import se.lolektivet.linus.linuswars.logic.enums.Faction;
 
 /**
  * Created by Linus on 2014-09-22.
@@ -15,8 +15,8 @@ public class GraphicalGamePreDeployer {
       _graphicalUnitFactory = new GraphicalUnitFactory();
    }
 
-   public void init(ResourceLoader resourceLoader) {
-      _graphicalUnitFactory.init(resourceLoader);
+   public void init(Sprites sprites) {
+      _graphicalUnitFactory.init(sprites);
    }
 
    public void preDeploy(LogicalWarGame logicalWarGame, GraphicalWarGame graphicalWarGame) {

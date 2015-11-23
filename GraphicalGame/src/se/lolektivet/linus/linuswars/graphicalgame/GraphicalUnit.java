@@ -24,7 +24,7 @@ public class GraphicalUnit {
    }
 
    public void draw(int relX, int relY, Renderable hpNumber) {
-      _unitSprite.getSprite(_direction, false).draw(relX + _positionX, relY + _positionY - 3);
+      _unitSprite.getUnitSprite(_direction, false).draw(relX + _positionX, relY + _positionY - 3);
       if (hpNumber != null) {
          hpNumber.draw(relX + _positionX + 8,
                relY + _positionY + 8);

@@ -1,8 +1,7 @@
 package se.lolektivet.linus.linuswars;
 
 import se.lolektivet.linus.linuswars.graphicalgame.MapCoordinateTransformer;
-import se.lolektivet.linus.linuswars.graphics.MovementArrowSprites;
-import se.lolektivet.linus.linuswars.graphics.ResourceLoader;
+import se.lolektivet.linus.linuswars.graphics.Sprites;
 import se.lolektivet.linus.linuswars.logic.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.WarGameQueries;
@@ -17,7 +16,7 @@ public class MovementArrowController {
    private final LogicalUnit _movingUnit;
    private WarGameQueries _warGameQueries;
    private final InteractiveWarGame _interactiveWarGame;
-   private MovementArrowSprites _movementArrowSprites;
+   private Sprites _sprites;
 
    public MovementArrowController(MovementArrow movementArrow, LogicalUnit movingUnit, WarGameQueries warGameQueries, InteractiveWarGame interactiveWarGame) {
       _movementArrow = movementArrow;
@@ -26,9 +25,8 @@ public class MovementArrowController {
       _interactiveWarGame = interactiveWarGame;
    }
 
-   public void init(ResourceLoader resourceLoader) {
-      _movementArrowSprites = new MovementArrowSprites();
-      _movementArrowSprites.init(resourceLoader);
+   public void init(Sprites sprites) {
+      _sprites = sprites;
    }
 
    public void setMovementArrow(MovementArrow movementArrow) {
@@ -61,7 +59,7 @@ public class MovementArrowController {
 
    public void draw(int x, int y, MapCoordinateTransformer coordinateTransformer) {
       for (int i = 0; i < _movementArrow.getLength(); i++) {
-         _movementArrowSprites.getArrowSection(_movementArrow.getSection(i)).draw(
+         _sprites.getMovementArrowSection(_movementArrow.getSection(i)).draw(
                x + coordinateTransformer.transform(_movementArrow.getPosition(i).getX()),
                y + coordinateTransformer.transform(_movementArrow.getPosition(i).getY()));
       }
