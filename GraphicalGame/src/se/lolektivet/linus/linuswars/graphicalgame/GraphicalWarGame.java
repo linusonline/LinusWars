@@ -104,11 +104,11 @@ public class GraphicalWarGame implements WarGameListener {
 
    public void makeUnitFaceEnemyHq(LogicalUnit logicalUnit) {
       Faction friendlyFaction = _warGameQueries.getFactionForUnit(logicalUnit);
-      Position friendlyHq = _warGameQueries.getHqPosition(friendlyFaction);
+      Position unitPosition = _warGameQueries.getPositionOfUnit(logicalUnit);
       for (Faction otherFaction : _warGameQueries.getFactionsInGame()) {
          if (!friendlyFaction.equals(otherFaction)) {
             Position enemyHq = _warGameQueries.getHqPosition(otherFaction);
-            Direction directionToFace = enemyHq.getX() < friendlyHq.getX() ? Direction.LEFT : Direction.RIGHT;
+            Direction directionToFace = enemyHq.getX() < unitPosition.getX() ? Direction.LEFT : Direction.RIGHT;
             _graphicsForUnits.get(logicalUnit).setDirection(directionToFace);
          }
       }
