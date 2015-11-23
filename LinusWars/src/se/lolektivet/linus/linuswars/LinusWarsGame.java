@@ -58,8 +58,9 @@ public class LinusWarsGame extends BasicGame {
       LogicalWarMap logicalWarMap = new LogicalWarMap();
       GraphicalWarMap graphicalWarMap = new GraphicalWarMap(logicalWarMap);
       MapMaker mapMaker = new GraphicalAndLogicalMapMaker(_allSprites, logicalWarMap, graphicalWarMap);
-      Map1 map1 = new Map1(mapMaker);
+      Map1 map1 = new Map1(new RowMapMaker(mapMaker));
       map1.create();
+      mapMaker.validate();
 
       List<Faction> factions = new ArrayList<>(2);
       factions.add(Faction.ORANGE_STAR);

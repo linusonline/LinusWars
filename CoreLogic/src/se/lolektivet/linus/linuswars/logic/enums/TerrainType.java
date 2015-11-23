@@ -20,7 +20,7 @@ public enum TerrainType {
    SEA,
    REEF;
 
-   boolean isBuilding() {
+   public boolean isBuilding() {
       return equals(CITY) ||
             equals(BASE) ||
             equals(AIRPORT) ||

@@ -29,7 +29,12 @@ public class GraphicalAndLogicalMapMaker implements MapMaker {
 
    @Override
    public void addBuilding(TerrainType buildingType, Faction faction, int x, int y) {
-      _logicalWarMap.setTerrain(x, y, buildingType);
+      _logicalWarMap.setBuilding(x, y, buildingType);
       _graphicalWarMap.addBuilding(_sprites.getBuildingSprite(buildingType, faction), x, y);
+   }
+
+   @Override
+   public void validate() {
+      _logicalWarMap.validate();
    }
 }

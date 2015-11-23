@@ -11,4 +11,6 @@ public interface MapMaker {
    void addTerrain(TerrainTile terrainTile, int x, int y);
 
    void addBuilding(TerrainType buildingType, Faction faction, int x, int y);
+
+   void validate();
 }
