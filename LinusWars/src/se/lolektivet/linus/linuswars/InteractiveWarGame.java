@@ -35,9 +35,9 @@ public class InteractiveWarGame {
    private Animation _attackCursor;
    private MovementArrowController _movementArrowController;
 
-   public InteractiveWarGame(GraphicalWarGame graphicalWarGame, WarGameQueries warGameQueries) {
+   public InteractiveWarGame(GraphicalWarGame graphicalWarGame, WarGameQueries warGameQueries, MapCoordinateTransformer mapCoordinateTransformer) {
       _cursorPosition = new Position(0, 0);
-      _coordinateTransformer = new MapCoordinateTransformerImpl();
+      _coordinateTransformer = mapCoordinateTransformer;
       _warGameQueries = warGameQueries;
       _positionsToIndicate = new HashSet<>();
       _graphicalWarGame = graphicalWarGame;

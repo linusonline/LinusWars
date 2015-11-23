@@ -26,11 +26,11 @@ public class GraphicalWarMap {
       _logicalWarMap = logicalWarMap;
    }
 
-   int getWidth() {
+   public int getWidth() {
       return _logicalWarMap.getWidth();
    }
 
-   int getHeight() {
+   public int getHeight() {
       return _logicalWarMap.getHeight();
    }
 

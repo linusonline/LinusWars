@@ -28,8 +28,8 @@ public class GraphicalWarGame implements WarGameListener {
    private static final int HUD_OFFSET_VERTICAL = 8;
    private boolean _hudIsOnTheLeft = true;
 
-   public GraphicalWarGame(WarGameQueries warGameQueries) {
-      _coordinateTransformer = new MapCoordinateTransformerImpl();
+   public GraphicalWarGame(WarGameQueries warGameQueries, MapCoordinateTransformer mapCoordinateTransformer) {
+      _coordinateTransformer = mapCoordinateTransformer;
       _warGameQueries = warGameQueries;
       _graphicsForUnits = new HashMap<>();
       _hiddenUnits = new HashSet<>(0);

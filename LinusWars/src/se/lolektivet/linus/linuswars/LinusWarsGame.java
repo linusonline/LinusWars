@@ -1,10 +1,7 @@
 package se.lolektivet.linus.linuswars;
 
 import org.newdawn.slick.*;
-import se.lolektivet.linus.linuswars.graphicalgame.GraphicalAndLogicalMapMaker;
-import se.lolektivet.linus.linuswars.graphicalgame.GraphicalGamePreDeployer;
-import se.lolektivet.linus.linuswars.graphicalgame.GraphicalWarGame;
-import se.lolektivet.linus.linuswars.graphicalgame.GraphicalWarMap;
+import se.lolektivet.linus.linuswars.graphicalgame.*;
 import se.lolektivet.linus.linuswars.graphics.*;
 import se.lolektivet.linus.linuswars.logic.*;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
@@ -69,10 +66,11 @@ public class LinusWarsGame extends BasicGame {
       WarGameQueries warGameQueries = new WarGameQueriesImpl(logicalWarGame);
       logicalWarGame.setQueries(warGameQueries);
 
-      GraphicalWarGame graphicalWarGame = new GraphicalWarGame(warGameQueries);
+      MapCoordinateTransformer mapCoordinateTransformer = new MapCoordinateTransformerImpl();
+      GraphicalWarGame graphicalWarGame = new GraphicalWarGame(warGameQueries, mapCoordinateTransformer);
       graphicalWarGame.init(_allSprites);
       graphicalWarGame.setMap(graphicalWarMap);
-      _interactiveWarGame = new InteractiveWarGame(graphicalWarGame, warGameQueries);
+      _interactiveWarGame = new InteractiveWarGame(graphicalWarGame, warGameQueries, mapCoordinateTransformer);
       _interactiveWarGame.init(_allSprites);
 
       // Deploy logical units
@@ -141,8 +139,6 @@ public class LinusWarsGame extends BasicGame {
 
    @Override
    public void render(GameContainer gc, Graphics graphics) throws SlickException {
-      // g.drawString("Howdy!", 10, 10);
-      // _img.draw();
       graphics.scale(2.0f, 2.0f);
       _gameState.draw(gc, graphics, _mainFont, 0, 0);
    }
