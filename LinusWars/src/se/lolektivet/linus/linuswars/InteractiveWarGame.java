@@ -6,7 +6,6 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import se.lolektivet.linus.linuswars.graphicalgame.GraphicalWarGame;
 import se.lolektivet.linus.linuswars.graphicalgame.MapCoordinateTransformer;
-import se.lolektivet.linus.linuswars.graphicalgame.MapCoordinateTransformerImpl;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
 import se.lolektivet.linus.linuswars.logic.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.Position;
@@ -28,12 +27,13 @@ public class InteractiveWarGame {
 
    private final MapCoordinateTransformer _coordinateTransformer;
    private Position _cursorPosition;
+   private boolean _attackCursorVisible = false;
    private Position _positionUnderAttackCursor = null;
    private final Collection<Position> _positionsToIndicate;
 
    private Renderable _cursorImage;
    private Animation _attackCursor;
-   private MovementArrowController _movementArrowController;
+   private MovementArrowController _movementArrowController = new NullMovementArrowController();
 
    public InteractiveWarGame(GraphicalWarGame graphicalWarGame, WarGameQueries warGameQueries, MapCoordinateTransformer mapCoordinateTransformer) {
       _cursorPosition = new Position(0, 0);
@@ -49,7 +49,11 @@ public class InteractiveWarGame {
    }
 
    public void setMovementArrowController(MovementArrowController movementArrowController) {
-      _movementArrowController = movementArrowController;
+      if (movementArrowController == null) {
+         _movementArrowController = new NullMovementArrowController();
+      } else {
+         _movementArrowController = movementArrowController;
+      }
    }
 
    Position getCursorPosition() {
@@ -59,15 +63,20 @@ public class InteractiveWarGame {
    void moveCursor(Direction direction) throws CursorOutsideMapException {
       Position newCandidatePosition = _cursorPosition.getPositionAfterStep(direction);
       if (_warGameQueries.isPositionInsideMap(newCandidatePosition)) {
-         _cursorPosition = newCandidatePosition;
-         if (_warGameQueries.hasUnitAtPosition(_cursorPosition)) {
-            System.out.println(_warGameQueries.getUnitAtPosition(_cursorPosition));
-            for (LogicalUnit transportedUnit : _warGameQueries.getTransportedUnits(_warGameQueries.getUnitAtPosition(_cursorPosition))) {
-               System.out.println("   Transporting " + transportedUnit.getType());
-            }
-         }
+         moveCursor(newCandidatePosition);
       } else {
          throw new CursorOutsideMapException();
+      }
+   }
+
+   private void moveCursor(Position newPosition) {
+      _cursorPosition = newPosition;
+      _coordinateTransformer.cursorMoved(newPosition, _warGameQueries.getMapWidth(), _warGameQueries.getMapHeight());
+      if (_warGameQueries.hasUnitAtPosition(_cursorPosition)) {
+         System.out.println(_warGameQueries.getUnitAtPosition(_cursorPosition));
+         for (LogicalUnit transportedUnit : _warGameQueries.getTransportedUnits(_warGameQueries.getUnitAtPosition(_cursorPosition))) {
+            System.out.println("   Transporting " + transportedUnit.getType());
+         }
       }
    }
 
@@ -81,14 +90,16 @@ public class InteractiveWarGame {
 
    public void showAttackCursorOnUnit(LogicalUnit logicalUnit) {
       _positionUnderAttackCursor = _warGameQueries.getPositionOfUnit(logicalUnit);
+      _attackCursorVisible = true;
    }
 
    public void showAttackCursorOnPosition(Position position) {
       _positionUnderAttackCursor = position;
+      _attackCursorVisible = true;
    }
 
    public void hideAttackCursor() {
-      _positionUnderAttackCursor = null;
+      _attackCursorVisible = false;
    }
 
    public void hideGraphicForUnit(LogicalUnit logicalUnit) {
@@ -99,28 +110,40 @@ public class InteractiveWarGame {
       _graphicalWarGame.showGraphicForUnit(logicalUnit);
    }
 
-   void draw(GameContainer gc, Graphics g, Font font, int x, int y) {
-      _graphicalWarGame.drawMap(g, font, x, y);
+   void draw(GameContainer gc, int x, int y) {
+      _graphicalWarGame.drawMap(gc);
+      drawDestinationPositions(gc, x, y);
+      _movementArrowController.draw(x, y, _coordinateTransformer);
+      _graphicalWarGame.drawUnits(x, y);
+      drawAttackCursor(x, y);
+      _graphicalWarGame.drawHud(x, y);
+      drawCursor(x, y);
+   }
+
+   private void drawDestinationPositions(GameContainer gc, int x, int y) {
       for (Position indicatedPosition : _positionsToIndicate) {
-         Shape fillShape = new Rectangle(
-               x + _coordinateTransformer.transform(indicatedPosition.getX()),
-               y + _coordinateTransformer.transform(indicatedPosition.getY()),
-               _coordinateTransformer.transform(1),
-               _coordinateTransformer.transform(1));
-         g.fill(fillShape, new GradientFill(0, 0, new Color(255, 255, 255, 128), 0, 1, new Color(255, 255, 255, 128)));
+         if (_coordinateTransformer.isVisible(indicatedPosition.getX(), indicatedPosition.getY())) {
+            Shape fillShape = new Rectangle(
+                  x + _coordinateTransformer.transformX(indicatedPosition.getX()),
+                  y + _coordinateTransformer.transformY(indicatedPosition.getY()),
+                  _coordinateTransformer.transformX(1),
+                  _coordinateTransformer.transformY(1));
+            gc.getGraphics().fill(fillShape, new GradientFill(0, 0, new Color(255, 255, 255, 128), 0, 1, new Color(255, 255, 255, 128)));
+         }
       }
-      if (_movementArrowController != null){
-         _movementArrowController.draw(x, y, _coordinateTransformer);
+   }
+
+   private void drawAttackCursor(int x, int y) {
+      if (_attackCursorVisible) {
+         _attackCursor.draw(x + _coordinateTransformer.transformX(_positionUnderAttackCursor.getX()) - 4,
+               y + _coordinateTransformer.transformY(_positionUnderAttackCursor.getY()) - 4);
       }
-      _graphicalWarGame.drawUnits(g, font, x, y);
-      if (_positionUnderAttackCursor != null) {
-         _attackCursor.draw(x + _coordinateTransformer.transform(_positionUnderAttackCursor.getX()) - 4,
-               y + _coordinateTransformer.transform(_positionUnderAttackCursor.getY()) - 4);
-      }
-      _graphicalWarGame.drawHud(gc, g, font, x, y);
+   }
+
+   private void drawCursor(int x, int y) {
       _cursorImage.draw(
-            x + _coordinateTransformer.transform(_cursorPosition.getX()),
-            y + _coordinateTransformer.transform(_cursorPosition.getY()));
+            x + _coordinateTransformer.transformX(_cursorPosition.getX()),
+            y + _coordinateTransformer.transformY(_cursorPosition.getY()));
    }
 
    void setPositionOfGraphicForUnit(LogicalUnit logicalUnit, Position newPosition) {

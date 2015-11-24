@@ -2,7 +2,6 @@ package se.lolektivet.linus.linuswars;
 
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
 import se.lolektivet.linus.linuswars.logic.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.Position;
@@ -122,9 +121,9 @@ public class ActionMenuState implements InteractiveGameState {
    }
 
    @Override
-   public void draw(GameContainer gc, Graphics graphics, Font font, int x, int y) {
-      _interactiveWarGame.draw(gc, graphics, font, 0, 0);
-      _theActionMenu.draw(graphics, font);
+   public void draw(GameContainer gc, Font font, int x, int y) {
+      _interactiveWarGame.draw(gc, 0, 0);
+      _theActionMenu.draw(gc.getGraphics(), font);
    }
 
    @Override

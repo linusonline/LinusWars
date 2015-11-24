@@ -14,6 +14,9 @@ public interface BasicWarGameQueries {
 
    void addListener(WarGameListener listener);
 
+   int getMapWidth();
+   int getMapHeight();
+
    boolean unitBelongsToCurrentlyActiveFaction(LogicalUnit unit);
    boolean unitCanStillMoveThisTurn(LogicalUnit logicalUnit);
 

@@ -164,7 +164,7 @@ public class MovementArrow {
    }
 
    public List<MovementArrowSection> getSpriteList() {
-      return new ArrayList<MovementArrowSection>(_spriteList);
+      return new ArrayList<>(_spriteList);
    }
 
    public void addPoint(Position newPoint) {

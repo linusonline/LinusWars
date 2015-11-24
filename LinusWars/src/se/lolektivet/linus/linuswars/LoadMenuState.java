@@ -2,7 +2,6 @@ package se.lolektivet.linus.linuswars;
 
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
 import se.lolektivet.linus.linuswars.logic.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.WarGameMoves;
@@ -69,8 +68,8 @@ public class LoadMenuState implements InteractiveGameState {
    }
 
    @Override
-   public void draw(GameContainer gc, Graphics g, Font font, int x, int y) {
-      _interactiveWarGame.draw(gc, g, font, 0, 0);
-      _theLoadMenu.draw(g, font);
+   public void draw(GameContainer gc, Font font, int x, int y) {
+      _interactiveWarGame.draw(gc, 0, 0);
+      _theLoadMenu.draw(gc.getGraphics(), font);
    }
 }

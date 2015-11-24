@@ -16,8 +16,6 @@ public class GraphicalWarMap {
    // TODO: Make this a list of lists to speed up lookup.
    private final Map<Position, Renderable> _terrainSprites;
 
-   private int _relativeX;
-   private int _relativeY;
    private MapCoordinateTransformer _transformer;
 
    public GraphicalWarMap(LogicalWarMap logicalWarMap) {
@@ -42,9 +40,7 @@ public class GraphicalWarMap {
       _buildingSprites.put(new Position(x, y), buildingImage);
    }
 
-   public void draw(MapCoordinateTransformer transformer, int x, int y) {
-      _relativeX = x;
-      _relativeY = y;
+   public void draw(MapCoordinateTransformer transformer) {
       _transformer = transformer;
       Position currentPosition = new Position(0, 0);
       for (int mapy = 0; mapy < _logicalWarMap.getHeight(); mapy++) {
@@ -60,12 +56,16 @@ public class GraphicalWarMap {
    }
 
    private void drawBuilding(Renderable image, int x, int y) {
-      image.draw(_relativeX + _transformer.transform(x),
-            _relativeY + _transformer.transform(y) - 15);
+      if (_transformer.isVisible(x, y)) {
+         image.draw(_transformer.transformX(x),
+               _transformer.transformY(y) - 15);
+      }
    }
 
    private void drawTile(Renderable image, int x, int y) {
-      image.draw(_relativeX + _transformer.transform(x),
-            _relativeY + _transformer.transform(y));
+      if (_transformer.isVisible(x, y)) {
+         image.draw(_transformer.transformX(x),
+               _transformer.transformY(y));
+      }
    }
 }

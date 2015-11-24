@@ -9,10 +9,10 @@ import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
 /**
  * Created by Linus on 2014-09-21.
  */
-public class Map1 {
+public class Map2 {
    private RowMapMaker _mapMaker;
 
-   public Map1(RowMapMaker mapMaker) {
+   public Map2(RowMapMaker mapMaker) {
       _mapMaker = mapMaker;
    }
 
@@ -24,7 +24,7 @@ public class Map1 {
       _mapMaker.addBuilding(buildingType, faction, x, y);
    }
 
-   private static final int NUM_ROWS = 6;
+   private static final int NUM_ROWS = 12;
    private int rows = 0;
 
    private void nextRow() {
@@ -48,6 +48,8 @@ public class Map1 {
       addTerrain(TerrainTile.PLAIN);
       addTerrain(TerrainTile.PLAIN);
       addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
 
       nextRow();
 
@@ -66,22 +68,6 @@ public class Map1 {
       addTerrain(TerrainTile.PLAIN);
       addTerrain(TerrainTile.WOODS_SINGLE);
       addTerrain(TerrainTile.PLAIN);
-
-      nextRow();
-
-      addTerrain(TerrainTile.PLAIN);
-      addTerrain(TerrainTile.WOODS_SINGLE);
-      addTerrain(TerrainTile.WOODS_SINGLE);
-      addTerrain(TerrainTile.PLAIN);
-      addTerrain(TerrainTile.WOODS_SINGLE);
-      addTerrain(TerrainTile.WOODS_SINGLE);
-      addTerrain(TerrainTile.WOODS_SINGLE);
-      addTerrain(TerrainTile.WOODS_SINGLE);
-      addTerrain(TerrainTile.PLAIN);
-      addTerrain(TerrainTile.WOODS_SINGLE);
-      addTerrain(TerrainTile.WOODS_SINGLE);
-      addTerrain(TerrainTile.PLAIN);
-      addTerrain(TerrainTile.WOODS_SINGLE);
       addTerrain(TerrainTile.PLAIN);
       addTerrain(TerrainTile.PLAIN);
 
@@ -89,13 +75,15 @@ public class Map1 {
 
       addTerrain(TerrainTile.PLAIN);
       addTerrain(TerrainTile.WOODS_SINGLE);
-      addTerrain(TerrainTile.PLAIN);
-      addTerrain(TerrainTile.PLAIN);
       addTerrain(TerrainTile.WOODS_SINGLE);
       addTerrain(TerrainTile.PLAIN);
       addTerrain(TerrainTile.WOODS_SINGLE);
       addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.WOODS_SINGLE);
       addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.WOODS_SINGLE);
       addTerrain(TerrainTile.PLAIN);
       addTerrain(TerrainTile.WOODS_SINGLE);
       addTerrain(TerrainTile.PLAIN);
@@ -106,12 +94,34 @@ public class Map1 {
       nextRow();
 
       addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+
+      nextRow();
+
+      addTerrain(TerrainTile.PLAIN);
       addTerrain(TerrainTile.PLAIN);
       addTerrain(TerrainTile.PLAIN);
       addTerrain(TerrainTile.PLAIN);
       addTerrain(TerrainTile.PLAIN);
       addTerrain(TerrainTile.PLAIN);
       addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
       addTerrain(TerrainTile.PLAIN);
       addTerrain(TerrainTile.PLAIN);
       addTerrain(TerrainTile.PLAIN);
@@ -137,6 +147,128 @@ public class Map1 {
       addTerrain(TerrainTile.MOUNTAIN_SMALL);
       addTerrain(TerrainTile.MOUNTAIN_SMALL);
       addTerrain(TerrainTile.MOUNTAIN_SMALL);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+
+      nextRow();
+
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+
+      nextRow();
+
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+
+      nextRow();
+
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+
+      nextRow();
+
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+
+      nextRow();
+
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+
+      nextRow();
+
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.WOODS_SINGLE);
+      addTerrain(TerrainTile.PLAIN);
+      addTerrain(TerrainTile.PLAIN);
       addTerrain(TerrainTile.PLAIN);
 
       nextRow();

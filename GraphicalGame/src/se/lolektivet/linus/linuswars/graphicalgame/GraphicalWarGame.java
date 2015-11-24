@@ -72,7 +72,7 @@ public class GraphicalWarGame implements WarGameListener {
    }
 
    public void addUnit(GraphicalUnit graphicalUnit, LogicalUnit logicalUnit, Position position) {
-      graphicalUnit.setPosition(_coordinateTransformer.transform(position));
+      graphicalUnit.setTilePosition(position);
       _graphicsForUnits.put(logicalUnit, graphicalUnit);
    }
 
@@ -85,7 +85,7 @@ public class GraphicalWarGame implements WarGameListener {
    }
 
    private void setUnitPosition(GraphicalUnit graphicalUnit, Position newPosition) {
-      graphicalUnit.setPosition(_coordinateTransformer.transform(newPosition));
+      graphicalUnit.setTilePosition(newPosition);
    }
 
    public void hideGraphicForUnit(LogicalUnit logicalUnit) {
@@ -114,11 +114,11 @@ public class GraphicalWarGame implements WarGameListener {
       }
    }
 
-   public void drawMap(Graphics g, Font font, int x, int y) {
-      _theMap.draw(_coordinateTransformer, x, y);
+   public void drawMap(GameContainer gc) {
+      _theMap.draw(_coordinateTransformer);
    }
 
-   public void drawUnits(Graphics g, Font font, int x, int y) {
+   public void drawUnits(int x, int y) {
       for (Map.Entry<LogicalUnit, GraphicalUnit> entry : _graphicsForUnits.entrySet()) {
          if (unitIsHidden(entry.getKey())) {
             continue;
@@ -128,11 +128,11 @@ public class GraphicalWarGame implements WarGameListener {
          if (hp < 10) {
             hpNumber = _sprites.getHpNumberImage(hp);
          }
-         entry.getValue().draw(x, y, hpNumber);
+         entry.getValue().draw(x, y, hpNumber, _coordinateTransformer);
       }
    }
 
-   public void drawHud(GameContainer gc, Graphics g, Font font, int x, int y) {
+   public void drawHud(int x, int y) {
       // TODO: Draw money pane in right position!
       // Image pane = _sprites.getMoneyCounterPane();
       // int hudHorizontalOffset = _hudIsOnTheLeft ? HUD_OFFSET_HORIZONTAL : gc.getWidth() - HUD_OFFSET_HORIZONTAL - pane.getWidth();

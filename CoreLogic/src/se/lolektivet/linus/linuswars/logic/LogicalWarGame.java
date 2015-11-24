@@ -90,6 +90,16 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
       _listeners.add(listener);
    }
 
+   @Override
+   public int getMapWidth() {
+      return _logicalWarMap.getWidth();
+   }
+
+   @Override
+   public int getMapHeight() {
+      return _logicalWarMap.getHeight();
+   }
+
    private void fireTransportedUnitDestroyed(LogicalUnit logicalUnit) {
       for (WarGameListener listener : _listeners) {
          listener.transportedUnitWasDestroyed(logicalUnit);

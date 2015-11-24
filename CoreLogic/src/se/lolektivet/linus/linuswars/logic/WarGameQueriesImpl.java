@@ -97,6 +97,16 @@ public class WarGameQueriesImpl implements WarGameQueries {
    }
 
    @Override
+   public int getMapWidth() {
+      return _basicWarGameQueries.getMapWidth();
+   }
+
+   @Override
+   public int getMapHeight() {
+      return _basicWarGameQueries.getMapHeight();
+   }
+
+   @Override
    public boolean unitBelongsToCurrentlyActiveFaction(LogicalUnit unit) {
       return _basicWarGameQueries.unitBelongsToCurrentlyActiveFaction(unit);
    }

@@ -2,7 +2,6 @@ package se.lolektivet.linus.linuswars;
 
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 
@@ -15,5 +14,5 @@ public interface InteractiveGameState {
    InteractiveGameState handleCancel();
    InteractiveGameState handleDirection(Direction direction);
    void setSprites(Sprites sprites);
-   void draw(GameContainer gc, Graphics g, Font font, int x, int y);
+   void draw(GameContainer gc, Font font, int x, int y);
 }
