@@ -131,9 +131,21 @@ public class GraphicalWarGame implements WarGameListener {
    }
 
    public void drawHud(TileView tileView, int x, int y) {
-       Image pane = _sprites.getMoneyCounterPane();
-       int hudHorizontalOffset = _hudIsOnTheLeft ? HUD_OFFSET_HORIZONTAL : tileView.getVisiblePixelWidth() - HUD_OFFSET_HORIZONTAL - pane.getWidth();
-       pane.draw(x + hudHorizontalOffset, y + HUD_OFFSET_VERTICAL);
+      Image pane = _sprites.getMoneyCounterPane();
+      int hudHorizontalOffset = _hudIsOnTheLeft ? HUD_OFFSET_HORIZONTAL : tileView.getVisiblePixelWidth() - HUD_OFFSET_HORIZONTAL - pane.getWidth();
+      pane.draw(x + hudHorizontalOffset, y + HUD_OFFSET_VERTICAL);
+      drawMoneyNumber(_warGameQueries.getMoneyForFaction(_warGameQueries.getCurrentlyActiveFaction()), x + hudHorizontalOffset + 55, y + HUD_OFFSET_VERTICAL + 3);
+   }
+
+   private void drawMoneyNumber(int nr, int x, int y) {
+      int maxDigits = 6;
+      int nrDigits = 0;
+      do {
+         _sprites.getMoneyNumberImage(nr % 10).draw(x, y);
+         nr = nr / 10;
+         x -= 8;
+         nrDigits++;
+      } while (nr > 0 && nrDigits < maxDigits);
    }
 
    private boolean unitIsHidden(LogicalUnit logicalUnit) {

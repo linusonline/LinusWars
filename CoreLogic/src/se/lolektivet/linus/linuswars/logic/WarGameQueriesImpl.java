@@ -152,6 +152,11 @@ public class WarGameQueriesImpl implements WarGameQueries {
    }
 
    @Override
+   public int getMoneyForFaction(Faction faction) {
+      return _basicWarGameQueries.getMoneyForFaction(faction);
+   }
+
+   @Override
    public List<LogicalUnit> getTransportedUnits(LogicalUnit transporter) {
       return _basicWarGameQueries.getTransportedUnits(transporter);
    }

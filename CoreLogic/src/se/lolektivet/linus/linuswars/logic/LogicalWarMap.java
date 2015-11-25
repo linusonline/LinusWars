@@ -15,6 +15,9 @@ public class LogicalWarMap {
    private int _mapSizeX;
    private int _mapSizeY;
 
+   // TODO: Need way of specifying which properties belong to which faction. Problem is, maps should be playable with any factions!
+   // Still, some properties might be owned by the same faction as one specific HQ.
+
    public LogicalWarMap() {
       _terrainTiles = new HashMap<>();
       _mapSizeX = 0;

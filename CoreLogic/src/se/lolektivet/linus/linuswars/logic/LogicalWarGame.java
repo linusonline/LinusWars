@@ -12,6 +12,8 @@ import java.util.*;
  */
 public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQueries {
 
+   private static final int INCOME_PER_PROPERTY = 1000;
+
    class UnitCollisionException extends RuntimeException {}
    class UnitNotFoundException extends RuntimeException {}
    class FactionAlreadySetException extends RuntimeException {}
@@ -37,6 +39,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
 
    private Faction _currentlyActiveFaction;
    private final List<Faction> _factionsInTurnOrder;
+   private final Map<Faction, Integer> _moneyForFactions;
 
    private boolean _gameStarted;
    private Collection<LogicalUnit> _unitsLeftToMoveThisTurn;
@@ -51,25 +54,29 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
       _fuelLogic = new FuelLogic();
       _attackLogic = new AttackLogic();
       _transportLogic = new TransportLogic();
-      _positionsOfUnits = new HashMap<LogicalUnit, Position>();
-      _unitsAtPositions = new HashMap<Position, LogicalUnit>();
-      _transportedUnits = new HashMap<LogicalUnit, List<LogicalUnit>>(0);
-      _factionsInTurnOrder = new ArrayList<Faction>(factionsInTurnOrder);
-      _factionsOfUnits = new HashMap<LogicalUnit, Faction>();
-      _unitsInFaction = new HashMap<Faction, Collection<LogicalUnit>>(_factionsInTurnOrder.size());
-      _transportedUnitsInFaction = new HashMap<Faction, Collection<LogicalUnit>>(0);
+      _positionsOfUnits = new HashMap<>();
+      _unitsAtPositions = new HashMap<>();
+      _transportedUnits = new HashMap<>(0);
+      _factionsInTurnOrder = new ArrayList<>(factionsInTurnOrder);
+      _factionsOfUnits = new HashMap<>();
+      _unitsInFaction = new HashMap<>(_factionsInTurnOrder.size());
+      _transportedUnitsInFaction = new HashMap<>(0);
       for (Faction faction : _factionsInTurnOrder) {
-         _unitsInFaction.put(faction, new HashSet<LogicalUnit>());
-         _transportedUnitsInFaction.put(faction, new HashSet<LogicalUnit>(0));
+         _unitsInFaction.put(faction, new HashSet<>());
+         _transportedUnitsInFaction.put(faction, new HashSet<>(0));
       }
       _currentlyActiveFaction = _factionsInTurnOrder.get(0);
       System.out.println("Current Faction is " + _currentlyActiveFaction.toString());
-      _factionOwningProperty = new HashMap<Position, Faction>();
-      _hqsOfFactions = new HashMap<Faction, Position>(_factionsInTurnOrder.size());
-      _positionsOfHqs = new HashMap<Position, Faction>(_factionsInTurnOrder.size());
+      _factionOwningProperty = new HashMap<>();
+      _hqsOfFactions = new HashMap<>(_factionsInTurnOrder.size());
+      _positionsOfHqs = new HashMap<>(_factionsInTurnOrder.size());
+      _moneyForFactions = new HashMap<>(_factionsInTurnOrder.size());
+      for (Faction faction : _factionsInTurnOrder) {
+         _moneyForFactions.put(faction, 0);
+      }
       _gameStarted = false;
-      _unitsLeftToMoveThisTurn = new HashSet<LogicalUnit>();
-      _listeners = new HashSet<WarGameListener>(0);
+      _unitsLeftToMoveThisTurn = new HashSet<>();
+      _listeners = new HashSet<>(0);
       findHqs();
    }
 
@@ -125,10 +132,11 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
       if (_gameStarted) {
          throw new IllegalStateException("setFactionForProperty not allowed after game start!");
       }
-      TerrainType terrain = _logicalWarMap.getTerrainForTile(positionOfProperty);
       if (_factionOwningProperty.get(positionOfProperty) != null) {
          throw new FactionAlreadySetException();
       }
+
+      TerrainType terrain = _logicalWarMap.getTerrainForTile(positionOfProperty);
       if (terrain.equals(TerrainType.HQ)) {
          _positionsOfHqs.put(positionOfProperty, faction);
          _hqsOfFactions.put(faction, positionOfProperty);
@@ -160,11 +168,11 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
          throw new HqNotSetException();
       }
       _gameStarted = true;
-      activateAllNonTransportedUnitsInCurrentFaction();
+      doBeginningOfTurn();
    }
 
    private void activateAllNonTransportedUnitsInCurrentFaction() {
-      Collection<LogicalUnit> nonTransportedUnitsInFaction = new HashSet<LogicalUnit>(_unitsInFaction.get(_currentlyActiveFaction));
+      Collection<LogicalUnit> nonTransportedUnitsInFaction = new HashSet<>(_unitsInFaction.get(_currentlyActiveFaction));
       nonTransportedUnitsInFaction.removeAll(_transportedUnitsInFaction.get(_currentlyActiveFaction));
       _unitsLeftToMoveThisTurn.addAll(nonTransportedUnitsInFaction);
    }
@@ -192,7 +200,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
    @Override
    public Collection<Position> getAdjacentPositions(Position position) {
       Collection<Position> adjacentPositions = position.getAdjacentPositions();
-      Collection<Position> adjacentPositionsInsideMap = new HashSet<Position>(2);
+      Collection<Position> adjacentPositionsInsideMap = new HashSet<>(2);
       for (Position adjacentPosition : adjacentPositions) {
          if (isPositionInsideMap(adjacentPosition)) {
             adjacentPositionsInsideMap.add(adjacentPosition);
@@ -205,7 +213,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
    @Override
    public Set<LogicalUnit> getAdjacentUnits(Position position) {
       Collection<Position> adjacentPositions = getAdjacentPositions(position);
-      Set<LogicalUnit> adjacentUnits = new HashSet<LogicalUnit>(4);
+      Set<LogicalUnit> adjacentUnits = new HashSet<>(4);
       for (Position adjacentPosition : adjacentPositions) {
          addUnitFromPositionToList(adjacentUnits, adjacentPosition);
       }
@@ -221,7 +229,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
 
    // Fuel query (plus todo)
    private Set<LogicalUnit> getUnitsSuppliableByUnit(Set<LogicalUnit> targetUnits, LogicalUnit supplier) {
-      Set<LogicalUnit> suppliableUnits = new HashSet<LogicalUnit>(0);
+      Set<LogicalUnit> suppliableUnits = new HashSet<>(0);
       for (LogicalUnit targetUnit : targetUnits) {
          if (!supplier.equals(targetUnit) && !_queries.unitsAreEnemies(supplier, targetUnit)) {
             if (_fuelLogic.canResupplyUnit(supplier.getType(), targetUnit.getType())) {
@@ -236,7 +244,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
    // Attack query (plus todo)
    @Override
    public Set<LogicalUnit> getUnitsAttackableByUnit(Set<LogicalUnit> targetUnits, LogicalUnit attacker) {
-      Set<LogicalUnit> attackableUnits = new HashSet<LogicalUnit>(0);
+      Set<LogicalUnit> attackableUnits = new HashSet<>(0);
       for (LogicalUnit targetUnit : targetUnits) {
          if (_queries.unitsAreEnemies(attacker, targetUnit)) {
             if (_attackLogic.canAttack(attacker.getType(), targetUnit.getType())) {
@@ -335,7 +343,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
    }
 
    private Set<LogicalUnit> getAllUnitsFromFactionOfType(Faction faction, UnitType type) {
-      Set<LogicalUnit> unitsFromFactionOfType = new HashSet<LogicalUnit>();
+      Set<LogicalUnit> unitsFromFactionOfType = new HashSet<>();
       for (LogicalUnit logicalUnit : _unitsInFaction.get(faction)) {
          if (logicalUnit.getType().equals(type)) {
             unitsFromFactionOfType.add(logicalUnit);
@@ -400,16 +408,16 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
    public List<LogicalUnit> getTransportedUnits(LogicalUnit transporter) {
       List<LogicalUnit> unitsOnTransport = _transportedUnits.get(transporter);
       if (unitsOnTransport == null) {
-         return new ArrayList<LogicalUnit>(0);
+         return new ArrayList<>(0);
       } else {
-         return new ArrayList<LogicalUnit>(unitsOnTransport);
+         return new ArrayList<>(unitsOnTransport);
       }
    }
 
    private void loadUnitOntoTransport(LogicalUnit movingUnit, LogicalUnit transport) {
       List<LogicalUnit> unitsOnThisTransport = _transportedUnits.get(transport);
       if (unitsOnThisTransport == null) {
-         unitsOnThisTransport = new ArrayList<LogicalUnit>(1);
+         unitsOnThisTransport = new ArrayList<>(1);
          _transportedUnits.put(transport, unitsOnThisTransport);
       }
       unitsOnThisTransport.add(movingUnit);
@@ -508,9 +516,6 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
    public void endTurn() {
       _unitsLeftToMoveThisTurn.clear();
       _currentlyActiveFaction = getNextFactionInTurn();
-      System.out.println("Current Faction is " + _currentlyActiveFaction.toString());
-      activateAllNonTransportedUnitsInCurrentFaction();
-      _queries.invalidateOptimalPathsCache();
       doBeginningOfTurn();
    }
 
@@ -529,14 +534,29 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
 
    private void doBeginningOfTurn() {
       // TODO: Do beginning-of-turn stuff for next faction.
+      System.out.println("Current Faction is " + _currentlyActiveFaction.toString());
+      activateAllNonTransportedUnitsInCurrentFaction();
+      _queries.invalidateOptimalPathsCache();
       resupplyFromAllAtcs(_currentlyActiveFaction);
-      // Add income from properties
+      addIncomeFromProperties(_currentlyActiveFaction);
       // Repair units on friendly bases
       // Subtract per-day fuel consumptions
       // Resupply all units on appropriate bases or adjacent to resupply units
       // Check for crashing aircraft or ships
 
       // Question: Should resupply or healing be prioritized when not enough funds for both?
+   }
+
+   private void addIncomeFromProperties(Faction faction) {
+      for (Map.Entry<Position, Faction> propertyForFaction :  _factionOwningProperty.entrySet()) {
+         if (faction == propertyForFaction.getValue()) {
+            addMoneyForFaction(faction, INCOME_PER_PROPERTY);
+         }
+      }
+   }
+
+   private void addMoneyForFaction(Faction faction, int money) {
+      _moneyForFactions.put(faction, _moneyForFactions.get(faction) + money);
    }
 
    public LogicalWarMap getLogicalWarMap() {
@@ -555,10 +575,15 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
       return _hqsOfFactions.get(faction);
    }
 
+   @Override
+   public int getMoneyForFaction(Faction faction) {
+      return _moneyForFactions.get(faction);
+   }
+
    // Basic query
    @Override
    public List<Faction> getFactionsInGame() {
-      return new ArrayList<Faction>(_factionsInTurnOrder);
+      return new ArrayList<>(_factionsInTurnOrder);
    }
 
    // Basic query
@@ -569,7 +594,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
 
    // Basic query
    public Collection<LogicalUnit> getAllUnits() {
-      return new HashSet<LogicalUnit>(_factionsOfUnits.keySet());
+      return new HashSet<>(_factionsOfUnits.keySet());
    }
 
    // Basic query

@@ -27,8 +27,8 @@ public interface BasicWarGameQueries {
    List<Faction> getFactionsInGame();
    Faction getCurrentlyActiveFaction();
    Faction getFactionForUnit(LogicalUnit logicalUnit);
-
    Position getHqPosition(Faction faction);
+   int getMoneyForFaction(Faction faction);
 
    List<LogicalUnit> getTransportedUnits(LogicalUnit transporter);
 

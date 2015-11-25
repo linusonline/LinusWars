@@ -63,6 +63,10 @@ class ResourceLoader {
       return getImage("res/moneypane.png");
    }
 
+   Image getMoneyNumbersSpriteSheet() {
+      return getImage("res/goldnumbers.png");
+   }
+
    private Image getImage(String path) {
       Image image;
       image = _imageCache.get(path);
