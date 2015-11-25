@@ -7,7 +7,6 @@ import se.lolektivet.linus.linuswars.logic.*;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.maps.GameSetup1;
-import se.lolektivet.linus.linuswars.maps.Map1;
 import se.lolektivet.linus.linuswars.maps.Map2;
 
 import java.util.ArrayList;
@@ -34,16 +33,13 @@ public class LinusWarsGame extends BasicGame {
    private LogicalWarGame createGameFromMapAndFactions(LogicalWarMap logicalWarMap, List<Faction> factions) {
       LogicalWarGame logicalWarGame = new LogicalWarGame(logicalWarMap, factions);
       List<Position> hqs = logicalWarMap.findHqs();
+      if (hqs.size() != factions.size()) {
+         throw new RuntimeException("This map needs " + hqs.size() + " factions, but you supplied " + factions.size());
+      }
       int factionIndex = 0;
       for (Position hqPosition : hqs) {
-         if (factionIndex >= factions.size()) {
-            throw new RuntimeException("This map needs " + hqs.size() + " factions, but you only supplied " + factions.size());
-         }
          logicalWarGame.setFactionForProperty(hqPosition, factions.get(factionIndex));
          factionIndex++;
-      }
-      if (factionIndex < factions.size()) {
-         throw new RuntimeException("This map only accepts " + hqs.size() + " factions, but you supplied " + factions.size());
       }
       return logicalWarGame;
    }
@@ -69,12 +65,12 @@ public class LinusWarsGame extends BasicGame {
       WarGameQueries warGameQueries = new WarGameQueriesImpl(logicalWarGame);
       logicalWarGame.setQueries(warGameQueries);
 
-      MapCoordinateTransformer mapCoordinateTransformer = new MapCoordinateTransformerImpl();
-      mapCoordinateTransformer.setVisibleRectSize(15, 10);
-      GraphicalWarGame graphicalWarGame = new GraphicalWarGame(warGameQueries, mapCoordinateTransformer);
+      ScrollingTileViewImpl scrollingTileViewImpl = new ScrollingTileViewImpl();
+      scrollingTileViewImpl.setVisibleRectSize(15, 10);
+      GraphicalWarGame graphicalWarGame = new GraphicalWarGame(warGameQueries);
       graphicalWarGame.init(_allSprites);
       graphicalWarGame.setMap(graphicalWarMap);
-      _interactiveWarGame = new InteractiveWarGame(graphicalWarGame, warGameQueries, mapCoordinateTransformer);
+      _interactiveWarGame = new InteractiveWarGame(graphicalWarGame, warGameQueries, scrollingTileViewImpl);
       _interactiveWarGame.init(_allSprites);
 
       // Deploy logical units

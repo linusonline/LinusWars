@@ -1,6 +1,6 @@
 package se.lolektivet.linus.linuswars;
 
-import se.lolektivet.linus.linuswars.graphicalgame.MapCoordinateTransformer;
+import se.lolektivet.linus.linuswars.graphicalgame.TileView;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
 
 /**
@@ -24,6 +24,6 @@ public class NullMovementArrowController implements MovementArrowController {
    }
 
    @Override
-   public void draw(int x, int y, MapCoordinateTransformer coordinateTransformer) {
+   public void draw(int x, int y, TileView tileView) {
    }
 }

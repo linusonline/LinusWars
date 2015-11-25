@@ -1,0 +1,56 @@
+package se.lolektivet.linus.linuswars.graphicalgame;
+
+import se.lolektivet.linus.linuswars.logic.Position;
+
+/**
+ * Created by Linus on 2014-09-19.
+ */
+public class TileViewImpl implements TileView {
+   private int _tileOffsetX = 0;
+   private int _tileOffsetY = 0;
+   private int _visibleTileWidth = 1000;
+   private int _visibleTileHeight = 1000;
+
+   @Override
+   public boolean isTileVisible(int tileX, int tileY) {
+      return _tileOffsetX <= tileX && tileX < _tileOffsetX + _visibleTileWidth &&
+            _tileOffsetY <= tileY && tileY < _tileOffsetY + _visibleTileHeight;
+
+   }
+
+   @Override
+   public int tileToPixelX(int tileX) {
+      return baseTransform(tileX - _tileOffsetX);
+   }
+
+   @Override
+   public int tileToPixelY(int tileY) {
+      return baseTransform(tileY - _tileOffsetY);
+   }
+
+   public void setVisibleRectSize(int width, int height) {
+      _visibleTileWidth = width;
+      _visibleTileHeight = height;
+   }
+
+   void setTileOffset(int x, int y) {
+      _tileOffsetX = x;
+      _tileOffsetY = y;
+   }
+
+   Position getTileOffset() {
+      return new Position(_tileOffsetX, _tileOffsetY);
+   }
+
+   int getVisibleRectWidth() {
+      return _visibleTileWidth;
+   }
+
+   int getVisibleRectHeight() {
+      return _visibleTileHeight;
+   }
+
+   private int baseTransform(int tileCoord) {
+      return tileCoord*16;
+   }
+}

@@ -1,6 +1,6 @@
 package se.lolektivet.linus.linuswars;
 
-import se.lolektivet.linus.linuswars.graphicalgame.MapCoordinateTransformer;
+import se.lolektivet.linus.linuswars.graphicalgame.TileView;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
 import se.lolektivet.linus.linuswars.logic.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.Position;
@@ -61,11 +61,11 @@ public class MovementArrowControllerImpl implements MovementArrowController {
    }
 
    @Override
-   public void draw(int x, int y, MapCoordinateTransformer coordinateTransformer) {
+   public void draw(int x, int y, TileView tileView) {
       for (int i = 0; i < _movementArrow.getLength(); i++) {
          _sprites.getMovementArrowSection(_movementArrow.getSection(i)).draw(
-               x + coordinateTransformer.transformX(_movementArrow.getPosition(i).getX()),
-               y + coordinateTransformer.transformY(_movementArrow.getPosition(i).getY()));
+               x + tileView.tileToPixelX(_movementArrow.getPosition(i).getX()),
+               y + tileView.tileToPixelY(_movementArrow.getPosition(i).getY()));
       }
    }
 }

@@ -23,12 +23,12 @@ public class GraphicalUnit {
       _direction = direction;
    }
 
-   public void draw(int pixelOffsetX, int pixelOffsetY, Renderable hpNumber, MapCoordinateTransformer coordinateTransformer) {
-      if (!coordinateTransformer.isVisible(_tilePositionX, _tilePositionY)) {
+   public void draw(int pixelOffsetX, int pixelOffsetY, Renderable hpNumber, TileView tileView) {
+      if (!tileView.isTileVisible(_tilePositionX, _tilePositionY)) {
          return;
       }
-      int placeX = pixelOffsetX + coordinateTransformer.transformX(_tilePositionX);
-      int placeY = pixelOffsetY + coordinateTransformer.transformY(_tilePositionY);
+      int placeX = pixelOffsetX + tileView.tileToPixelX(_tilePositionX);
+      int placeY = pixelOffsetY + tileView.tileToPixelY(_tilePositionY);
 
       _unitSprite.getUnitSprite(_direction, false).draw(
             placeX,

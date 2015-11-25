@@ -18,7 +18,6 @@ import java.util.Set;
  * Created by Linus on 2014-09-26.
  */
 public class GraphicalWarGame implements WarGameListener {
-   private final MapCoordinateTransformer _coordinateTransformer;
    private final Map<LogicalUnit, GraphicalUnit> _graphicsForUnits;
    private final Set<LogicalUnit> _hiddenUnits;
    private final WarGameQueries _warGameQueries;
@@ -28,8 +27,7 @@ public class GraphicalWarGame implements WarGameListener {
    private static final int HUD_OFFSET_VERTICAL = 8;
    private boolean _hudIsOnTheLeft = true;
 
-   public GraphicalWarGame(WarGameQueries warGameQueries, MapCoordinateTransformer mapCoordinateTransformer) {
-      _coordinateTransformer = mapCoordinateTransformer;
+   public GraphicalWarGame(WarGameQueries warGameQueries) {
       _warGameQueries = warGameQueries;
       _graphicsForUnits = new HashMap<>();
       _hiddenUnits = new HashSet<>(0);
@@ -114,11 +112,11 @@ public class GraphicalWarGame implements WarGameListener {
       }
    }
 
-   public void drawMap(GameContainer gc) {
-      _theMap.draw(_coordinateTransformer);
+   public void drawMap(TileView tileView) {
+      _theMap.draw(tileView);
    }
 
-   public void drawUnits(int x, int y) {
+   public void drawUnits(TileView tileView, int x, int y) {
       for (Map.Entry<LogicalUnit, GraphicalUnit> entry : _graphicsForUnits.entrySet()) {
          if (unitIsHidden(entry.getKey())) {
             continue;
@@ -128,7 +126,7 @@ public class GraphicalWarGame implements WarGameListener {
          if (hp < 10) {
             hpNumber = _sprites.getHpNumberImage(hp);
          }
-         entry.getValue().draw(x, y, hpNumber, _coordinateTransformer);
+         entry.getValue().draw(x, y, hpNumber, tileView);
       }
    }
 
