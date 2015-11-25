@@ -25,7 +25,7 @@ public class GraphicalWarGame implements WarGameListener {
    private Sprites _sprites;
    private static final int HUD_OFFSET_HORIZONTAL = 8;
    private static final int HUD_OFFSET_VERTICAL = 8;
-   private boolean _hudIsOnTheLeft = true;
+   private boolean _hudIsOnTheLeft = false;
 
    public GraphicalWarGame(WarGameQueries warGameQueries) {
       _warGameQueries = warGameQueries;
@@ -130,11 +130,10 @@ public class GraphicalWarGame implements WarGameListener {
       }
    }
 
-   public void drawHud(int x, int y) {
-      // TODO: Draw money pane in right position!
-      // Image pane = _sprites.getMoneyCounterPane();
-      // int hudHorizontalOffset = _hudIsOnTheLeft ? HUD_OFFSET_HORIZONTAL : gc.getWidth() - HUD_OFFSET_HORIZONTAL - pane.getWidth();
-      // pane.draw(x + hudHorizontalOffset, y + HUD_OFFSET_VERTICAL);
+   public void drawHud(TileView tileView, int x, int y) {
+       Image pane = _sprites.getMoneyCounterPane();
+       int hudHorizontalOffset = _hudIsOnTheLeft ? HUD_OFFSET_HORIZONTAL : tileView.getVisiblePixelWidth() - HUD_OFFSET_HORIZONTAL - pane.getWidth();
+       pane.draw(x + hudHorizontalOffset, y + HUD_OFFSET_VERTICAL);
    }
 
    private boolean unitIsHidden(LogicalUnit logicalUnit) {

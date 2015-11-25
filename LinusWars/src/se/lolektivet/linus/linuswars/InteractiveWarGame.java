@@ -72,10 +72,23 @@ public class InteractiveWarGame {
    private void moveCursor(Position newPosition) {
       _cursorPosition = newPosition;
       _scrollingTileView.cursorMoved(newPosition, _warGameQueries.getMapWidth(), _warGameQueries.getMapHeight());
+      adjustHudToCursor();
       if (_warGameQueries.hasUnitAtPosition(_cursorPosition)) {
          System.out.println(_warGameQueries.getUnitAtPosition(_cursorPosition));
          for (LogicalUnit transportedUnit : _warGameQueries.getTransportedUnits(_warGameQueries.getUnitAtPosition(_cursorPosition))) {
             System.out.println("   Transporting " + transportedUnit.getType());
+         }
+      }
+   }
+
+   private void adjustHudToCursor() {
+      int leftLimit = _scrollingTileView.getVisibleTileOffsetX() + _scrollingTileView.getVisibleTileWidth() / 3;
+      if (_cursorPosition.getX() < leftLimit) {
+         _graphicalWarGame.setHudOnLeft(false);
+      } else {
+         int rightLimit = _scrollingTileView.getVisibleTileOffsetX() + 2 * _scrollingTileView.getVisibleTileWidth() / 3 - 1;
+         if (_cursorPosition.getX() > rightLimit) {
+            _graphicalWarGame.setHudOnLeft(true);
          }
       }
    }
@@ -116,8 +129,8 @@ public class InteractiveWarGame {
       _movementArrowController.draw(x, y, _scrollingTileView);
       _graphicalWarGame.drawUnits(_scrollingTileView, x, y);
       drawAttackCursor(x, y);
-      _graphicalWarGame.drawHud(x, y);
       drawCursor(x, y);
+      _graphicalWarGame.drawHud(_scrollingTileView, x, y);
    }
 
    private void drawDestinationPositions(GameContainer gc, int x, int y) {

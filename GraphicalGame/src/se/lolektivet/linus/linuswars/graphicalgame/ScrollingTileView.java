@@ -7,4 +7,6 @@ import se.lolektivet.linus.linuswars.logic.Position;
  */
 public interface ScrollingTileView extends TileView {
    void cursorMoved(Position newPosition, int mapWidth, int mapHeight);
+   int getVisibleTileOffsetX();
+   int getVisibleTileOffsetY();
 }

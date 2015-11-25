@@ -8,7 +8,7 @@ import se.lolektivet.linus.linuswars.logic.Position;
  */
 public class ScrollingTileViewImpl extends TileViewImpl implements ScrollingTileView {
 
-   private static final int HORIZONTAL_CURSOR_MARGIN = 5;
+   private static final int HORIZONTAL_CURSOR_MARGIN = 4;
    private static final int VERTICAL_CURSOR_MARGIN = 4;
 
    @Override
@@ -17,8 +17,8 @@ public class ScrollingTileViewImpl extends TileViewImpl implements ScrollingTile
       int newOffsetX = oldOffset.getX();
       int newOffsetY = oldOffset.getY();
 
-      int rectHeight = getVisibleRectHeight();
-      int rectWidth = getVisibleRectWidth();
+      int rectHeight = getVisibleTileHeight();
+      int rectWidth = getVisibleTileWidth();
 
       if (newPosition.getX() < oldOffset.getX() + HORIZONTAL_CURSOR_MARGIN) {
          newOffsetX = Math.max(0, newPosition.getX() - HORIZONTAL_CURSOR_MARGIN);
@@ -31,5 +31,15 @@ public class ScrollingTileViewImpl extends TileViewImpl implements ScrollingTile
          newOffsetY = Math.min(mapHeight - rectHeight, newPosition.getY() + VERTICAL_CURSOR_MARGIN + 1 - rectHeight);
       }
       setTileOffset(newOffsetX, newOffsetY);
+   }
+
+   @Override
+   public int getVisibleTileOffsetX() {
+      return getTileOffset().getX();
+   }
+
+   @Override
+   public int getVisibleTileOffsetY() {
+      return getTileOffset().getY();
    }
 }

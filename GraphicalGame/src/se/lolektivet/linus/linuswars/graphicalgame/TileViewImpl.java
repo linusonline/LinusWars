@@ -42,12 +42,24 @@ public class TileViewImpl implements TileView {
       return new Position(_tileOffsetX, _tileOffsetY);
    }
 
-   int getVisibleRectWidth() {
+   @Override
+   public int getVisibleTileWidth() {
       return _visibleTileWidth;
    }
 
-   int getVisibleRectHeight() {
+   @Override
+   public int getVisibleTileHeight() {
       return _visibleTileHeight;
+   }
+
+   @Override
+   public int getVisiblePixelWidth() {
+      return baseTransform(_visibleTileWidth);
+   }
+
+   @Override
+   public int getVisiblePixelHeight() {
+      return baseTransform(_visibleTileHeight);
    }
 
    private int baseTransform(int tileCoord) {

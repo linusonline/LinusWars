@@ -60,7 +60,7 @@ class ResourceLoader {
    }
 
    Image getMoneyCounterImage() {
-      return getImage("res/goldplate.png");
+      return getImage("res/moneypane.png");
    }
 
    private Image getImage(String path) {
