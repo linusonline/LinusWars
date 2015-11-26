@@ -30,6 +30,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    private final TransportLogic _transportLogic;
 
    private final ModuleMoney _moneyModule;
+   private final ModuleTurnOrder _turnOrderModule;
 
    private final Map<LogicalUnit, Position> _positionsOfUnits;
    private final Map<Position, LogicalUnit> _unitsAtPositions;
@@ -41,9 +42,6 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    private final Map<Position, Faction> _factionOwningProperty;
    private final Map<Faction, Position> _hqsOfFactions;
    private final Map<Position, Faction> _positionsOfHqs;
-
-   private Faction _currentlyActiveFaction;
-   private final List<Faction> _factionsInTurnOrder;
 
    private boolean _gameStarted;
    private Collection<LogicalUnit> _unitsLeftToMoveThisTurn;
@@ -64,21 +62,21 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       _positionsOfUnits = new HashMap<>();
       _unitsAtPositions = new HashMap<>();
       _transportedUnits = new HashMap<>(0);
-      _factionsInTurnOrder = new ArrayList<>(factionsInTurnOrder);
+
+      _turnOrderModule = new ModuleTurnOrder(factionsInTurnOrder);
       _factionsOfUnits = new HashMap<>();
-      _unitsInFaction = new HashMap<>(_factionsInTurnOrder.size());
+      _unitsInFaction = new HashMap<>(factionsInTurnOrder.size());
       _transportedUnitsInFaction = new HashMap<>(0);
-      for (Faction faction : _factionsInTurnOrder) {
+      for (Faction faction : factionsInTurnOrder) {
          _unitsInFaction.put(faction, new HashSet<>());
          _transportedUnitsInFaction.put(faction, new HashSet<>(0));
       }
       _moneyModule = new ModuleMoney();
-      _moneyModule.init(_factionsInTurnOrder);
-      _currentlyActiveFaction = _factionsInTurnOrder.get(0);
-      System.out.println("Current Faction is " + _currentlyActiveFaction.toString());
+      _moneyModule.init(factionsInTurnOrder);
+      System.out.println("Current Faction is " + factionsInTurnOrder.get(0).toString());
       _factionOwningProperty = new HashMap<>();
-      _hqsOfFactions = new HashMap<>(_factionsInTurnOrder.size());
-      _positionsOfHqs = new HashMap<>(_factionsInTurnOrder.size());
+      _hqsOfFactions = new HashMap<>(factionsInTurnOrder.size());
+      _positionsOfHqs = new HashMap<>(factionsInTurnOrder.size());
       _gameStarted = false;
       _unitsLeftToMoveThisTurn = new HashSet<>();
       _listeners = new HashSet<>(0);
@@ -150,7 +148,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       if (_unitsAtPositions.containsKey(position)) {
          throw new UnitCollisionException();
       }
-      if (!_factionsInTurnOrder.contains(faction)) {
+      if (!_turnOrderModule.factionIsInGame(faction)) {
          throw new FactionNotInGameException();
       }
       if (_gameStarted) {
@@ -173,13 +171,13 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    }
 
    private void activateAllNonTransportedUnitsInCurrentFaction() {
-      Collection<LogicalUnit> nonTransportedUnitsInFaction = new HashSet<>(_unitsInFaction.get(_currentlyActiveFaction));
-      nonTransportedUnitsInFaction.removeAll(_transportedUnitsInFaction.get(_currentlyActiveFaction));
+      Collection<LogicalUnit> nonTransportedUnitsInFaction = new HashSet<>(_unitsInFaction.get(_turnOrderModule.currentlyActiveFaction()));
+      nonTransportedUnitsInFaction.removeAll(_transportedUnitsInFaction.get(_turnOrderModule.currentlyActiveFaction()));
       _unitsLeftToMoveThisTurn.addAll(nonTransportedUnitsInFaction);
    }
 
    private boolean allFactionsHaveSetTheirHq() {
-      return _hqsOfFactions.size() == _factionsInTurnOrder.size();
+      return _hqsOfFactions.size() == _turnOrderModule.numberOfFactions();
    }
 
    // Fuel and map query
@@ -516,30 +514,17 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    @Override
    public void endTurn() {
       _unitsLeftToMoveThisTurn.clear();
-      _currentlyActiveFaction = getNextFactionInTurn();
+      _turnOrderModule.advanceToNextFactionInTurn();
       doBeginningOfTurn();
-   }
-
-   private Faction getNextFactionInTurn() {
-      for (int i = 0; i < _factionsInTurnOrder.size(); i++) {
-         if (_factionsInTurnOrder.get(i).equals(_currentlyActiveFaction)) {
-            int indexOfNextFaction = i + 1;
-            if (indexOfNextFaction == _factionsInTurnOrder.size()) {
-               indexOfNextFaction = 0;
-            }
-            return _factionsInTurnOrder.get(indexOfNextFaction);
-         }
-      }
-      throw new RuntimeException("Not gonna happen");
    }
 
    private void doBeginningOfTurn() {
       // TODO: Do beginning-of-turn stuff for next faction.
-      System.out.println("Current Faction is " + _currentlyActiveFaction.toString());
+      System.out.println("Current Faction is " + _turnOrderModule.currentlyActiveFaction());
       activateAllNonTransportedUnitsInCurrentFaction();
       invalidateOptimalPathsCache();
-      resupplyFromAllAtcs(_currentlyActiveFaction);
-      addIncomeFromProperties(_currentlyActiveFaction);
+      resupplyFromAllAtcs(_turnOrderModule.currentlyActiveFaction());
+      addIncomeFromProperties(_turnOrderModule.currentlyActiveFaction());
       // Repair units on friendly bases
       // Subtract per-day fuel consumptions
       // Resupply all units on appropriate bases or adjacent to resupply units
@@ -580,13 +565,13 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    // Basic query
    @Override
    public List<Faction> getFactionsInGame() {
-      return new ArrayList<>(_factionsInTurnOrder);
+      return _turnOrderModule.getFactionsInTurnOrder();
    }
 
    // Basic query
    @Override
    public Faction getCurrentlyActiveFaction() {
-      return _currentlyActiveFaction;
+      return _turnOrderModule.currentlyActiveFaction();
    }
 
    // Basic query
@@ -632,7 +617,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    // Basic query
    @Override
    public boolean unitBelongsToCurrentlyActiveFaction(LogicalUnit unit) {
-      return _factionsOfUnits.get(unit).equals(_currentlyActiveFaction);
+      return _factionsOfUnits.get(unit).equals(_turnOrderModule.currentlyActiveFaction());
    }
 
    // Basic query
