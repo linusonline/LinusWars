@@ -29,6 +29,8 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    private final AttackLogic _attackLogic;
    private final TransportLogic _transportLogic;
 
+   private final ModuleMoney _moneyModule;
+
    private final Map<LogicalUnit, Position> _positionsOfUnits;
    private final Map<Position, LogicalUnit> _unitsAtPositions;
    private final Map<LogicalUnit, Faction> _factionsOfUnits;
@@ -42,7 +44,6 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
 
    private Faction _currentlyActiveFaction;
    private final List<Faction> _factionsInTurnOrder;
-   private final Map<Faction, Integer> _moneyForFactions;
 
    private boolean _gameStarted;
    private Collection<LogicalUnit> _unitsLeftToMoveThisTurn;
@@ -54,10 +55,12 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
 
    public LogicalWarGame(LogicalWarMap logicalWarMap, List<Faction> factionsInTurnOrder) {
       _logicalWarMap = logicalWarMap;
+
       _movementLogic = new MovementLogic();
       _fuelLogic = new FuelLogic();
       _attackLogic = new AttackLogic();
       _transportLogic = new TransportLogic();
+
       _positionsOfUnits = new HashMap<>();
       _unitsAtPositions = new HashMap<>();
       _transportedUnits = new HashMap<>(0);
@@ -69,15 +72,13 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
          _unitsInFaction.put(faction, new HashSet<>());
          _transportedUnitsInFaction.put(faction, new HashSet<>(0));
       }
+      _moneyModule = new ModuleMoney();
+      _moneyModule.init(_factionsInTurnOrder);
       _currentlyActiveFaction = _factionsInTurnOrder.get(0);
       System.out.println("Current Faction is " + _currentlyActiveFaction.toString());
       _factionOwningProperty = new HashMap<>();
       _hqsOfFactions = new HashMap<>(_factionsInTurnOrder.size());
       _positionsOfHqs = new HashMap<>(_factionsInTurnOrder.size());
-      _moneyForFactions = new HashMap<>(_factionsInTurnOrder.size());
-      for (Faction faction : _factionsInTurnOrder) {
-         _moneyForFactions.put(faction, 0);
-      }
       _gameStarted = false;
       _unitsLeftToMoveThisTurn = new HashSet<>();
       _listeners = new HashSet<>(0);
@@ -550,13 +551,9 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    private void addIncomeFromProperties(Faction faction) {
       for (Map.Entry<Position, Faction> propertyForFaction :  _factionOwningProperty.entrySet()) {
          if (faction == propertyForFaction.getValue()) {
-            addMoneyForFaction(faction, INCOME_PER_PROPERTY);
+            _moneyModule.addMoneyForFaction(faction, INCOME_PER_PROPERTY);
          }
       }
-   }
-
-   private void addMoneyForFaction(Faction faction, int money) {
-      _moneyForFactions.put(faction, _moneyForFactions.get(faction) + money);
    }
 
    public LogicalWarMap getLogicalWarMap() {
@@ -577,7 +574,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
 
    @Override
    public int getMoneyForFaction(Faction faction) {
-      return _moneyForFactions.get(faction);
+      return _moneyModule.getMoneyForFaction(faction);
    }
 
    // Basic query
