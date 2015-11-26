@@ -11,15 +11,15 @@ import java.util.Map;
 /**
  * Created by Linus on 2014-09-21.
  */
-public class Terrain {
+class Terrain {
    private SpriteSheet _spriteSheet;
    private final Map<TerrainTile, Position> _spritePositionForTile;
 
-   public Terrain() {
-      _spritePositionForTile = new HashMap<TerrainTile, Position>();
+   Terrain() {
+      _spritePositionForTile = new HashMap<>();
    }
 
-   public void init(ResourceLoader resourceLoader) {
+   void init(ResourceLoader resourceLoader) {
       _spriteSheet = new SpriteSheet(resourceLoader.getTerrainSpriteSheet(), 16, 16);
       setSpriteCoordinatesForTile(TerrainTile.PLAIN, 0, 0);
       setSpriteCoordinatesForTile(TerrainTile.WOODS_SINGLE, 1, 0);
@@ -43,14 +43,13 @@ public class Terrain {
       setSpriteCoordinatesForTile(TerrainTile.ROAD_BEND_NW, 19, 0);
       setSpriteCoordinatesForTile(TerrainTile.ROAD_BEND_SE, 20, 0);
       setSpriteCoordinatesForTile(TerrainTile.BRIDGE_HORIZONTAL, 21, 0);
-
    }
 
    private void setSpriteCoordinatesForTile(TerrainTile tile, int x, int y) {
       _spritePositionForTile.put(tile, new Position(x, y));
    }
 
-   public Renderable getTerrainSprite(TerrainTile terrainTile) {
+   Renderable getTerrainSprite(TerrainTile terrainTile) {
       Position spritePosition = _spritePositionForTile.get(terrainTile);
       return _spriteSheet.getSubImage(spritePosition.getX(), spritePosition.getY());
    }

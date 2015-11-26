@@ -1,10 +1,11 @@
 package se.lolektivet.linus.linuswars.graphicalgame;
 
-import org.newdawn.slick.Font;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Renderable;
-import se.lolektivet.linus.linuswars.graphics.HpNumbers;
-import se.lolektivet.linus.linuswars.logic.*;
+import org.newdawn.slick.*;
+import se.lolektivet.linus.linuswars.graphics.Sprites;
+import se.lolektivet.linus.linuswars.logic.LogicalUnit;
+import se.lolektivet.linus.linuswars.logic.Position;
+import se.lolektivet.linus.linuswars.logic.WarGameListener;
+import se.lolektivet.linus.linuswars.logic.WarGameQueries;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 
@@ -17,21 +18,25 @@ import java.util.Set;
  * Created by Linus on 2014-09-26.
  */
 public class GraphicalWarGame implements WarGameListener {
-   private final HpNumbers _hpNumbers;
-   private final MapCoordinateTransformer _coordinateTransformer;
    private final Map<LogicalUnit, GraphicalUnit> _graphicsForUnits;
    private final Set<LogicalUnit> _hiddenUnits;
    private final WarGameQueries _warGameQueries;
    private GraphicalWarMap _theMap;
+   private Sprites _sprites;
+   private static final int HUD_OFFSET_HORIZONTAL = 8;
+   private static final int HUD_OFFSET_VERTICAL = 8;
+   private boolean _hudIsOnTheLeft = false;
 
-   public GraphicalWarGame(HpNumbers hpNumbers, WarGameQueries warGameQueries) {
-      _hpNumbers = hpNumbers;
-      _coordinateTransformer = new MapCoordinateTransformerImpl();
+   public GraphicalWarGame(WarGameQueries warGameQueries) {
       _warGameQueries = warGameQueries;
-      _graphicsForUnits = new HashMap<LogicalUnit, GraphicalUnit>();
-      _hiddenUnits = new HashSet<LogicalUnit>(0);
+      _graphicsForUnits = new HashMap<>();
+      _hiddenUnits = new HashSet<>(0);
 
       _warGameQueries.addListener(this);
+   }
+
+   public void init(Sprites sprites) {
+      _sprites = sprites;
    }
 
    public void setMap(GraphicalWarMap map) {
@@ -60,8 +65,12 @@ public class GraphicalWarGame implements WarGameListener {
       _hiddenUnits.remove(logicalUnit);
    }
 
+   public void setHudOnLeft(boolean left) {
+      _hudIsOnTheLeft = left;
+   }
+
    public void addUnit(GraphicalUnit graphicalUnit, LogicalUnit logicalUnit, Position position) {
-      graphicalUnit.setPosition(_coordinateTransformer.transform(position));
+      graphicalUnit.setTilePosition(position);
       _graphicsForUnits.put(logicalUnit, graphicalUnit);
    }
 
@@ -74,7 +83,7 @@ public class GraphicalWarGame implements WarGameListener {
    }
 
    private void setUnitPosition(GraphicalUnit graphicalUnit, Position newPosition) {
-      graphicalUnit.setPosition(_coordinateTransformer.transform(newPosition));
+      graphicalUnit.setTilePosition(newPosition);
    }
 
    public void hideGraphicForUnit(LogicalUnit logicalUnit) {
@@ -93,21 +102,21 @@ public class GraphicalWarGame implements WarGameListener {
 
    public void makeUnitFaceEnemyHq(LogicalUnit logicalUnit) {
       Faction friendlyFaction = _warGameQueries.getFactionForUnit(logicalUnit);
-      Position friendlyHq = _warGameQueries.getHqPosition(friendlyFaction);
+      Position unitPosition = _warGameQueries.getPositionOfUnit(logicalUnit);
       for (Faction otherFaction : _warGameQueries.getFactionsInGame()) {
          if (!friendlyFaction.equals(otherFaction)) {
             Position enemyHq = _warGameQueries.getHqPosition(otherFaction);
-            Direction directionToFace = enemyHq.getX() < friendlyHq.getX() ? Direction.LEFT : Direction.RIGHT;
+            Direction directionToFace = enemyHq.getX() < unitPosition.getX() ? Direction.LEFT : Direction.RIGHT;
             _graphicsForUnits.get(logicalUnit).setDirection(directionToFace);
          }
       }
    }
 
-   public void drawMap(Graphics g, Font font, int x, int y) {
-      _theMap.draw(_coordinateTransformer, x, y);
+   public void drawMap(TileView tileView) {
+      _theMap.draw(tileView);
    }
 
-   public void drawUnits(Graphics g, Font font, int x, int y) {
+   public void drawUnits(TileView tileView, int x, int y) {
       for (Map.Entry<LogicalUnit, GraphicalUnit> entry : _graphicsForUnits.entrySet()) {
          if (unitIsHidden(entry.getKey())) {
             continue;
@@ -115,10 +124,28 @@ public class GraphicalWarGame implements WarGameListener {
          int hp = entry.getKey().getHp1To10();
          Renderable hpNumber = null;
          if (hp < 10) {
-            hpNumber = _hpNumbers.getHpNumberImage(hp);
+            hpNumber = _sprites.getHpNumberImage(hp);
          }
-         entry.getValue().draw(x, y, hpNumber);
+         entry.getValue().draw(x, y, hpNumber, tileView);
       }
+   }
+
+   public void drawHud(TileView tileView, int x, int y) {
+      Image pane = _sprites.getMoneyCounterPane();
+      int hudHorizontalOffset = _hudIsOnTheLeft ? HUD_OFFSET_HORIZONTAL : tileView.getVisiblePixelWidth() - HUD_OFFSET_HORIZONTAL - pane.getWidth();
+      pane.draw(x + hudHorizontalOffset, y + HUD_OFFSET_VERTICAL);
+      drawMoneyNumber(_warGameQueries.getMoneyForFaction(_warGameQueries.getCurrentlyActiveFaction()), x + hudHorizontalOffset + 55, y + HUD_OFFSET_VERTICAL + 3);
+   }
+
+   private void drawMoneyNumber(int nr, int x, int y) {
+      int maxDigits = 6;
+      int nrDigits = 0;
+      do {
+         _sprites.getMoneyNumberImage(nr % 10).draw(x, y);
+         nr = nr / 10;
+         x -= 8;
+         nrDigits++;
+      } while (nr > 0 && nrDigits < maxDigits);
    }
 
    private boolean unitIsHidden(LogicalUnit logicalUnit) {

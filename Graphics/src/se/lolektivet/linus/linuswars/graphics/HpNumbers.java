@@ -6,16 +6,16 @@ import org.newdawn.slick.SpriteSheet;
 /**
  * Created by Linus on 2014-09-24.
  */
-public class HpNumbers {
+class HpNumbers {
    private SpriteSheet _spriteSheet;
 
-   public void init(ResourceLoader resourceLoader) {
+   void init(ResourceLoader resourceLoader) {
       if (_spriteSheet == null) {
          _spriteSheet = new SpriteSheet(resourceLoader.getHpNumbersSpriteSheet(), 8, 7);
       }
    }
 
-   public Renderable getHpNumberImage(int nr) {
+   Renderable getHpNumberImage(int nr) {
       if (nr < 1 || nr > 9) {
          throw new SpriteNotFoundException();
       }

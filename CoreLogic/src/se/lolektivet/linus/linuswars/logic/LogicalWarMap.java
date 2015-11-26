@@ -15,8 +15,11 @@ public class LogicalWarMap {
    private int _mapSizeX;
    private int _mapSizeY;
 
+   // TODO: Need way of specifying which properties belong to which faction. Problem is, maps should be playable with any factions!
+   // Still, some properties might be owned by the same faction as one specific HQ.
+
    public LogicalWarMap() {
-      _terrainTiles = new HashMap<Position, TerrainType>();
+      _terrainTiles = new HashMap<>();
       _mapSizeX = 0;
       _mapSizeY = 0;
    }
@@ -25,7 +28,25 @@ public class LogicalWarMap {
       return _terrainTiles.get(tile);
    }
 
+   public void setBuilding(int x, int y, TerrainType terrainType) {
+      if (!terrainType.isBuilding()) {
+         throw new InitializationException();
+      }
+      internalSetTerrainType(x, y, terrainType);
+   }
+
    public void setTerrain(int x, int y, TerrainType terrainType) {
+      if (terrainType.isBuilding()) {
+         throw new InitializationException();
+      }
+      Position tilePosition = new Position(x, y);
+      if (_terrainTiles.get(tilePosition) != null) {
+         throw new TileAlreadySetException("Tile in position " + tilePosition + " was set twice!");
+      }
+      internalSetTerrainType(x, y, terrainType);
+   }
+
+   private void internalSetTerrainType(int x, int y, TerrainType terrainType) {
       _terrainTiles.put(new Position(x, y), terrainType);
       if (x >= _mapSizeX) {
          _mapSizeX = x + 1;
@@ -35,9 +56,9 @@ public class LogicalWarMap {
       }
    }
 
-   public void mapReady() {
+   public void validate() {
       if (_mapSizeX * _mapSizeY != _terrainTiles.size()) {
-         throw new MapUninitializedException();
+         throw new MapUninitializedException("Some tiles of the map were not set!");
       }
    }
 
@@ -66,9 +87,15 @@ public class LogicalWarMap {
             position.getY() < getHeight();
    }
 
-   class TileAlreadySetException extends RuntimeException {
+   static class TileAlreadySetException extends RuntimeException {
+      public TileAlreadySetException(String message) {
+         super(message);
+      }
    }
 
-   class MapUninitializedException extends RuntimeException {
+   static class MapUninitializedException extends RuntimeException {
+      public MapUninitializedException(String message) {
+         super(message);
+      }
    }
 }

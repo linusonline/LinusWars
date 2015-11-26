@@ -1,13 +1,9 @@
 package se.lolektivet.linus.linuswars.pathfinding;
 
 import junit.framework.TestCase;
+import se.lolektivet.linus.linuswars.logic.*;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
-import se.lolektivet.linus.linuswars.logic.LogicalWarGame;
-import se.lolektivet.linus.linuswars.logic.LogicalWarMap;
-import se.lolektivet.linus.linuswars.logic.Position;
-import se.lolektivet.linus.linuswars.logic.LogicalMapMaker;
-import se.lolektivet.linus.linuswars.logic.Map1;
-import se.lolektivet.linus.linuswars.logic.MapMaker;
+import se.lolektivet.linus.linuswars.maps.Map1;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,7 +19,7 @@ public class TestPathFinder extends TestCase {
    public void setUp() {
       LogicalWarMap logicalWarMap = new LogicalWarMap();
       MapMaker mapMaker = new LogicalMapMaker(logicalWarMap);
-      Map1 map = new Map1(mapMaker);
+      Map1 map = new Map1(new RowMapMaker(mapMaker));
       map.create();
       List<Faction> factions = new ArrayList<Faction>(2);
       factions.add(Faction.ORANGE_STAR);

@@ -97,6 +97,16 @@ public class WarGameQueriesImpl implements WarGameQueries {
    }
 
    @Override
+   public int getMapWidth() {
+      return _basicWarGameQueries.getMapWidth();
+   }
+
+   @Override
+   public int getMapHeight() {
+      return _basicWarGameQueries.getMapHeight();
+   }
+
+   @Override
    public boolean unitBelongsToCurrentlyActiveFaction(LogicalUnit unit) {
       return _basicWarGameQueries.unitBelongsToCurrentlyActiveFaction(unit);
    }
@@ -139,6 +149,11 @@ public class WarGameQueriesImpl implements WarGameQueries {
    @Override
    public Position getHqPosition(Faction faction) {
       return _basicWarGameQueries.getHqPosition(faction);
+   }
+
+   @Override
+   public int getMoneyForFaction(Faction faction) {
+      return _basicWarGameQueries.getMoneyForFaction(faction);
    }
 
    @Override

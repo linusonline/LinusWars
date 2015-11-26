@@ -5,9 +5,8 @@ import org.newdawn.slick.fills.GradientFill;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import se.lolektivet.linus.linuswars.graphicalgame.GraphicalWarGame;
-import se.lolektivet.linus.linuswars.graphicalgame.MapCoordinateTransformer;
-import se.lolektivet.linus.linuswars.graphicalgame.MapCoordinateTransformerImpl;
-import se.lolektivet.linus.linuswars.graphics.ResourceLoader;
+import se.lolektivet.linus.linuswars.graphicalgame.ScrollingTileView;
+import se.lolektivet.linus.linuswars.graphics.Sprites;
 import se.lolektivet.linus.linuswars.logic.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.WarGameQueries;
@@ -21,37 +20,40 @@ import java.util.HashSet;
  */
 public class InteractiveWarGame {
 
-   class CursorOutsideMapException extends Exception {}
+   static class CursorOutsideMapException extends Exception {}
 
    private final WarGameQueries _warGameQueries;
    private final GraphicalWarGame _graphicalWarGame;
 
-   private final MapCoordinateTransformer _coordinateTransformer;
+   private final ScrollingTileView _scrollingTileView;
    private Position _cursorPosition;
+   private boolean _attackCursorVisible = false;
    private Position _positionUnderAttackCursor = null;
    private final Collection<Position> _positionsToIndicate;
 
-   private Image _cursorImage;
+   private Renderable _cursorImage;
    private Animation _attackCursor;
-   private MovementArrowController _movementArrowController;
+   private MovementArrowController _movementArrowController = new NullMovementArrowController();
 
-   public InteractiveWarGame(GraphicalWarGame graphicalWarGame, WarGameQueries warGameQueries) {
+   public InteractiveWarGame(GraphicalWarGame graphicalWarGame, WarGameQueries warGameQueries, ScrollingTileView tileView) {
       _cursorPosition = new Position(0, 0);
-      _coordinateTransformer = new MapCoordinateTransformerImpl();
+      _scrollingTileView = tileView;
       _warGameQueries = warGameQueries;
-      _positionsToIndicate = new HashSet<Position>();
+      _positionsToIndicate = new HashSet<>();
       _graphicalWarGame = graphicalWarGame;
    }
 
-   public void init(ResourceLoader resourceLoader) {
-      Image attackCursorImage = resourceLoader.getAttackCursorSheet();
-      SpriteSheet attackCursorSheet = new SpriteSheet(attackCursorImage, 30, 29);
-      _attackCursor = new Animation(attackCursorSheet, 500);
-      _cursorImage = resourceLoader.getCursorImage();
+   public void init(Sprites sprites) {
+      _attackCursor = sprites.getAttackCursor();
+      _cursorImage = sprites.getCursor();
    }
 
    public void setMovementArrowController(MovementArrowController movementArrowController) {
-      _movementArrowController = movementArrowController;
+      if (movementArrowController == null) {
+         _movementArrowController = new NullMovementArrowController();
+      } else {
+         _movementArrowController = movementArrowController;
+      }
    }
 
    Position getCursorPosition() {
@@ -61,15 +63,33 @@ public class InteractiveWarGame {
    void moveCursor(Direction direction) throws CursorOutsideMapException {
       Position newCandidatePosition = _cursorPosition.getPositionAfterStep(direction);
       if (_warGameQueries.isPositionInsideMap(newCandidatePosition)) {
-         _cursorPosition = newCandidatePosition;
-         if (_warGameQueries.hasUnitAtPosition(_cursorPosition)) {
-            System.out.println(_warGameQueries.getUnitAtPosition(_cursorPosition));
-            for (LogicalUnit transportedUnit : _warGameQueries.getTransportedUnits(_warGameQueries.getUnitAtPosition(_cursorPosition))) {
-               System.out.println("   Transporting " + transportedUnit.getType());
-            }
-         }
+         moveCursor(newCandidatePosition);
       } else {
          throw new CursorOutsideMapException();
+      }
+   }
+
+   private void moveCursor(Position newPosition) {
+      _cursorPosition = newPosition;
+      _scrollingTileView.cursorMoved(newPosition, _warGameQueries.getMapWidth(), _warGameQueries.getMapHeight());
+      adjustHudToCursor();
+      if (_warGameQueries.hasUnitAtPosition(_cursorPosition)) {
+         System.out.println(_warGameQueries.getUnitAtPosition(_cursorPosition));
+         for (LogicalUnit transportedUnit : _warGameQueries.getTransportedUnits(_warGameQueries.getUnitAtPosition(_cursorPosition))) {
+            System.out.println("   Transporting " + transportedUnit.getType());
+         }
+      }
+   }
+
+   private void adjustHudToCursor() {
+      int leftLimit = _scrollingTileView.getVisibleTileOffsetX() + _scrollingTileView.getVisibleTileWidth() / 3;
+      if (_cursorPosition.getX() < leftLimit) {
+         _graphicalWarGame.setHudOnLeft(false);
+      } else {
+         int rightLimit = _scrollingTileView.getVisibleTileOffsetX() + 2 * _scrollingTileView.getVisibleTileWidth() / 3 - 1;
+         if (_cursorPosition.getX() > rightLimit) {
+            _graphicalWarGame.setHudOnLeft(true);
+         }
       }
    }
 
@@ -83,14 +103,16 @@ public class InteractiveWarGame {
 
    public void showAttackCursorOnUnit(LogicalUnit logicalUnit) {
       _positionUnderAttackCursor = _warGameQueries.getPositionOfUnit(logicalUnit);
+      _attackCursorVisible = true;
    }
 
    public void showAttackCursorOnPosition(Position position) {
       _positionUnderAttackCursor = position;
+      _attackCursorVisible = true;
    }
 
    public void hideAttackCursor() {
-      _positionUnderAttackCursor = null;
+      _attackCursorVisible = false;
    }
 
    public void hideGraphicForUnit(LogicalUnit logicalUnit) {
@@ -101,27 +123,40 @@ public class InteractiveWarGame {
       _graphicalWarGame.showGraphicForUnit(logicalUnit);
    }
 
-   void draw(Graphics g, Font font, int x, int y) {
-      _graphicalWarGame.drawMap(g, font, x, y);
+   void draw(GameContainer gc, int x, int y) {
+      _graphicalWarGame.drawMap(_scrollingTileView);
+      drawDestinationPositions(gc, x, y);
+      _movementArrowController.draw(x, y, _scrollingTileView);
+      _graphicalWarGame.drawUnits(_scrollingTileView, x, y);
+      drawAttackCursor(x, y);
+      drawCursor(x, y);
+      _graphicalWarGame.drawHud(_scrollingTileView, x, y);
+   }
+
+   private void drawDestinationPositions(GameContainer gc, int x, int y) {
       for (Position indicatedPosition : _positionsToIndicate) {
-         Shape fillShape = new Rectangle(
-               x + _coordinateTransformer.transform(indicatedPosition.getX()),
-               y + _coordinateTransformer.transform(indicatedPosition.getY()),
-               _coordinateTransformer.transform(1),
-               _coordinateTransformer.transform(1));
-         g.fill(fillShape, new GradientFill(0, 0, new Color(255, 255, 255, 128), 0, 1, new Color(255, 255, 255, 128)));
+         if (_scrollingTileView.isTileVisible(indicatedPosition.getX(), indicatedPosition.getY())) {
+            Shape fillShape = new Rectangle(
+                  x + _scrollingTileView.tileToPixelX(indicatedPosition.getX()),
+                  y + _scrollingTileView.tileToPixelY(indicatedPosition.getY()),
+                  _scrollingTileView.tileToPixelX(1),
+                  _scrollingTileView.tileToPixelY(1));
+            gc.getGraphics().fill(fillShape, new GradientFill(0, 0, new Color(255, 255, 255, 128), 0, 1, new Color(255, 255, 255, 128)));
+         }
       }
-      if (_movementArrowController != null){
-         _movementArrowController.draw(x, y, _coordinateTransformer);
+   }
+
+   private void drawAttackCursor(int x, int y) {
+      if (_attackCursorVisible) {
+         _attackCursor.draw(x + _scrollingTileView.tileToPixelX(_positionUnderAttackCursor.getX()) - 4,
+               y + _scrollingTileView.tileToPixelY(_positionUnderAttackCursor.getY()) - 4);
       }
-      _graphicalWarGame.drawUnits(g, font, x, y);
-      if (_positionUnderAttackCursor != null) {
-         _attackCursor.draw(x + _coordinateTransformer.transform(_positionUnderAttackCursor.getX()) - 4,
-               y + _coordinateTransformer.transform(_positionUnderAttackCursor.getY()) - 4);
-      }
+   }
+
+   private void drawCursor(int x, int y) {
       _cursorImage.draw(
-            x + _coordinateTransformer.transform(_cursorPosition.getX()),
-            y + _coordinateTransformer.transform(_cursorPosition.getY()));
+            x + _scrollingTileView.tileToPixelX(_cursorPosition.getX()),
+            y + _scrollingTileView.tileToPixelY(_cursorPosition.getY()));
    }
 
    void setPositionOfGraphicForUnit(LogicalUnit logicalUnit, Position newPosition) {

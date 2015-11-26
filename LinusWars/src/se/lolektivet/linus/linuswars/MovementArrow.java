@@ -1,6 +1,6 @@
 package se.lolektivet.linus.linuswars;
 
-import se.lolektivet.linus.linuswars.graphics.MovementArrowSprites;
+import se.lolektivet.linus.linuswars.graphics.MovementArrowSection;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.pathfinding.Path;
@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class MovementArrow {
    private final Path _arrowPath;
-   private final List<MovementArrowSprites.ArrowSection> _spriteList;
+   private final List<MovementArrowSection> _spriteList;
    private final List<Direction> _listOfDirections;
 
    public MovementArrow(Position origin) {
@@ -21,9 +21,9 @@ public class MovementArrow {
    }
 
    public MovementArrow(Path arrowPath) {
-      _spriteList = new ArrayList<MovementArrowSprites.ArrowSection>(arrowPath.getLength());
+      _spriteList = new ArrayList<>(arrowPath.getLength());
       _arrowPath = new Path(arrowPath, true);
-      _listOfDirections = new ArrayList<Direction>(_spriteList.size());
+      _listOfDirections = new ArrayList<>(_spriteList.size());
    }
 
    public void build() {
@@ -47,41 +47,41 @@ public class MovementArrow {
       _spriteList.add(getArrowEndSectionForDirection(fromDirection));
    }
 
-   private MovementArrowSprites.ArrowSection getArrowEndSectionForDirection(Direction direction) {
+   private MovementArrowSection getArrowEndSectionForDirection(Direction direction) {
       switch (direction) {
          case LEFT:
-            return MovementArrowSprites.ArrowSection.END_W;
+            return MovementArrowSection.END_W;
          case RIGHT:
-            return MovementArrowSprites.ArrowSection.END_E;
+            return MovementArrowSection.END_E;
          case UP:
-            return MovementArrowSprites.ArrowSection.END_N;
+            return MovementArrowSection.END_N;
          case DOWN:
          default:
-            return MovementArrowSprites.ArrowSection.END_S;
+            return MovementArrowSection.END_S;
       }
    }
 
-   private MovementArrowSprites.ArrowSection getArrowSectionForDirections(Direction inDirection, Direction outDirection) {
+   private MovementArrowSection getArrowSectionForDirections(Direction inDirection, Direction outDirection) {
       assert !getMirror(inDirection).equals(outDirection);
       assert inDirection != null;
       assert outDirection != null;
       if (directionPairsYieldSameArrowSection(inDirection, outDirection, Direction.UP, Direction.UP)) {
-         return MovementArrowSprites.ArrowSection.VERTICAL;
+         return MovementArrowSection.VERTICAL;
       }
       if (directionPairsYieldSameArrowSection(inDirection, outDirection, Direction.RIGHT, Direction.RIGHT)) {
-         return MovementArrowSprites.ArrowSection.HORIZONTAL;
+         return MovementArrowSection.HORIZONTAL;
       }
       if (directionPairsYieldSameArrowSection(inDirection, outDirection, Direction.UP, Direction.LEFT)) {
-         return MovementArrowSprites.ArrowSection.BEND_S_TO_W;
+         return MovementArrowSection.BEND_S_TO_W;
       }
       if (directionPairsYieldSameArrowSection(inDirection, outDirection, Direction.UP, Direction.RIGHT)) {
-         return MovementArrowSprites.ArrowSection.BEND_S_TO_E;
+         return MovementArrowSection.BEND_S_TO_E;
       }
       if (directionPairsYieldSameArrowSection(inDirection, outDirection, Direction.DOWN, Direction.LEFT)) {
-         return MovementArrowSprites.ArrowSection.BEND_N_TO_W;
+         return MovementArrowSection.BEND_N_TO_W;
       }
       if (directionPairsYieldSameArrowSection(inDirection, outDirection, Direction.DOWN, Direction.RIGHT)) {
-         return MovementArrowSprites.ArrowSection.BEND_N_TO_E;
+         return MovementArrowSection.BEND_N_TO_E;
       }
       throw new IllegalArgumentException();
    }
@@ -147,7 +147,7 @@ public class MovementArrow {
       return _arrowPath.isEmpty();
    }
 
-   public MovementArrowSprites.ArrowSection getSection(int index) {
+   public MovementArrowSection getSection(int index) {
       return _spriteList.get(index);
    }
 
@@ -163,8 +163,8 @@ public class MovementArrow {
       return _arrowPath.getPosition(index);
    }
 
-   public List<MovementArrowSprites.ArrowSection> getSpriteList() {
-      return new ArrayList<MovementArrowSprites.ArrowSection>(_spriteList);
+   public List<MovementArrowSection> getSpriteList() {
+      return new ArrayList<>(_spriteList);
    }
 
    public void addPoint(Position newPoint) {

@@ -1,9 +1,11 @@
 package se.lolektivet.linus.linuswars;
 
 import org.newdawn.slick.Font;
-import org.newdawn.slick.Graphics;
-import se.lolektivet.linus.linuswars.graphics.ResourceLoader;
-import se.lolektivet.linus.linuswars.logic.*;
+import org.newdawn.slick.GameContainer;
+import se.lolektivet.linus.linuswars.graphics.Sprites;
+import se.lolektivet.linus.linuswars.logic.LogicalUnit;
+import se.lolektivet.linus.linuswars.logic.WarGameMoves;
+import se.lolektivet.linus.linuswars.logic.WarGameQueries;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 
 /**
@@ -56,7 +58,7 @@ public class StartingState implements InteractiveGameState {
    }
 
    @Override
-   public void setResourceLoader(ResourceLoader loader) {
+   public void setSprites(Sprites sprites) {
 
    }
 
@@ -66,7 +68,7 @@ public class StartingState implements InteractiveGameState {
    }
 
    @Override
-   public void draw(Graphics graphics, Font font, int x, int y) {
-      _interactiveWarGame.draw(graphics, font, 0, 0);
+   public void draw(GameContainer gc, Font font, int x, int y) {
+      _interactiveWarGame.draw(gc, 0, 0);
    }
 }

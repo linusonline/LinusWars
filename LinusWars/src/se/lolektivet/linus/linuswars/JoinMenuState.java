@@ -1,8 +1,8 @@
 package se.lolektivet.linus.linuswars;
 
 import org.newdawn.slick.Font;
-import org.newdawn.slick.Graphics;
-import se.lolektivet.linus.linuswars.graphics.ResourceLoader;
+import org.newdawn.slick.GameContainer;
+import se.lolektivet.linus.linuswars.graphics.Sprites;
 import se.lolektivet.linus.linuswars.logic.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.WarGameMoves;
 import se.lolektivet.linus.linuswars.logic.WarGameQueries;
@@ -60,17 +60,17 @@ public class JoinMenuState implements InteractiveGameState  {
    }
 
    @Override
-   public void setResourceLoader(ResourceLoader loader) {
+   public void setSprites(Sprites sprites) {
       if (_theJoinMenu == null) {
-         _theJoinMenu = new GraphicalMenu(loader.getMenuCursorImage());
+         _theJoinMenu = new GraphicalMenu(sprites.getMenuCursor());
       }
       _theJoinMenu.addItem(ActionMenuItem.JOIN.getName());
 
    }
 
    @Override
-   public void draw(Graphics g, Font font, int x, int y) {
-      _interactiveWarGame.draw(g, font, 0, 0);
-      _theJoinMenu.draw(g, font);
+   public void draw(GameContainer gc, Font font, int x, int y) {
+      _interactiveWarGame.draw(gc, 0, 0);
+      _theJoinMenu.draw(gc.getGraphics(), font);
    }
 }

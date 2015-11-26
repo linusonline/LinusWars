@@ -11,8 +11,8 @@ import se.lolektivet.linus.linuswars.logic.Position;
 public class GraphicalUnit {
    private final UnitSprite _unitSprite;
    private Direction _direction;
-   private int _positionX;
-   private int _positionY;
+   private int _tilePositionX;
+   private int _tilePositionY;
 
    public GraphicalUnit(UnitSprite unitSprite) {
       _unitSprite = unitSprite;
@@ -23,16 +23,24 @@ public class GraphicalUnit {
       _direction = direction;
    }
 
-   public void draw(int relX, int relY, Renderable hpNumber) {
-      _unitSprite.getSprite(_direction, false).draw(relX + _positionX, relY + _positionY - 3);
+   public void draw(int pixelOffsetX, int pixelOffsetY, Renderable hpNumber, TileView tileView) {
+      if (!tileView.isTileVisible(_tilePositionX, _tilePositionY)) {
+         return;
+      }
+      int placeX = pixelOffsetX + tileView.tileToPixelX(_tilePositionX);
+      int placeY = pixelOffsetY + tileView.tileToPixelY(_tilePositionY);
+
+      _unitSprite.getUnitSprite(_direction, false).draw(
+            placeX,
+            placeY - 3);
       if (hpNumber != null) {
-         hpNumber.draw(relX + _positionX + 8,
-               relY + _positionY + 8);
+         hpNumber.draw(placeX + 8,
+               placeY + 8);
       }
    }
 
-   public void setPosition(Position position) {
-      _positionX = position.getX();
-      _positionY = position.getY();
+   public void setTilePosition(Position position) {
+      _tilePositionX = position.getX();
+      _tilePositionY = position.getY();
    }
 }

@@ -1,9 +1,6 @@
 package se.lolektivet.linus.linuswars;
 
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Font;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
+import org.newdawn.slick.*;
 import org.newdawn.slick.fills.GradientFill;
 import org.newdawn.slick.geom.RoundedRectangle;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;

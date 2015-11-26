@@ -21,6 +21,11 @@ public class LogicalMapMaker implements MapMaker {
 
    @Override
    public void addBuilding(TerrainType buildingType, Faction faction, int x, int y) {
-      _logicalWarMap.setTerrain(x, y, buildingType);
+      _logicalWarMap.setBuilding(x, y, buildingType);
+   }
+
+   @Override
+   public void validate() {
+      _logicalWarMap.validate();
    }
 }

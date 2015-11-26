@@ -10,12 +10,12 @@ public class LogicalGamePredeployer {
    private final WarGameSetup _logicalWarGame;
    private final LogicalUnitFactory _unitFactory;
 
-   public LogicalGamePredeployer(WarGameSetup logicalWarGame) {
+   public LogicalGamePredeployer(WarGameSetup logicalWarGame, LogicalUnitFactory logicalUnitFactory) {
       _logicalWarGame = logicalWarGame;
-      _unitFactory = new LogicalUnitFactory();
+      _unitFactory = logicalUnitFactory;
    }
 
-   void addNewUnit(UnitType type, Position position, Faction faction, int hpPercent) {
+   public void addNewUnit(UnitType type, Position position, Faction faction, int hpPercent) {
       if (hpPercent < 1 || hpPercent > 100) {
          throw new InternalError("Unit must have 1 to 100 HP%!");
       }
@@ -24,7 +24,7 @@ public class LogicalGamePredeployer {
       _logicalWarGame.addUnit(logicalUnit, position, faction);
    }
 
-   void addNewUnit(UnitType type, Position position, Faction faction) {
+   public void addNewUnit(UnitType type, Position position, Faction faction) {
       _logicalWarGame.addUnit(_unitFactory.createLogicalUnit(type), position, faction);
    }
 }

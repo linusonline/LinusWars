@@ -14,6 +14,9 @@ public interface BasicWarGameQueries {
 
    void addListener(WarGameListener listener);
 
+   int getMapWidth();
+   int getMapHeight();
+
    boolean unitBelongsToCurrentlyActiveFaction(LogicalUnit unit);
    boolean unitCanStillMoveThisTurn(LogicalUnit logicalUnit);
 
@@ -24,8 +27,8 @@ public interface BasicWarGameQueries {
    List<Faction> getFactionsInGame();
    Faction getCurrentlyActiveFaction();
    Faction getFactionForUnit(LogicalUnit logicalUnit);
-
    Position getHqPosition(Faction faction);
+   int getMoneyForFaction(Faction faction);
 
    List<LogicalUnit> getTransportedUnits(LogicalUnit transporter);
 
