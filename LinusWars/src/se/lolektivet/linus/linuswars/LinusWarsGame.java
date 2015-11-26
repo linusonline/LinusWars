@@ -63,15 +63,13 @@ public class LinusWarsGame extends BasicGame {
       factions.add(Faction.ORANGE_STAR);
       factions.add(Faction.BLUE_MOON);
       LogicalWarGame logicalWarGame = createGameFromMapAndFactions(logicalWarMap, factions);
-      WarGameQueries warGameQueries = new WarGameQueriesImpl(logicalWarGame);
-      logicalWarGame.setQueries(warGameQueries);
 
       ScrollingTileViewImpl scrollingTileViewImpl = new ScrollingTileViewImpl();
       scrollingTileViewImpl.setVisibleRectSize(15, 10);
-      GraphicalWarGame graphicalWarGame = new GraphicalWarGame(warGameQueries);
+      GraphicalWarGame graphicalWarGame = new GraphicalWarGame(logicalWarGame);
       graphicalWarGame.init(_allSprites);
       graphicalWarGame.setMap(graphicalWarMap);
-      _interactiveWarGame = new InteractiveWarGame(graphicalWarGame, warGameQueries, scrollingTileViewImpl);
+      _interactiveWarGame = new InteractiveWarGame(graphicalWarGame, logicalWarGame, scrollingTileViewImpl);
       _interactiveWarGame.init(_allSprites);
 
       // Deploy logical units
@@ -85,7 +83,7 @@ public class LinusWarsGame extends BasicGame {
       logicalWarGame.callGameStart();
       graphicalWarGame.callGameStart();
 
-      _gameState = new StartingState(_interactiveWarGame, warGameQueries, logicalWarGame);
+      _gameState = new StartingState(_interactiveWarGame, logicalWarGame, logicalWarGame);
    }
 
    @Override

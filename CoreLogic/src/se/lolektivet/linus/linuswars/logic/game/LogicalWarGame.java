@@ -1,7 +1,7 @@
 package se.lolektivet.linus.linuswars.logic.game;
 
-import se.lolektivet.linus.linuswars.logic.BasicWarGameQueries;
 import se.lolektivet.linus.linuswars.logic.LogicException;
+import se.lolektivet.linus.linuswars.logic.PathFinder;
 import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * Created by Linus on 2014-09-19.
  */
-public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQueries {
+public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQueries {
 
    private static final int INCOME_PER_PROPERTY = 1000;
 
@@ -49,7 +49,8 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
 
    private final Collection<WarGameListener> _listeners;
 
-   private WarGameQueries _queries;
+   private Map<Position, PathWithCost> _cachedOptimalPathsForTravellingUnit;
+   private LogicalUnit _unitForWhichOptimalPathsAreCached;
 
    public LogicalWarGame(LogicalWarMap logicalWarMap, List<Faction> factionsInTurnOrder) {
       _logicalWarMap = logicalWarMap;
@@ -81,10 +82,6 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
       _unitsLeftToMoveThisTurn = new HashSet<>();
       _listeners = new HashSet<>(0);
       findHqs();
-   }
-
-   public void setQueries(WarGameQueries warGameQueries) {
-      _queries = warGameQueries;
    }
 
    private void findHqs() {
@@ -193,7 +190,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
    // Movement & map query
    @Override
    public PotentiallyInfiniteInteger getTravelCostForUnitOnTile(LogicalUnit travellingUnit, Position tile) {
-      if (hasUnitAtPosition(tile) && _queries.unitsAreEnemies(travellingUnit, getUnitAtPosition(tile))) {
+      if (hasUnitAtPosition(tile) && unitsAreEnemies(travellingUnit, getUnitAtPosition(tile))) {
          return PotentiallyInfiniteInteger.infinite();
       }
       return _movementLogic.getTravelCostForMovementTypeOnTerrainType(travellingUnit.getMovementType(), _logicalWarMap.getTerrainForTile(tile));
@@ -234,7 +231,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
    private Set<LogicalUnit> getUnitsSuppliableByUnit(Set<LogicalUnit> targetUnits, LogicalUnit supplier) {
       Set<LogicalUnit> suppliableUnits = new HashSet<>(0);
       for (LogicalUnit targetUnit : targetUnits) {
-         if (!supplier.equals(targetUnit) && !_queries.unitsAreEnemies(supplier, targetUnit)) {
+         if (!supplier.equals(targetUnit) && !unitsAreEnemies(supplier, targetUnit)) {
             if (_fuelLogic.canResupplyUnit(supplier.getType(), targetUnit.getType())) {
                // TODO: If attacker is out of ammo AND cannot attack with secondary weapon!?
                suppliableUnits.add(targetUnit);
@@ -249,7 +246,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
    public Set<LogicalUnit> getUnitsAttackableByUnit(Set<LogicalUnit> targetUnits, LogicalUnit attacker) {
       Set<LogicalUnit> attackableUnits = new HashSet<>(0);
       for (LogicalUnit targetUnit : targetUnits) {
-         if (_queries.unitsAreEnemies(attacker, targetUnit)) {
+         if (unitsAreEnemies(attacker, targetUnit)) {
             if (_attackLogic.canAttack(attacker.getType(), targetUnit.getType())) {
                // TODO: If attacker is out of ammo AND cannot attack with secondary weapon!?
                attackableUnits.add(targetUnit);
@@ -279,11 +276,11 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
       _unitsAtPositions.put(path.getFinalPosition(), logicalUnit);
       _positionsOfUnits.put(logicalUnit, path.getFinalPosition());
       subtractFuelForUnitAndPath(path, logicalUnit);
-      _queries.invalidateOptimalPathsCache();
+      invalidateOptimalPathsCache();
    }
 
    private void subtractFuelForUnitAndPath(Path path, LogicalUnit logicalUnit) {
-      Cost cost = _queries.getCostForUnitAndPath(path, logicalUnit);
+      Cost cost = getCostForUnitAndPath(path, logicalUnit);
       PotentiallyInfiniteInteger fuelCost = cost.getFuelCost();
       if (fuelCost.isInfinite()) {
          throw new LogicException();
@@ -304,7 +301,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
       if (canCounterAttack(attackingUnit, defendingUnit)) {
          doDamage(defendingUnit, attackingUnit);
       }
-      _queries.invalidateOptimalPathsCache();
+      invalidateOptimalPathsCache();
    }
 
    private void doDamage(LogicalUnit attackingUnit, LogicalUnit defendingUnit) {
@@ -364,7 +361,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
       for (LogicalUnit suppliedUnit : suppliedUnits) {
          _fuelLogic.resupplyUnit(suppliedUnit);
       }
-      _queries.invalidateOptimalPathsCache();
+      invalidateOptimalPathsCache();
    }
 
    @Override
@@ -391,14 +388,14 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
 
    @Override
    public boolean canLoadOnto(LogicalUnit loadingUnit, LogicalUnit transporter) {
-      return !_queries.unitsAreEnemies(loadingUnit, transporter) &&
+      return !unitsAreEnemies(loadingUnit, transporter) &&
             _transportLogic.canTransport(transporter.getType(), loadingUnit.getType()) &&
             !transportIsFull(transporter);
    }
 
    @Override
    public boolean canJoinWith(LogicalUnit joiningUnit, LogicalUnit joinedUnit) {
-      return !_queries.unitsAreEnemies(joiningUnit, joinedUnit) &&
+      return !unitsAreEnemies(joiningUnit, joinedUnit) &&
             joiningUnit.getType().equals(joinedUnit.getType()) &&
             joiningUnit.isDamaged() && joinedUnit.isDamaged();
    }
@@ -468,7 +465,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
          fireTransportedUnitDestroyed(transportedUnit);
          removeUnitFromTransport(destroyedUnit, transportedUnit);
       }
-      _queries.invalidateOptimalPathsCache();
+      invalidateOptimalPathsCache();
    }
 
    @Override
@@ -539,7 +536,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
       // TODO: Do beginning-of-turn stuff for next faction.
       System.out.println("Current Faction is " + _currentlyActiveFaction.toString());
       activateAllNonTransportedUnitsInCurrentFaction();
-      _queries.invalidateOptimalPathsCache();
+      invalidateOptimalPathsCache();
       resupplyFromAllAtcs(_currentlyActiveFaction);
       addIncomeFromProperties(_currentlyActiveFaction);
       // Repair units on friendly bases
@@ -652,4 +649,192 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
          super(s);
       }
    }
+
+   @Override
+   public Path getOptimalPathForUnitToDestination(LogicalUnit travellingUnit, Position destination) {
+      Map<Position, PathWithCost> optimalPaths = getAndCacheOptimalPathsToAllReachablePoints(travellingUnit);
+      return optimalPaths.get(destination).getPath();
+   }
+
+   @Override
+   public Set<Position> getAllReachablePoints(LogicalUnit travellingUnit) {
+      return getAndCacheOptimalPathsToAllReachablePoints(travellingUnit).keySet();
+   }
+
+   @Override
+   public boolean isPathAllowedForUnit(Path path, LogicalUnit movingUnit) {
+      Cost totalCost = getCostForUnitAndPath(path, movingUnit);
+      return totalCost.isEqualOrBetterThan(getCostLimitForUnit(movingUnit));
+   }
+
+   @Override
+   public Cost getCostForUnitAndPath(Path path, LogicalUnit logicalUnit) {
+      CostCalculator costCalculator = createCostCalculatorForUnit(logicalUnit);
+      Cost totalCost = new Cost();
+      for (Position step : path.getPositionList()) {
+         totalCost = Cost.add(totalCost, costCalculator.getCostForPosition(step));
+      }
+      return totalCost;
+   }
+
+   @Override
+   public void invalidateOptimalPathsCache() {
+      _cachedOptimalPathsForTravellingUnit = null;
+      _unitForWhichOptimalPathsAreCached = null;
+   }
+
+   @Override
+   public boolean hasActiveUnitAtPosition(Position position) {
+      return hasUnitAtPosition(position) && !unitHasMovedThisTurn(getUnitAtPosition(position));
+   }
+
+   @Override
+   public Set<Position> getAdjacentVacantPositionsAfterMove(LogicalUnit movingUnit, Path path) {
+      Position destination = path.getFinalPosition();
+      Collection<Position> adjacentPositions = getAdjacentPositions(destination);
+      Set<Position> adjacentVacantPositions = new HashSet<>();
+      for (Position adjacentPosition : adjacentPositions) {
+         if (hasUnitAtPosition(adjacentPosition)) {
+            if (!getUnitAtPosition(adjacentPosition).equals(movingUnit)) {
+               continue;
+            }
+         }
+         adjacentVacantPositions.add(adjacentPosition);
+      }
+      return adjacentVacantPositions;
+   }
+
+   @Override
+   public Set<LogicalUnit> getAttackableUnitsAfterMove(LogicalUnit attackingUnit, Path path) {
+      Position destination = path.getFinalPosition();
+      Set<LogicalUnit> attackableUnits;
+      if (attackingUnit.isRanged() && !path.isEmpty()) {
+         attackableUnits = new HashSet<>(0);
+      } else {
+         attackableUnits = getUnitsAttackableFromPosition(attackingUnit, destination);
+      }
+      return attackableUnits;
+   }
+
+   @Override
+   public boolean unitsAreEnemies(LogicalUnit oneUnit, LogicalUnit otherUnit) {
+      return !getFactionForUnit(oneUnit).equals(getFactionForUnit(otherUnit));
+   }
+
+   @Override
+   public Set<LogicalUnit> getSuppliableUnitsAfterMove(LogicalUnit supplier, Path path) {
+      Position destination = path.getFinalPosition();
+      Set<LogicalUnit> suppliableUnits;
+      suppliableUnits = getUnitsSuppliableFromPosition(supplier, destination);
+      return suppliableUnits;
+   }
+
+   private Map<Position, PathWithCost> getAndCacheOptimalPathsToAllReachablePoints(LogicalUnit travellingUnit) {
+      if (!travellingUnit.equals(_unitForWhichOptimalPathsAreCached)) {
+         _cachedOptimalPathsForTravellingUnit = getOptimalPathsToAllReachablePoints(travellingUnit);
+         _unitForWhichOptimalPathsAreCached = travellingUnit;
+      }
+      return _cachedOptimalPathsForTravellingUnit;
+   }
+
+   private Map<Position, PathWithCost> getOptimalPathsToAllReachablePoints(LogicalUnit travellingUnit) {
+      PathFinder pathFinder = new PathFinder(travellingUnit, this, createCostCalculatorForUnit(travellingUnit));
+      return pathFinder.getOptimalPathsToAllReachablePoints(getCostLimitForUnit(travellingUnit));
+   }
+
+   private CostCalculator createCostCalculatorForUnit(final LogicalUnit logicalUnit) {
+      return new CostCalculator() {
+         @Override
+         public Cost getCostForPosition(Position position) {
+            PotentiallyInfiniteInteger movementCost = getTravelCostForUnitOnTile(logicalUnit, position);
+            PotentiallyInfiniteInteger fuelCost = getFuelCostForUnitOnTile(logicalUnit, position);
+            return new Cost(movementCost, fuelCost);
+         }
+      };
+   }
+
+   private Cost getCostLimitForUnit(LogicalUnit logicalUnit) {
+      PotentiallyInfiniteInteger movementLimit = PotentiallyInfiniteInteger.create(logicalUnit.getBaseMovementRange());
+      PotentiallyInfiniteInteger fuelLimit = PotentiallyInfiniteInteger.create(logicalUnit.getFuel());
+      return new Cost(movementLimit, fuelLimit);
+   }
+
+   private boolean unitHasMovedThisTurn(LogicalUnit unit) {
+      return unitBelongsToCurrentlyActiveFaction(unit) && !unitCanStillMoveThisTurn(unit);
+   }
+
+   private Set<LogicalUnit> getUnitsAttackableFromPosition(LogicalUnit attacker, Position attackingPosition) {
+      if (attacker.isRanged()) {
+         return getUnitsRemotelyAttackableFromPosition(attacker, attackingPosition);
+      } else if (attacker.isCombat()) {
+         return getUnitsDirectlyAttackableFromPosition(attacker, attackingPosition);
+      } else {
+         return new HashSet<LogicalUnit>(0);
+      }
+   }
+
+   private Set<LogicalUnit> getUnitsRemotelyAttackableFromPosition(LogicalUnit attacker, Position attackingPosition) {
+      Set<Position> targetPositions = getPositionsRemotelyAttackableFromPosition(attackingPosition, attacker.getBaseMinAttackRange(), attacker.getBaseMaxAttackRange());
+      Set<LogicalUnit> targetUnits = getUnitsOnPositions(targetPositions);
+      Set<LogicalUnit> attackableTargetUnits = getUnitsAttackableByUnit(targetUnits, attacker);
+      return attackableTargetUnits;
+   }
+
+   private Set<Position> getPositionsRemotelyAttackableFromPosition(Position attackingPosition, int minRange, int maxRange) {
+      Set<Position> attackablePositions = new HashSet<Position>(0);
+      for (int range = minRange; range <= maxRange; range++) {
+         attackablePositions.addAll(getPositionsXStepsAwayFrom(attackingPosition, range));
+      }
+      return attackablePositions;
+   }
+
+   private Collection<Position> getPositionsXStepsAwayFrom(Position origin, int nrOfSteps) {
+      Collection<Position> positions = new HashSet<Position>(0);
+      int x = origin.getX();
+      int y = origin.getY() - nrOfSteps;
+      for (int stepCount = 0; stepCount < nrOfSteps; stepCount++) {
+         x++;
+         y++;
+         addPositionIfInsideMap(x, y, positions);
+      }
+      for (int stepCount = 0; stepCount < nrOfSteps; stepCount++) {
+         x--;
+         y++;
+         addPositionIfInsideMap(x, y, positions);
+      }
+      for (int stepCount = 0; stepCount < nrOfSteps; stepCount++) {
+         x--;
+         y--;
+         addPositionIfInsideMap(x, y, positions);
+      }
+      for (int stepCount = 0; stepCount < nrOfSteps; stepCount++) {
+         x++;
+         y--;
+         addPositionIfInsideMap(x, y, positions);
+      }
+      return positions;
+   }
+
+   private void addPositionIfInsideMap(int x, int y, Collection<Position> positions) {
+      Position position = new Position(x, y);
+      if (isPositionInsideMap(position)) {
+         positions.add(position);
+      }
+   }
+
+   private Set<LogicalUnit> getUnitsOnPositions(Collection<Position> positions) {
+      Set<LogicalUnit> units = new HashSet<LogicalUnit>();
+      for (Position position : positions) {
+         if (hasUnitAtPosition(position)) {
+            units.add(getUnitAtPosition(position));
+         }
+      }
+      return units;
+   }
+
+   private Set<LogicalUnit> getUnitsDirectlyAttackableFromPosition(LogicalUnit attacker, Position attackingPosition) {
+      Set<LogicalUnit> adjacentUnits = getAdjacentUnits(attackingPosition);
+      return getUnitsAttackableByUnit(adjacentUnits, attacker);
+   }
+
 }
