@@ -28,6 +28,16 @@ public class TileViewImpl implements TileView {
       return baseTransform(tileY - _tileOffsetY);
    }
 
+   @Override
+   public int tileHeightInPixels(int tiles) {
+      return baseTransform(tiles);
+   }
+
+   @Override
+   public int tileWidthInPixels(int tiles) {
+      return baseTransform(tiles);
+   }
+
    public void setVisibleRectSize(int width, int height) {
       _visibleTileWidth = width;
       _visibleTileHeight = height;

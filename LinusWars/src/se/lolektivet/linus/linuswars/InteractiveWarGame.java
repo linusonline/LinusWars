@@ -139,8 +139,8 @@ public class InteractiveWarGame {
             Shape fillShape = new Rectangle(
                   x + _scrollingTileView.tileToPixelX(indicatedPosition.getX()),
                   y + _scrollingTileView.tileToPixelY(indicatedPosition.getY()),
-                  _scrollingTileView.tileToPixelX(1),
-                  _scrollingTileView.tileToPixelY(1));
+                  _scrollingTileView.tileWidthInPixels(1),
+                  _scrollingTileView.tileHeightInPixels(1));
             gc.getGraphics().fill(fillShape, new GradientFill(0, 0, new Color(255, 255, 255, 128), 0, 1, new Color(255, 255, 255, 128)));
          }
       }
