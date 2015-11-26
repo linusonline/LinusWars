@@ -1,4 +1,4 @@
-package se.lolektivet.linus.linuswars.logic;
+package se.lolektivet.linus.linuswars.logic.game;
 
 import se.lolektivet.linus.linuswars.logic.enums.UnitType;
 
@@ -10,13 +10,13 @@ import java.util.Map;
 /**
  * Created by Linus on 2014-09-29.
  */
-public class TransportLogic {
+class TransportLogic {
    private final Map<UnitType, List<UnitType>> _transportCapabilities;
    private final Map<UnitType, Integer> _transportLimits;
 
-   public TransportLogic() {
-      _transportCapabilities = new HashMap<UnitType, List<UnitType>>(4);
-      _transportLimits = new HashMap<UnitType, Integer>(4);
+   TransportLogic() {
+      _transportCapabilities = new HashMap<>(4);
+      _transportLimits = new HashMap<>(4);
       initializeTransportCapabilities();
       initializeTransportLimits();
    }
@@ -63,11 +63,11 @@ public class TransportLogic {
       return _transportCapabilities.containsKey(unitType);
    }
 
-   public boolean canTransport(UnitType transporter, UnitType passenger) {
+   boolean canTransport(UnitType transporter, UnitType passenger) {
       return isTransportType(transporter) && _transportCapabilities.get(transporter).contains(passenger);
    }
 
-   public int getTransportLimit(UnitType transporter) {
+   int getTransportLimit(UnitType transporter) {
       return _transportLimits.get(transporter);
    }
 }

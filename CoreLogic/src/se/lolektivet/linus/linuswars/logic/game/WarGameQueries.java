@@ -1,5 +1,7 @@
-package se.lolektivet.linus.linuswars.logic;
+package se.lolektivet.linus.linuswars.logic.game;
 
+import se.lolektivet.linus.linuswars.logic.BasicWarGameQueries;
+import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.pathfinding.Cost;
 import se.lolektivet.linus.linuswars.logic.pathfinding.Path;
 

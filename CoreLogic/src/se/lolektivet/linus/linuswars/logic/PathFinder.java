@@ -1,5 +1,7 @@
 package se.lolektivet.linus.linuswars.logic;
 
+import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
+import se.lolektivet.linus.linuswars.logic.game.WarGameQueries;
 import se.lolektivet.linus.linuswars.logic.pathfinding.Cost;
 import se.lolektivet.linus.linuswars.logic.pathfinding.CostCalculator;
 import se.lolektivet.linus.linuswars.logic.pathfinding.PathWithCost;
@@ -24,7 +26,7 @@ public class PathFinder {
       _costCalculator = costCalculator;
    }
 
-   Map<Position, PathWithCost> getOptimalPathsToAllReachablePoints(Cost limit) {
+   public Map<Position, PathWithCost> getOptimalPathsToAllReachablePoints(Cost limit) {
       _limit = limit;
       calculateOptimalPathsToAllReachablePoints(_warGameQueries.getPositionOfUnit(_travellingUnit));
       Map<Position, PathWithCost> optimalPaths = new HashMap<Position, PathWithCost>(_optimalPathsFound.size());

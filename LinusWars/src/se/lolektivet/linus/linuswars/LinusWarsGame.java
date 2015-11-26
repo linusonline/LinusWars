@@ -6,6 +6,7 @@ import se.lolektivet.linus.linuswars.graphics.*;
 import se.lolektivet.linus.linuswars.logic.*;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
+import se.lolektivet.linus.linuswars.logic.game.*;
 import se.lolektivet.linus.linuswars.maps.GameSetup1;
 import se.lolektivet.linus.linuswars.maps.Map2;
 

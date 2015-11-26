@@ -1,5 +1,6 @@
-package se.lolektivet.linus.linuswars.logic;
+package se.lolektivet.linus.linuswars.logic.game;
 
+import se.lolektivet.linus.linuswars.logic.LogicException;
 import se.lolektivet.linus.linuswars.logic.enums.MovementType;
 import se.lolektivet.linus.linuswars.logic.enums.UnitType;
 
@@ -62,7 +63,7 @@ public class LogicalUnit {
    }
 
    // Core method
-   void setHp1To100(int hp) {
+   public void setHp1To100(int hp) {
       _hp = hp;
    }
 

@@ -1,4 +1,4 @@
-package se.lolektivet.linus.linuswars.logic;
+package se.lolektivet.linus.linuswars.logic.game;
 
 /**
 * Created by Linus on 2014-11-08.

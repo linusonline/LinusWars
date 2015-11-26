@@ -2,6 +2,9 @@ package se.lolektivet.linus.linuswars.logic;
 
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.UnitType;
+import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
+import se.lolektivet.linus.linuswars.logic.game.LogicalUnitFactory;
+import se.lolektivet.linus.linuswars.logic.game.WarGameSetup;
 
 /**
  * Created by Linus on 2014-09-22.

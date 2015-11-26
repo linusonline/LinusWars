@@ -1,6 +1,8 @@
 package se.lolektivet.linus.linuswars.logic;
 
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
+import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
+import se.lolektivet.linus.linuswars.logic.game.WarGameListener;
 import se.lolektivet.linus.linuswars.logic.pathfinding.PotentiallyInfiniteInteger;
 
 import java.util.Collection;

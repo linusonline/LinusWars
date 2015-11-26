@@ -1,9 +1,9 @@
-package se.lolektivet.linus.linuswars.logic;
+package se.lolektivet.linus.linuswars.logic.game;
 
 /**
  * Created by Linus on 2014-09-19.
  */
-public class BaseDamage {
+class BaseDamage {
    private final int _specificDamage;
    private final boolean _canAttack;
 

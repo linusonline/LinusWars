@@ -1,8 +1,7 @@
-package se.lolektivet.linus.linuswars.logic;
+package se.lolektivet.linus.linuswars.logic.game;
 
+import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.pathfinding.Path;
-
-import java.util.Set;
 
 /**
  * Created by Linus on 2014-09-18.

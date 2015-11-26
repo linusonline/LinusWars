@@ -3,6 +3,8 @@ package se.lolektivet.linus.linuswars.pathfinding;
 import junit.framework.TestCase;
 import se.lolektivet.linus.linuswars.logic.*;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
+import se.lolektivet.linus.linuswars.logic.game.LogicalWarGame;
+import se.lolektivet.linus.linuswars.logic.game.LogicalWarMap;
 import se.lolektivet.linus.linuswars.maps.Map1;
 
 import java.util.ArrayList;

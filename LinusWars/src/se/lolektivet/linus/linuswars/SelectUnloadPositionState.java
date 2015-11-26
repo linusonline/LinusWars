@@ -3,10 +3,10 @@ package se.lolektivet.linus.linuswars;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.logic.LogicalUnit;
+import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.Position;
-import se.lolektivet.linus.linuswars.logic.WarGameMoves;
-import se.lolektivet.linus.linuswars.logic.WarGameQueries;
+import se.lolektivet.linus.linuswars.logic.game.WarGameMoves;
+import se.lolektivet.linus.linuswars.logic.game.WarGameQueries;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 
 import java.util.ArrayList;

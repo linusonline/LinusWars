@@ -2,10 +2,10 @@ package se.lolektivet.linus.linuswars.graphicalgame;
 
 import org.newdawn.slick.*;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.logic.LogicalUnit;
+import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.Position;
-import se.lolektivet.linus.linuswars.logic.WarGameListener;
-import se.lolektivet.linus.linuswars.logic.WarGameQueries;
+import se.lolektivet.linus.linuswars.logic.game.WarGameListener;
+import se.lolektivet.linus.linuswars.logic.game.WarGameQueries;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 

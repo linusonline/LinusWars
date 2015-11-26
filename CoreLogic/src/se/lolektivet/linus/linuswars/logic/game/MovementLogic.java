@@ -1,4 +1,4 @@
-package se.lolektivet.linus.linuswars.logic;
+package se.lolektivet.linus.linuswars.logic.game;
 
 import se.lolektivet.linus.linuswars.logic.enums.MovementType;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
@@ -10,10 +10,10 @@ import java.util.Map;
 /**
  * Created by Linus on 2014-09-19.
  */
-public class MovementLogic {
+class MovementLogic {
    private final Map<MovementType, Map<TerrainType, PotentiallyInfiniteInteger>> _movementCosts;
 
-   public MovementLogic() {
+   MovementLogic() {
       _movementCosts = initializeMovementCosts();
    }
 

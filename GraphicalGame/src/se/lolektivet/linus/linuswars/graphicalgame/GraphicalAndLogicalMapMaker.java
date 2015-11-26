@@ -1,7 +1,7 @@
 package se.lolektivet.linus.linuswars.graphicalgame;
 
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.logic.LogicalWarMap;
+import se.lolektivet.linus.linuswars.logic.game.LogicalWarMap;
 import se.lolektivet.linus.linuswars.logic.MapMaker;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainTile;
