@@ -144,6 +144,6 @@ public class MovementLogic {
       return result;
    }
 
-   private class MovementCostMissingException extends RuntimeException {
+   private static class MovementCostMissingException extends RuntimeException {
    }
 }

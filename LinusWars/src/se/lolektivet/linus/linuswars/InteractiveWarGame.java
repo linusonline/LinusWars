@@ -20,7 +20,7 @@ import java.util.HashSet;
  */
 public class InteractiveWarGame {
 
-   class CursorOutsideMapException extends Exception {}
+   static class CursorOutsideMapException extends Exception {}
 
    private final WarGameQueries _warGameQueries;
    private final GraphicalWarGame _graphicalWarGame;

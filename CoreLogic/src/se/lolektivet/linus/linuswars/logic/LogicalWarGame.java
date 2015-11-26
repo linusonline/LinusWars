@@ -14,11 +14,11 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
 
    private static final int INCOME_PER_PROPERTY = 1000;
 
-   class UnitCollisionException extends RuntimeException {}
-   class UnitNotFoundException extends RuntimeException {}
-   class FactionAlreadySetException extends RuntimeException {}
-   class FactionNotInGameException extends RuntimeException {}
-   class HqNotSetException extends RuntimeException {}
+   static class UnitCollisionException extends RuntimeException {}
+   static class UnitNotFoundException extends RuntimeException {}
+   static class FactionAlreadySetException extends RuntimeException {}
+   static class FactionNotInGameException extends RuntimeException {}
+   static class HqNotSetException extends RuntimeException {}
 
    private final LogicalWarMap _logicalWarMap;
    private final MovementLogic _movementLogic;
@@ -644,7 +644,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, BasicWarGameQ
       return _unitsAtPositions.get(position) != null;
    }
 
-   private class NoSuppliableUnitsInRangeException extends LogicException {
+   private static class NoSuppliableUnitsInRangeException extends LogicException {
       public NoSuppliableUnitsInRangeException(String s) {
          super(s);
       }

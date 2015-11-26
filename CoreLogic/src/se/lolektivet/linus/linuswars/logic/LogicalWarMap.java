@@ -87,13 +87,13 @@ public class LogicalWarMap {
             position.getY() < getHeight();
    }
 
-   class TileAlreadySetException extends RuntimeException {
+   static class TileAlreadySetException extends RuntimeException {
       public TileAlreadySetException(String message) {
          super(message);
       }
    }
 
-   class MapUninitializedException extends RuntimeException {
+   static class MapUninitializedException extends RuntimeException {
       public MapUninitializedException(String message) {
          super(message);
       }

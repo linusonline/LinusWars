@@ -13,7 +13,7 @@ class ResourceLoader {
 
    private final Map<String, Image> _imageCache;
 
-   class ResourceNotLoadedException extends RuntimeException {
+   static class ResourceNotLoadedException extends RuntimeException {
       ResourceNotLoadedException(String message) {
          super(message);
       }

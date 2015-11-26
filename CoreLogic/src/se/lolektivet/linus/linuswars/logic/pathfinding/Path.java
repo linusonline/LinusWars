@@ -113,6 +113,6 @@ public class Path {
       }
    }
 
-   class IllegalPathException extends RuntimeException {
+   static class IllegalPathException extends RuntimeException {
    }
 }
