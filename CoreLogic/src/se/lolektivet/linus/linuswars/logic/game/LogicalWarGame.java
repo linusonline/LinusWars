@@ -32,10 +32,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    private final ModuleMoney _moneyModule;
    private final ModuleTurnOrder _turnOrderModule;
    private final ModuleUnits _unitModule;
-
-   private final Map<Position, Faction> _factionOwningProperty;
-   private final Map<Faction, Position> _hqsOfFactions;
-   private final Map<Position, Faction> _positionsOfHqs;
+   private final ModuleBases _basesModule;
 
    private boolean _gameStarted;
 
@@ -53,24 +50,14 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       _transportLogic = new TransportLogic();
 
       _unitModule = new ModuleUnits(factionsInTurnOrder);
-
       _turnOrderModule = new ModuleTurnOrder(factionsInTurnOrder);
       _moneyModule = new ModuleMoney();
       _moneyModule.init(factionsInTurnOrder);
+      _basesModule = new ModuleBases();
+
       System.out.println("Current Faction is " + factionsInTurnOrder.get(0).toString());
-      _factionOwningProperty = new HashMap<>();
-      _hqsOfFactions = new HashMap<>(factionsInTurnOrder.size());
-      _positionsOfHqs = new HashMap<>(factionsInTurnOrder.size());
       _gameStarted = false;
       _listeners = new HashSet<>(0);
-      findHqs();
-   }
-
-   private void findHqs() {
-      Collection<Position> positionsOfHqs = _logicalWarMap.findHqs();
-      for (Position hqPosition : positionsOfHqs) {
-         _positionsOfHqs.put(hqPosition, Faction.NEUTRAL);
-      }
    }
 
    // Listening
@@ -114,16 +101,12 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       if (_gameStarted) {
          throw new IllegalStateException("setFactionForProperty not allowed after game start!");
       }
-      if (_factionOwningProperty.get(positionOfProperty) != null) {
+      if (_basesModule.hasBaseAtPosition(positionOfProperty)) {
          throw new FactionAlreadySetException();
       }
 
       TerrainType terrain = _logicalWarMap.getTerrainForTile(positionOfProperty);
-      if (terrain.equals(TerrainType.HQ)) {
-         _positionsOfHqs.put(positionOfProperty, faction);
-         _hqsOfFactions.put(faction, positionOfProperty);
-      }
-      _factionOwningProperty.put(positionOfProperty, faction);
+      _basesModule.addBase(positionOfProperty, terrain, faction);
    }
 
    @Override
@@ -147,12 +130,21 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       if (!allFactionsHaveSetTheirHq()) {
          throw new HqNotSetException();
       }
+      createNeutralBases();
       _gameStarted = true;
       doBeginningOfTurn();
    }
 
    private boolean allFactionsHaveSetTheirHq() {
-      return _hqsOfFactions.size() == _turnOrderModule.numberOfFactions();
+      return _basesModule.getNumberOfHqs() == _turnOrderModule.numberOfFactions();
+   }
+
+   private void createNeutralBases() {
+      for (Position position : _logicalWarMap.findBases()) {
+         if (!_basesModule.hasBaseAtPosition(position)) {
+            _basesModule.addBase(position, _logicalWarMap.getTerrainForTile(position), Faction.NEUTRAL);
+         }
+      }
    }
 
    @Override
@@ -441,11 +433,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    }
 
    private void addIncomeFromProperties(Faction faction) {
-      for (Map.Entry<Position, Faction> propertyForFaction :  _factionOwningProperty.entrySet()) {
-         if (faction == propertyForFaction.getValue()) {
-            _moneyModule.addMoneyForFaction(faction, INCOME_PER_PROPERTY);
-         }
-      }
+      _moneyModule.addMoneyForFaction(faction, INCOME_PER_PROPERTY * _basesModule.getBasesForFaction(faction).size());
    }
 
    public LogicalWarMap getLogicalWarMap() {
@@ -459,7 +447,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
 
    @Override
    public Position getHqPosition(Faction faction) {
-      return _hqsOfFactions.get(faction);
+      return _basesModule.getHqPosition(faction);
    }
 
    @Override

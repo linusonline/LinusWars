@@ -65,13 +65,23 @@ public class LogicalWarMap {
    }
 
    public List<Position> findHqs() {
-      List<Position> positionsOfHqs = new ArrayList<Position>();
+      List<Position> positionsOfHqs = new ArrayList<>();
       for (Map.Entry<Position, TerrainType> entry : _terrainTiles.entrySet()) {
-         if (entry.getValue().equals(TerrainType.HQ)) {
+         if (entry.getValue() == TerrainType.HQ) {
             positionsOfHqs.add(entry.getKey());
          }
       }
       return positionsOfHqs;
+   }
+
+   public List<Position> findBases() {
+      List<Position> positionsOfBases = new ArrayList<>();
+      for (Map.Entry<Position, TerrainType> entry : _terrainTiles.entrySet()) {
+         if (entry.getValue().isBuilding()) {
+            positionsOfBases.add(entry.getKey());
+         }
+      }
+      return positionsOfBases;
    }
 
    public int getWidth() {
