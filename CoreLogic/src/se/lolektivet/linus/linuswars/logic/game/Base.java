@@ -14,6 +14,7 @@ public class Base {
    private final Position _mapPosition;
    private final TerrainType _baseType;
    private Faction _owningFaction;
+   private Faction _capturingFaction;
    private int _captureStatus;
 
    public static Base create(Position mapPosition, TerrainType baseType, Faction owningFaction) {
@@ -28,6 +29,41 @@ public class Base {
       _baseType = baseType;
       _captureStatus = STARTING_CAPTURE_STATUS;
       _owningFaction = owningFaction;
+      _capturingFaction = Faction.NEUTRAL;
+   }
+
+   public void doCapture(int captureValue, Faction faction) {
+      if (isCapturing() && _capturingFaction != faction) {
+         throw new LogicException("Base at " + _mapPosition + " is already being captured by " +
+               _capturingFaction + ", faction " + faction + " cannot start capturing.");
+      }
+      if (_owningFaction == faction) {
+         throw new LogicException("Base at " + _mapPosition + " is already owned by " + faction + ", cannot capture.");
+      }
+      internalDoCapture(captureValue, faction);
+   }
+
+   private void internalDoCapture(int captureValue, Faction faction) {
+      _captureStatus -= captureValue;
+      _capturingFaction = faction;
+      if (_captureStatus < 1) {
+         _captureStatus = STARTING_CAPTURE_STATUS;
+         _owningFaction = faction;
+         _capturingFaction = Faction.NEUTRAL;
+      }
+   }
+
+   public void resetCapture() {
+      _captureStatus = STARTING_CAPTURE_STATUS;
+      _capturingFaction = Faction.NEUTRAL;
+   }
+
+   public boolean isCapturing() {
+      return _captureStatus < STARTING_CAPTURE_STATUS;
+   }
+
+   public Faction getFaction() {
+      return _owningFaction;
    }
 
    @Override
