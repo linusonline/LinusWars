@@ -15,7 +15,7 @@ import java.util.Set;
 /**
  * Created by Linus on 2014-09-20.
  */
-public class SelectAttackState implements InteractiveGameState {
+public class StateSelectAttack implements InteractiveGameState {
    private final InteractiveWarGame _interactiveWarGame;
    private WarGameQueries _warGameQueries;
    private WarGameMoves _warGameMoves;
@@ -25,7 +25,7 @@ public class SelectAttackState implements InteractiveGameState {
    private int _currentlySelectedTargetIndex;
    private GraphicalMenu _fireOrNothingMenu;
 
-   public SelectAttackState(InteractiveWarGame interactiveWarGame,
+   public StateSelectAttack(InteractiveWarGame interactiveWarGame,
                             WarGameQueries warGameQueries,
                             WarGameMoves warGameMoves,
                             LogicalUnit logicalUnit,
@@ -59,7 +59,7 @@ public class SelectAttackState implements InteractiveGameState {
       _interactiveWarGame.hideAttackCursor();
       _interactiveWarGame.hideMovementArrow();
       // TODO: Check if game was won!
-      return new StartingState(_interactiveWarGame, _warGameQueries, _warGameMoves);
+      return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
    }
 
    @Override
@@ -70,7 +70,7 @@ public class SelectAttackState implements InteractiveGameState {
    @Override
    public InteractiveGameState handleCancel() {
       _interactiveWarGame.hideAttackCursor();
-      return new ActionMenuState(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
+      return new StateActionMenu(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
    }
 
    @Override

@@ -83,7 +83,7 @@ public class LinusWarsGame extends BasicGame {
       logicalWarGame.callGameStart();
       graphicalWarGame.callGameStart();
 
-      _gameState = new StartingState(_interactiveWarGame, logicalWarGame, logicalWarGame);
+      _gameState = new StateStarting(_interactiveWarGame, logicalWarGame, logicalWarGame);
    }
 
    @Override

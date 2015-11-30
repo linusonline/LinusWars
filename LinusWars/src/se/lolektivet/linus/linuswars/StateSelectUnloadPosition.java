@@ -16,7 +16,7 @@ import java.util.Set;
 /**
  * Created by Linus on 2014-09-29.
  */
-public class SelectUnloadPositionState implements InteractiveGameState {
+public class StateSelectUnloadPosition implements InteractiveGameState {
    private final InteractiveWarGame _interactiveWarGame;
    private final WarGameQueries _warGameQueries;
    private final WarGameMoves _warGameMoves;
@@ -25,7 +25,7 @@ public class SelectUnloadPositionState implements InteractiveGameState {
    private final List<Position> _candidatePositions;
    private int _currentlySelectedPositionIndex;
 
-   public SelectUnloadPositionState(InteractiveWarGame interactiveWarGame,
+   public StateSelectUnloadPosition(InteractiveWarGame interactiveWarGame,
                                     WarGameQueries warGameQueries,
                                     WarGameMoves warGameMoves,
                                     LogicalUnit logicalUnit,
@@ -59,7 +59,7 @@ public class SelectUnloadPositionState implements InteractiveGameState {
       _interactiveWarGame.hideAttackCursor();
       _interactiveWarGame.showGraphicForUnit(unloadingUnit);
       _interactiveWarGame.setPositionOfGraphicForUnit(unloadingUnit, unloadingPosition);
-      return new StartingState(_interactiveWarGame, _warGameQueries, _warGameMoves);
+      return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
    }
 
    @Override
@@ -70,7 +70,7 @@ public class SelectUnloadPositionState implements InteractiveGameState {
    @Override
    public InteractiveGameState handleCancel() {
       _interactiveWarGame.hideAttackCursor();
-      return new ActionMenuState(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
+      return new StateActionMenu(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
    }
 
    @Override

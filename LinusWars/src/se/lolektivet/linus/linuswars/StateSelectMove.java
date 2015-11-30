@@ -15,7 +15,7 @@ import java.util.Collection;
 /**
  * Created by Linus on 2014-09-20.
  */
-public class SelectMovementState implements InteractiveGameState {
+public class StateSelectMove implements InteractiveGameState {
    private final InteractiveWarGame _interactiveWarGame;
    private final WarGameQueries _warGameQueries;
    private final WarGameMoves _warGameMoves;
@@ -24,7 +24,7 @@ public class SelectMovementState implements InteractiveGameState {
    private MovementArrow _movementArrow;
    private final MovementArrowController _movementArrowController;
 
-   public SelectMovementState(
+   public StateSelectMove(
          InteractiveWarGame interactiveWarGame,
          WarGameQueries warGameQueries, WarGameMoves warGameMoves,
          LogicalUnit logicalUnit,
@@ -39,7 +39,7 @@ public class SelectMovementState implements InteractiveGameState {
       resetGraphicalUnit();
    }
 
-   public SelectMovementState(
+   public StateSelectMove(
          InteractiveWarGame interactiveWarGame,
          WarGameQueries warGameQueries, WarGameMoves warGameMoves,
          LogicalUnit logicalUnit) {
@@ -56,15 +56,15 @@ public class SelectMovementState implements InteractiveGameState {
          // TODO: Animate travel.
          _interactiveWarGame.setPositionOfGraphicForUnit(_logicalUnit, _movementArrow.getFinalPosition());
          _interactiveWarGame.hideMovementArrow();
-         return new ActionMenuState(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
+         return new StateActionMenu(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
       } else if (canDoLoadMove()) {
          _interactiveWarGame.setPositionOfGraphicForUnit(_logicalUnit, _movementArrow.getFinalPosition());
          _interactiveWarGame.hideMovementArrow();
-         return new LoadMenuState(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
+         return new StateLoadMenu(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
       } else if (canDoJoinMove()) {
          _interactiveWarGame.setPositionOfGraphicForUnit(_logicalUnit, _movementArrow.getFinalPosition());
          _interactiveWarGame.hideMovementArrow();
-         return new JoinMenuState(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
+         return new StateJoinMenu(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
       } else {
          return this;
       }
@@ -126,7 +126,7 @@ public class SelectMovementState implements InteractiveGameState {
    public InteractiveGameState handleCancel() {
       _interactiveWarGame.stopIndicatingPositions();
       _interactiveWarGame.hideMovementArrow();
-      return new StartingState(_interactiveWarGame, _warGameQueries, _warGameMoves);
+      return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
    }
 
    @Override

@@ -9,21 +9,22 @@ import se.lolektivet.linus.linuswars.logic.game.WarGameQueries;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 
 /**
- * Created by Linus on 2014-09-29.
+ * Created by Linus on 2015-11-19.
  */
-public class LoadMenuState implements InteractiveGameState {
-   private GraphicalMenu _theLoadMenu;
+public class StateJoinMenu implements InteractiveGameState  {
+   private GraphicalMenu _theJoinMenu;
    private final InteractiveWarGame _interactiveWarGame;
    private final WarGameQueries _warGameQueries;
    private final WarGameMoves _warGameMoves;
    private final LogicalUnit _logicalUnit;
    private final MovementArrow _movementArrow;
 
-   public LoadMenuState(InteractiveWarGame interactiveWarGame,
-                        WarGameQueries warGameQueries,
-                        WarGameMoves warGameMoves,
-                        LogicalUnit logicalUnit,
-                        MovementArrow movementArrow) {
+   public StateJoinMenu(
+         InteractiveWarGame interactiveWarGame,
+         WarGameQueries warGameQueries,
+         WarGameMoves warGameMoves,
+         LogicalUnit logicalUnit,
+         MovementArrow movementArrow) {
       _interactiveWarGame = interactiveWarGame;
       _warGameQueries = warGameQueries;
       _warGameMoves = warGameMoves;
@@ -33,8 +34,7 @@ public class LoadMenuState implements InteractiveGameState {
 
    @Override
    public InteractiveGameState handleExecuteDown() {
-      _warGameMoves.executeLoadMove(_logicalUnit, _movementArrow.getPath());
-      _interactiveWarGame.hideGraphicForUnit(_logicalUnit);
+      _warGameMoves.executeJoinMove(_logicalUnit, _movementArrow.getPath());
       return endMoveAndGoToStartingState();
    }
 
@@ -43,9 +43,15 @@ public class LoadMenuState implements InteractiveGameState {
       return this;
    }
 
+   private InteractiveGameState endMoveAndGoToStartingState() {
+      _interactiveWarGame.stopIndicatingPositions();
+      _interactiveWarGame.hideMovementArrow();
+      return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
+   }
+
    @Override
    public InteractiveGameState handleCancel() {
-      return new SelectMovementState(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
+      return new StateSelectMove(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
    }
 
    @Override
@@ -53,23 +59,18 @@ public class LoadMenuState implements InteractiveGameState {
       return this;
    }
 
-   private InteractiveGameState endMoveAndGoToStartingState() {
-      _interactiveWarGame.stopIndicatingPositions();
-      _interactiveWarGame.hideMovementArrow();
-      return new StartingState(_interactiveWarGame, _warGameQueries, _warGameMoves);
-   }
-
    @Override
    public void setSprites(Sprites sprites) {
-      if (_theLoadMenu == null) {
-         _theLoadMenu = new GraphicalMenu(sprites.getMenuCursor());
+      if (_theJoinMenu == null) {
+         _theJoinMenu = new GraphicalMenu(sprites.getMenuCursor());
       }
-      _theLoadMenu.addItem(ActionMenuItem.LOAD.getName());
+      _theJoinMenu.addItem(ActionMenuItem.JOIN.getName());
+
    }
 
    @Override
    public void draw(GameContainer gc, Font font, int x, int y) {
       _interactiveWarGame.draw(gc, 0, 0);
-      _theLoadMenu.draw(gc.getGraphics(), font);
+      _theJoinMenu.draw(gc.getGraphics(), font);
    }
 }

@@ -14,7 +14,7 @@ import java.util.Set;
 /**
  * Created by Linus on 2014-09-20.
  */
-public class ActionMenuState implements InteractiveGameState {
+public class StateActionMenu implements InteractiveGameState {
    private final InteractiveWarGame _interactiveWarGame;
    private final WarGameQueries _warGameQueries;
    private final WarGameMoves _warGameMoves;
@@ -23,7 +23,7 @@ public class ActionMenuState implements InteractiveGameState {
    private GraphicalMenu _theActionMenu;
    private Set<LogicalUnit> _attackableUnits;
 
-   public ActionMenuState(
+   public StateActionMenu(
          InteractiveWarGame interactiveWarGame,
          WarGameQueries warGameQueries,
          WarGameMoves warGameMoves,
@@ -46,7 +46,7 @@ public class ActionMenuState implements InteractiveGameState {
             return endMoveAndGoToStartingState();
          case FIRE:
             // TODO: Animate travel.
-            return new SelectAttackState(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow, _attackableUnits);
+            return new StateSelectAttack(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow, _attackableUnits);
          case SUPPLY:
             // TODO: Animate supply
             _warGameMoves.executeSupplyMove(_logicalUnit, _movementArrow.getPath());
@@ -55,7 +55,7 @@ public class ActionMenuState implements InteractiveGameState {
             break;
          case UNLOAD:
             // TODO: Extra state for selecting which unit to unload (for lander and cruiser)
-            return new SelectUnloadPositionState(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow, _adjacentVacantPositions);
+            return new StateSelectUnloadPosition(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow, _adjacentVacantPositions);
          case DIVE:
             break;
          case SURFACE:
@@ -68,7 +68,7 @@ public class ActionMenuState implements InteractiveGameState {
    private InteractiveGameState endMoveAndGoToStartingState() {
       _interactiveWarGame.stopIndicatingPositions();
       _interactiveWarGame.hideMovementArrow();
-      return new StartingState(_interactiveWarGame, _warGameQueries, _warGameMoves);
+      return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
    }
 
    @Override
@@ -78,7 +78,7 @@ public class ActionMenuState implements InteractiveGameState {
 
    @Override
    public InteractiveGameState handleCancel() {
-      return new SelectMovementState(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
+      return new StateSelectMove(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
    }
 
    @Override
