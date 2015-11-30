@@ -57,7 +57,7 @@ public class SelectAttackState implements InteractiveGameState {
       _warGameMoves.executeAttackMove(_logicalUnit, _movementArrow.getPath(), defendingUnit);
       _interactiveWarGame.stopIndicatingPositions();
       _interactiveWarGame.hideAttackCursor();
-      _interactiveWarGame.setMovementArrowController(null);
+      _interactiveWarGame.hideMovementArrow();
       // TODO: Check if game was won!
       return new StartingState(_interactiveWarGame, _warGameQueries, _warGameMoves);
    }

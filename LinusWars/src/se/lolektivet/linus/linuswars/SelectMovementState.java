@@ -47,7 +47,7 @@ public class SelectMovementState implements InteractiveGameState {
    }
 
    private void resetGraphicalUnit() {
-      _interactiveWarGame.setPositionOfGraphicForUnit(_logicalUnit, _warGameQueries.getPositionOfUnit(_logicalUnit));
+      _interactiveWarGame.resetUnitGraphicToUnitPosition(_logicalUnit);
    }
 
    @Override
@@ -55,15 +55,15 @@ public class SelectMovementState implements InteractiveGameState {
       if (canDoMove()) {
          // TODO: Animate travel.
          _interactiveWarGame.setPositionOfGraphicForUnit(_logicalUnit, _movementArrow.getFinalPosition());
-         _interactiveWarGame.setMovementArrowController(null);
+         _interactiveWarGame.hideMovementArrow();
          return new ActionMenuState(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
       } else if (canDoLoadMove()) {
          _interactiveWarGame.setPositionOfGraphicForUnit(_logicalUnit, _movementArrow.getFinalPosition());
-         _interactiveWarGame.setMovementArrowController(null);
+         _interactiveWarGame.hideMovementArrow();
          return new LoadMenuState(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
       } else if (canDoJoinMove()) {
          _interactiveWarGame.setPositionOfGraphicForUnit(_logicalUnit, _movementArrow.getFinalPosition());
-         _interactiveWarGame.setMovementArrowController(null);
+         _interactiveWarGame.hideMovementArrow();
          return new JoinMenuState(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
       } else {
          return this;
@@ -125,7 +125,7 @@ public class SelectMovementState implements InteractiveGameState {
    @Override
    public InteractiveGameState handleCancel() {
       _interactiveWarGame.stopIndicatingPositions();
-      _interactiveWarGame.setMovementArrowController(null);
+      _interactiveWarGame.hideMovementArrow();
       return new StartingState(_interactiveWarGame, _warGameQueries, _warGameMoves);
    }
 

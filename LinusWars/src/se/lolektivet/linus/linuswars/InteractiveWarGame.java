@@ -48,12 +48,15 @@ public class InteractiveWarGame {
       _cursorImage = sprites.getCursor();
    }
 
+   public void hideMovementArrow() {
+      _movementArrowController = new NullMovementArrowController();
+   }
+
    public void setMovementArrowController(MovementArrowController movementArrowController) {
       if (movementArrowController == null) {
-         _movementArrowController = new NullMovementArrowController();
-      } else {
-         _movementArrowController = movementArrowController;
+         throw new NullPointerException("MovementArrowController can not be null. Use hideMovementArrow() instead.");
       }
+      _movementArrowController = movementArrowController;
    }
 
    Position getCursorPosition() {
@@ -161,5 +164,9 @@ public class InteractiveWarGame {
 
    void setPositionOfGraphicForUnit(LogicalUnit logicalUnit, Position newPosition) {
       _graphicalWarGame.setPositionOfGraphicForUnit(logicalUnit, newPosition);
+   }
+
+   void resetUnitGraphicToUnitPosition(LogicalUnit logicalUnit) {
+      _graphicalWarGame.resetUnitGraphicToUnitPosition(logicalUnit);
    }
 }

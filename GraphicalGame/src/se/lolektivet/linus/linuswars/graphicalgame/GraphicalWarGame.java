@@ -82,6 +82,10 @@ public class GraphicalWarGame implements WarGameListener {
       setUnitPosition(getGraphicForUnit(logicalUnit), newPosition);
    }
 
+   public void resetUnitGraphicToUnitPosition(LogicalUnit logicalUnit) {
+      setUnitPosition(getGraphicForUnit(logicalUnit), _warGameQueries.getPositionOfUnit(logicalUnit));
+   }
+
    private void setUnitPosition(GraphicalUnit graphicalUnit, Position newPosition) {
       graphicalUnit.setTilePosition(newPosition);
    }

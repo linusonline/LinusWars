@@ -55,7 +55,7 @@ public class LoadMenuState implements InteractiveGameState {
 
    private InteractiveGameState endMoveAndGoToStartingState() {
       _interactiveWarGame.stopIndicatingPositions();
-      _interactiveWarGame.setMovementArrowController(null);
+      _interactiveWarGame.hideMovementArrow();
       return new StartingState(_interactiveWarGame, _warGameQueries, _warGameMoves);
    }
 

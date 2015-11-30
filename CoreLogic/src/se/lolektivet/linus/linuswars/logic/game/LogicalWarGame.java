@@ -242,7 +242,10 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       Cost cost = getCostForUnitAndPath(path, logicalUnit);
       PotentiallyInfiniteInteger fuelCost = cost.getFuelCost();
       if (fuelCost.isInfinite()) {
-         throw new LogicException();
+         throw new LogicException("Path is illegal for unit!");
+      }
+      if (logicalUnit.getFuel() < fuelCost.getInteger()) {
+         throw new LogicException("Unit has too little fuel for this path!");
       }
       logicalUnit.subtractFuel(fuelCost.getInteger());
    }
@@ -380,12 +383,26 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    public void executeJoinMove(LogicalUnit movingUnit, Path movementPath) {
       LogicalUnit joinedUnit = getUnitAtPosition(movementPath.getFinalPosition());
       // TODO: Check if path is allowed.
+      // TODO: Expend fuel for moving unit.
       if (!canJoin(movingUnit, joinedUnit)) {
          throw new LogicException("Units cannot join!");
       }
       internalExecuteJoinMove(movingUnit, joinedUnit);
       _unitModule.expendUnitsTurn(joinedUnit);
       _unitModule.expendUnitsTurn(movingUnit);
+   }
+
+   @Override
+   public void executeCaptureMove(LogicalUnit movingUnit, Path movementPath) {
+      if (!movingUnit.canCapture()) {
+         throw new LogicException("Unit type " + movingUnit.getType() + " cannot capture property!");
+      }
+      if (!_basesModule.hasBaseAtPosition(movementPath.getFinalPosition())) {
+         throw new LogicException("No base at position " + movementPath.getFinalPosition() + "! Cannot do capture move.");
+      }
+      internalExecuteMove(movingUnit, movementPath);
+      Base base = _basesModule.getBaseAtPosition(movementPath.getFinalPosition());
+      base.doCapture(movingUnit.getHp1To10(), _unitModule.getFactionForUnit(movingUnit));
    }
 
    private boolean canJoin(LogicalUnit joiningUnit, LogicalUnit joinedUnit) {
