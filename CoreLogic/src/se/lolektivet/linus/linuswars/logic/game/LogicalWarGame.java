@@ -188,13 +188,12 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       return getUnitsSuppliableByUnit(adjacentUnits, supplier);
    }
 
-   // Fuel query (plus todo)
+   // Fuel query
    private Set<LogicalUnit> getUnitsSuppliableByUnit(Set<LogicalUnit> targetUnits, LogicalUnit supplier) {
       Set<LogicalUnit> suppliableUnits = new HashSet<>(0);
       for (LogicalUnit targetUnit : targetUnits) {
          if (!supplier.equals(targetUnit) && !areEnemies(supplier, targetUnit)) {
             if (_fuelLogic.canResupplyUnit(supplier.getType(), targetUnit.getType())) {
-               // TODO: If attacker is out of ammo AND cannot attack with secondary weapon!?
                suppliableUnits.add(targetUnit);
             }
          }
@@ -417,7 +416,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    }
 
    private boolean unitsAreSameType(LogicalUnit unitOne, LogicalUnit unitTwo) {
-      return unitOne.getType().equals(unitTwo.getType());
+      return unitOne.getType() == unitTwo.getType();
    }
 
    private void internalExecuteJoinMove(LogicalUnit movingUnit, LogicalUnit joinedUnit) {
