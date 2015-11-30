@@ -4,15 +4,15 @@ package se.lolektivet.linus.linuswars;
  * Created by Linus on 2014-09-22.
  */
 public enum ActionMenuItem {
-   WAIT("Wait"),
    FIRE("Fire"),
    SUPPLY("Supply"),
    CAPTURE("Capture"),
    LOAD("Load"),
-   JOIN("Join"),
    UNLOAD("Unload"),
+   JOIN("Join"),
    DIVE("Dive"),
-   SURFACE("Surface");
+   SURFACE("Surface"),
+   WAIT("Wait");
 
    private final String _name;
 

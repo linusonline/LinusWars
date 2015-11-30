@@ -22,6 +22,7 @@ public class StateSelectAttack implements InteractiveGameState {
    private final LogicalUnit _logicalUnit;
    private final MovementArrow _movementArrow;
    private final List<LogicalUnit> _attackableUnits;
+   private final InteractiveGameState _previousState;
    private int _currentlySelectedTargetIndex;
    private GraphicalMenu _fireOrNothingMenu;
 
@@ -30,13 +31,15 @@ public class StateSelectAttack implements InteractiveGameState {
                             WarGameMoves warGameMoves,
                             LogicalUnit logicalUnit,
                             MovementArrow movementArrow,
-                            Set<LogicalUnit> attackableUnits) {
+                            Set<LogicalUnit> attackableUnits,
+                            InteractiveGameState previousState) {
       _interactiveWarGame = interactiveWarGame;
       _warGameQueries = warGameQueries;
       _warGameMoves = warGameMoves;
       _logicalUnit = logicalUnit;
       _movementArrow = movementArrow;
-      _attackableUnits = new ArrayList<LogicalUnit>(attackableUnits);
+      _attackableUnits = new ArrayList<>(attackableUnits);
+      _previousState = previousState;
       _currentlySelectedTargetIndex = 0;
       _interactiveWarGame.showAttackCursorOnUnit(getTargetUnit());
       printAttackInfo();
@@ -70,7 +73,7 @@ public class StateSelectAttack implements InteractiveGameState {
    @Override
    public InteractiveGameState handleCancel() {
       _interactiveWarGame.hideAttackCursor();
-      return new StateActionMenu(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
+      return _previousState;
    }
 
    @Override

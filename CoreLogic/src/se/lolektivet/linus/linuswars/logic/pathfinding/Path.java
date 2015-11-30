@@ -10,14 +10,14 @@ import java.util.List;
  */
 public class Path {
 
-   private Position _origin;
+   private final Position _origin;
    private final List<Position> _pointsOnPath;
-   private int _length;
    private final boolean _isAutoBackTrack;
+   private int _length;
 
    private Path(Position origin, List<Position> pointsOnPath, boolean isAutoBackTrack) {
       _origin = origin;
-      _pointsOnPath = new ArrayList<Position>(pointsOnPath);
+      _pointsOnPath = new ArrayList<>(pointsOnPath);
       _length = _pointsOnPath.size();
       _isAutoBackTrack = isAutoBackTrack;
    }

@@ -152,4 +152,16 @@ public class ModuleUnits {
       nonTransportedUnitsInFaction.removeAll(_transportedUnitsInFaction.get(faction));
       _unitsLeftToMoveThisTurn.addAll(nonTransportedUnitsInFaction);
    }
+
+   boolean areEnemies(LogicalUnit oneUnit, LogicalUnit anotherUnit) {
+      return areEnemies(getFactionForUnit(oneUnit), getFactionForUnit(anotherUnit));
+   }
+
+   boolean areEnemies(LogicalUnit unit, Faction faction) {
+      return areEnemies(getFactionForUnit(unit), faction);
+   }
+
+   boolean areEnemies(Faction oneFaction, Faction anotherFaction) {
+      return oneFaction != anotherFaction;
+   }
 }

@@ -154,7 +154,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
 
    @Override
    public PotentiallyInfiniteInteger getTravelCostForUnitOnTile(LogicalUnit travellingUnit, Position tile) {
-      if (hasUnitAtPosition(tile) && unitsAreEnemies(travellingUnit, getUnitAtPosition(tile))) {
+      if (hasUnitAtPosition(tile) && areEnemies(travellingUnit, getUnitAtPosition(tile))) {
          return PotentiallyInfiniteInteger.infinite();
       }
       return _movementLogic.getTravelCostForMovementTypeOnTerrainType(travellingUnit.getMovementType(), _logicalWarMap.getTerrainForTile(tile));
@@ -192,7 +192,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    private Set<LogicalUnit> getUnitsSuppliableByUnit(Set<LogicalUnit> targetUnits, LogicalUnit supplier) {
       Set<LogicalUnit> suppliableUnits = new HashSet<>(0);
       for (LogicalUnit targetUnit : targetUnits) {
-         if (!supplier.equals(targetUnit) && !unitsAreEnemies(supplier, targetUnit)) {
+         if (!supplier.equals(targetUnit) && !areEnemies(supplier, targetUnit)) {
             if (_fuelLogic.canResupplyUnit(supplier.getType(), targetUnit.getType())) {
                // TODO: If attacker is out of ammo AND cannot attack with secondary weapon!?
                suppliableUnits.add(targetUnit);
@@ -207,7 +207,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    public Set<LogicalUnit> getUnitsAttackableByUnit(Set<LogicalUnit> targetUnits, LogicalUnit attacker) {
       Set<LogicalUnit> attackableUnits = new HashSet<>(0);
       for (LogicalUnit targetUnit : targetUnits) {
-         if (unitsAreEnemies(attacker, targetUnit)) {
+         if (areEnemies(attacker, targetUnit)) {
             if (_attackLogic.canAttack(attacker.getType(), targetUnit.getType())) {
                // TODO: If attacker is out of ammo AND cannot attack with secondary weapon!?
                attackableUnits.add(targetUnit);
@@ -340,14 +340,14 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
 
    @Override
    public boolean canLoadOnto(LogicalUnit loadingUnit, LogicalUnit transporter) {
-      return !unitsAreEnemies(loadingUnit, transporter) &&
+      return !areEnemies(loadingUnit, transporter) &&
             _transportLogic.canTransport(transporter.getType(), loadingUnit.getType()) &&
             !transportIsFull(transporter);
    }
 
    @Override
    public boolean canJoinWith(LogicalUnit joiningUnit, LogicalUnit joinedUnit) {
-      return !unitsAreEnemies(joiningUnit, joinedUnit) &&
+      return !areEnemies(joiningUnit, joinedUnit) &&
             joiningUnit.getType().equals(joinedUnit.getType()) &&
             joiningUnit.isDamaged() && joinedUnit.isDamaged();
    }
@@ -595,8 +595,18 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    }
 
    @Override
-   public boolean unitsAreEnemies(LogicalUnit oneUnit, LogicalUnit otherUnit) {
-      return !getFactionForUnit(oneUnit).equals(getFactionForUnit(otherUnit));
+   public boolean areEnemies(LogicalUnit oneUnit, LogicalUnit anotherUnit) {
+      return _unitModule.areEnemies(oneUnit, anotherUnit);
+   }
+
+   @Override
+   public boolean areEnemies(Faction oneFaction, Faction anotherFaction) {
+      return _unitModule.areEnemies(oneFaction, anotherFaction);
+   }
+
+   @Override
+   public boolean areEnemies(LogicalUnit unit, Faction faction) {
+      return _unitModule.areEnemies(unit, faction);
    }
 
    @Override
@@ -605,6 +615,16 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       Set<LogicalUnit> suppliableUnits;
       suppliableUnits = getUnitsSuppliableFromPosition(supplier, destination);
       return suppliableUnits;
+   }
+
+   @Override
+   public boolean hasEnemyBaseAtPosition(LogicalUnit movingUnit, Position position) {
+      if (_basesModule.hasBaseAtPosition(position)) {
+         Base base = _basesModule.getBaseAtPosition(position);
+         return _unitModule.areEnemies(movingUnit, base.getFaction());
+      } else {
+         return false;
+      }
    }
 
    private Map<Position, PathWithCost> getAndCacheOptimalPathsToAllReachablePoints(LogicalUnit travellingUnit) {

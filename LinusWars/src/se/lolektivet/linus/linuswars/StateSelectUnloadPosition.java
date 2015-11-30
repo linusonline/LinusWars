@@ -23,6 +23,7 @@ public class StateSelectUnloadPosition implements InteractiveGameState {
    private final LogicalUnit _logicalUnit;
    private final MovementArrow _movementArrow;
    private final List<Position> _candidatePositions;
+   private final InteractiveGameState _previousState;
    private int _currentlySelectedPositionIndex;
 
    public StateSelectUnloadPosition(InteractiveWarGame interactiveWarGame,
@@ -30,13 +31,15 @@ public class StateSelectUnloadPosition implements InteractiveGameState {
                                     WarGameMoves warGameMoves,
                                     LogicalUnit logicalUnit,
                                     MovementArrow movementArrow,
-                                    Set<Position> vacantPositions) {
+                                    Set<Position> vacantPositions,
+                                    InteractiveGameState previousState) {
       _interactiveWarGame = interactiveWarGame;
       _warGameQueries = warGameQueries;
       _warGameMoves = warGameMoves;
       _logicalUnit = logicalUnit;
       _movementArrow = movementArrow;
       _candidatePositions = new ArrayList<>(vacantPositions);
+      _previousState = previousState;
       _currentlySelectedPositionIndex = 0;
       _interactiveWarGame.showAttackCursorOnPosition(getSelectedPosition());
    }
@@ -70,7 +73,7 @@ public class StateSelectUnloadPosition implements InteractiveGameState {
    @Override
    public InteractiveGameState handleCancel() {
       _interactiveWarGame.hideAttackCursor();
-      return new StateActionMenu(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
+      return _previousState;
    }
 
    @Override

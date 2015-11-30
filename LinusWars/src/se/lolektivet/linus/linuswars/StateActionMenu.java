@@ -3,11 +3,11 @@ package se.lolektivet.linus.linuswars;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.Position;
+import se.lolektivet.linus.linuswars.logic.enums.Direction;
+import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.game.WarGameMoves;
 import se.lolektivet.linus.linuswars.logic.game.WarGameQueries;
-import se.lolektivet.linus.linuswars.logic.enums.Direction;
 
 import java.util.Set;
 
@@ -20,20 +20,22 @@ public class StateActionMenu implements InteractiveGameState {
    private final WarGameMoves _warGameMoves;
    private final LogicalUnit _logicalUnit;
    private final MovementArrow _movementArrow;
+   private final MoveAnalyzer _moveAnalyzer;
    private GraphicalMenu _theActionMenu;
-   private Set<LogicalUnit> _attackableUnits;
 
    public StateActionMenu(
          InteractiveWarGame interactiveWarGame,
          WarGameQueries warGameQueries,
          WarGameMoves warGameMoves,
          LogicalUnit logicalUnit,
-         MovementArrow movementArrow) {
+         MovementArrow movementArrow,
+         MoveAnalyzer moveAnalyzer) {
       _interactiveWarGame = interactiveWarGame;
       _warGameQueries = warGameQueries;
       _warGameMoves = warGameMoves;
       _logicalUnit = logicalUnit;
       _movementArrow = movementArrow;
+      _moveAnalyzer = moveAnalyzer;
    }
 
    @Override
@@ -41,25 +43,33 @@ public class StateActionMenu implements InteractiveGameState {
       String selectedItemText = _theActionMenu.getTextForSelectedItem();
       ActionMenuItem selectedItem = ActionMenuItem.fromName(selectedItemText);
       switch (selectedItem) {
-         case WAIT:
-            _warGameMoves.executeMove(_logicalUnit, _movementArrow.getPath());
-            return endMoveAndGoToStartingState();
          case FIRE:
             // TODO: Animate travel.
-            return new StateSelectAttack(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow, _attackableUnits);
+            return new StateSelectAttack(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow, _moveAnalyzer.getAttackableUnits(), this);
          case SUPPLY:
             // TODO: Animate supply
             _warGameMoves.executeSupplyMove(_logicalUnit, _movementArrow.getPath());
             return endMoveAndGoToStartingState();
          case CAPTURE:
-            break;
+            _warGameMoves.executeCaptureMove(_logicalUnit, _movementArrow.getPath());
+            return endMoveAndGoToStartingState();
+         case LOAD:
+            _warGameMoves.executeLoadMove(_logicalUnit, _movementArrow.getPath());
+            _interactiveWarGame.hideGraphicForUnit(_logicalUnit);
+            return endMoveAndGoToStartingState();
          case UNLOAD:
             // TODO: Extra state for selecting which unit to unload (for lander and cruiser)
-            return new StateSelectUnloadPosition(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow, _adjacentVacantPositions);
+            return new StateSelectUnloadPosition(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow, _moveAnalyzer.getAdjacentVacantPositions(), this);
+         case JOIN:
+            _warGameMoves.executeJoinMove(_logicalUnit, _movementArrow.getPath());
+            return endMoveAndGoToStartingState();
          case DIVE:
             break;
          case SURFACE:
             break;
+         case WAIT:
+            _warGameMoves.executeMove(_logicalUnit, _movementArrow.getPath());
+            return endMoveAndGoToStartingState();
          default:
       }
       return this;
@@ -87,37 +97,32 @@ public class StateActionMenu implements InteractiveGameState {
       return this;
    }
 
-   private Set<Position> _adjacentVacantPositions;
-
    @Override
    public void setSprites(Sprites sprites) {
       if (_theActionMenu == null) {
          _theActionMenu = new GraphicalMenu(sprites.getMenuCursor());
-         Set<LogicalUnit> suppliableUnits = _warGameQueries.getSuppliableUnitsAfterMove(_logicalUnit, _movementArrow.getPath());
-         _attackableUnits = _warGameQueries.getAttackableUnitsAfterMove(_logicalUnit, _movementArrow.getPath());
-         if (isTransportingUnits() && canUnload()) {
+         // Note: The first three moves are logically mutually exclusive.
+         if (_moveAnalyzer.canDoCapture()) {
+            _theActionMenu.addItem(ActionMenuItem.CAPTURE.getName());
+         } else if (_moveAnalyzer.canDoJoin()) {
+            _theActionMenu.addItem(ActionMenuItem.JOIN.getName());
+         } else if (_moveAnalyzer.canDoLoad()) {
+            _theActionMenu.addItem(ActionMenuItem.LOAD.getName());
+         }
+         if (_moveAnalyzer.canDoUnload()) {
             _theActionMenu.addItem(ActionMenuItem.UNLOAD.getName());
          }
-         if (!_attackableUnits.isEmpty()) {
-            _theActionMenu.addItem(ActionMenuItem.FIRE.getName());
-         }
-         if (!suppliableUnits.isEmpty()) {
+         if (_moveAnalyzer.canDoSupply()) {
             _theActionMenu.addItem(ActionMenuItem.SUPPLY.getName());
          }
-         _theActionMenu.addItem(ActionMenuItem.WAIT.getName());
-         // TODO: "if can capture" -> add "Capture"
+         if (_moveAnalyzer.canDoAttack()) {
+            _theActionMenu.addItem(ActionMenuItem.FIRE.getName());
+         }
+         if (_moveAnalyzer.canDoWait()) {
+            _theActionMenu.addItem(ActionMenuItem.WAIT.getName());
+         }
          // TODO: "if Sub" -> add "Dive" or "Surface"
-         // TODO: "if can unload" -> add "Unload"
       }
-   }
-
-   private boolean isTransportingUnits() {
-      return !_warGameQueries.getTransportedUnits(_logicalUnit).isEmpty();
-   }
-
-   private boolean canUnload() {
-      _adjacentVacantPositions = _warGameQueries.getAdjacentVacantPositionsAfterMove(_logicalUnit, _movementArrow.getPath());
-      return !_adjacentVacantPositions.isEmpty();
    }
 
    @Override
