@@ -27,6 +27,7 @@ class Buildings {
       _spriteRowForFaction.put(Faction.BLUE_MOON, 2);
       _spriteRowForFaction.put(Faction.YELLOW_COMET, 3);
       _spriteRowForFaction.put(Faction.BLACK_HOLE, 4);
+      _spriteRowForFaction.put(Faction.NEUTRAL, 5);
       _spriteColumnForBuildingType = new HashMap<>(5);
       _spriteColumnForBuildingType.put(TerrainType.HQ, 0);
       _spriteColumnForBuildingType.put(TerrainType.CITY, 1);
@@ -51,13 +52,13 @@ class Buildings {
       }
       int row = _spriteRowForFaction.get(faction);
       int column = _spriteColumnForBuildingType.get(buildingType);
-      if (faction.equals(Faction.NEUTRAL)) {
-         if (buildingType.equals(TerrainType.HQ)) {
+      if (faction == Faction.NEUTRAL) {
+         if (buildingType == TerrainType.HQ) {
             throw new SpriteNotFoundException();
          }
          return _spriteSheet.getSubImage(column, row);
       }
-      if (buildingType.equals(TerrainType.HQ)) {
+      if (buildingType == TerrainType.HQ) {
          return _spriteSheet.getSubImage(column, row);
       }
       return new Animation(_spriteSheet, column, row, column + 1, row, true, 1000, false);

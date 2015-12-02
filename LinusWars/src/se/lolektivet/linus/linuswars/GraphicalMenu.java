@@ -57,10 +57,10 @@ public class GraphicalMenu {
    }
 
    void moveCursor(Direction direction) {
-      if (direction.equals(Direction.DOWN)) {
+      if (direction == Direction.DOWN) {
          _selectedItemIndex += 1;
          _selectedItemIndex = _selectedItemIndex % _textForItems.size();
-      } else if (direction.equals(Direction.UP)) {
+      } else if (direction == Direction.UP) {
          _selectedItemIndex -= 1;
          if (_selectedItemIndex < 0) {
             _selectedItemIndex += _textForItems.size();

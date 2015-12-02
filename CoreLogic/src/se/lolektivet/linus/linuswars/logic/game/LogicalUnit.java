@@ -84,11 +84,11 @@ public class LogicalUnit {
    }
 
    boolean isSea() {
-      return _movement.equals(MovementType.SEA);
+      return _movement == MovementType.SEA;
    }
 
    boolean isAir() {
-      return _movement.equals(MovementType.AIR);
+      return _movement == MovementType.AIR;
    }
 
    boolean isTransport() {
@@ -104,7 +104,7 @@ public class LogicalUnit {
    }
 
    boolean canCapture() {
-      return _movement.equals(MovementType.FOOT);
+      return _movement == MovementType.FOOT;
    }
 
    public int getBaseMovementRange() {

@@ -48,15 +48,6 @@ class ModuleTurnOrder {
             }
          }
       }
-//      for (int i = 0; i < _factionsInTurnOrder.size(); i++) {
-//         if (_factionsInTurnOrder.get(i).equals(_currentlyActiveFaction)) {
-//            int indexOfNextFaction = i + 1;
-//            if (indexOfNextFaction == _factionsInTurnOrder.size()) {
-//               indexOfNextFaction = 0;
-//            }
-//            return _factionsInTurnOrder.get(indexOfNextFaction);
-//         }
-//      }
       throw new RuntimeException("Not gonna happen");
    }
 }

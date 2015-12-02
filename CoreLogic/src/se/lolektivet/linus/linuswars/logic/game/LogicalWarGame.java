@@ -15,6 +15,8 @@ import java.util.*;
  */
 public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQueries {
 
+   // TODO: Big one! Have GraphicalWarGame and InteractiveWarGame implement at least WarGameSetup. Maybe the other two as well!
+
    private static final int INCOME_PER_PROPERTY = 1000;
 
    static class UnitCollisionException extends RuntimeException {}
@@ -347,7 +349,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    @Override
    public boolean canJoinWith(LogicalUnit joiningUnit, LogicalUnit joinedUnit) {
       return !areEnemies(joiningUnit, joinedUnit) &&
-            joiningUnit.getType().equals(joinedUnit.getType()) &&
+            joiningUnit.getType() == joinedUnit.getType() &&
             joiningUnit.isDamaged() && joinedUnit.isDamaged();
    }
 
@@ -412,7 +414,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    }
 
    private boolean unitsBelongToSameFaction(LogicalUnit unitOne, LogicalUnit unitTwo) {
-      return getFactionForUnit(unitOne).equals(getFactionForUnit(unitTwo));
+      return getFactionForUnit(unitOne) == getFactionForUnit(unitTwo);
    }
 
    private boolean unitsAreSameType(LogicalUnit unitOne, LogicalUnit unitTwo) {

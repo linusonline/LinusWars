@@ -27,7 +27,7 @@ public class TestMovementArrow extends TestCase {
       movementArrow.build();
       List<MovementArrowSection> arrowList =  movementArrow.getSpriteList();
       assertTrue(arrowList.size() == 1);
-      assertTrue(arrowList.get(0).equals(MovementArrowSection.END_S));
+      assertTrue(arrowList.get(0) == MovementArrowSection.END_S);
    }
 
    public void testOneStepNorth() {
@@ -37,7 +37,7 @@ public class TestMovementArrow extends TestCase {
       movementArrow.build();
       List<MovementArrowSection> arrowList =  movementArrow.getSpriteList();
       assertTrue(arrowList.size() == 1);
-      assertTrue(arrowList.get(0).equals(MovementArrowSection.END_N));
+      assertTrue(arrowList.get(0) == MovementArrowSection.END_N);
    }
 
    public void testTwoDown() {
@@ -48,8 +48,8 @@ public class TestMovementArrow extends TestCase {
       movementArrow.build();
       List<MovementArrowSection> arrowList =  movementArrow.getSpriteList();
       assertTrue(arrowList.size() == 2);
-      assertTrue(arrowList.get(0).equals(MovementArrowSection.VERTICAL));
-      assertTrue(arrowList.get(1).equals(MovementArrowSection.END_S));
+      assertTrue(arrowList.get(0) == MovementArrowSection.VERTICAL);
+      assertTrue(arrowList.get(1) == MovementArrowSection.END_S);
    }
 
    public void testTwoRight() {
@@ -60,8 +60,8 @@ public class TestMovementArrow extends TestCase {
       movementArrow.build();
       List<MovementArrowSection> arrowList =  movementArrow.getSpriteList();
       assertTrue(arrowList.size() == 2);
-      assertTrue(arrowList.get(0).equals(MovementArrowSection.HORIZONTAL));
-      assertTrue(arrowList.get(1).equals(MovementArrowSection.END_E));
+      assertTrue(arrowList.get(0) == MovementArrowSection.HORIZONTAL);
+      assertTrue(arrowList.get(1) == MovementArrowSection.END_E);
    }
 
    public void testBendSE() {
@@ -72,8 +72,8 @@ public class TestMovementArrow extends TestCase {
       movementArrow.build();
       List<MovementArrowSection> arrowList =  movementArrow.getSpriteList();
       assertTrue(arrowList.size() == 2);
-      assertTrue(arrowList.get(0).equals(MovementArrowSection.BEND_S_TO_W));
-      assertTrue(arrowList.get(1).equals(MovementArrowSection.END_S));
+      assertTrue(arrowList.get(0) == MovementArrowSection.BEND_S_TO_W);
+      assertTrue(arrowList.get(1) == MovementArrowSection.END_S);
    }
 
    public void testBendNW() {
@@ -84,8 +84,8 @@ public class TestMovementArrow extends TestCase {
       movementArrow.build();
       List<MovementArrowSection> arrowList =  movementArrow.getSpriteList();
       assertTrue(arrowList.size() == 2);
-      assertTrue(arrowList.get(0).equals(MovementArrowSection.BEND_S_TO_W));
-      assertTrue(arrowList.get(1).equals(MovementArrowSection.END_W));
+      assertTrue(arrowList.get(0) == MovementArrowSection.BEND_S_TO_W);
+      assertTrue(arrowList.get(1) == MovementArrowSection.END_W);
    }
 
    public void testBacktrack() {
@@ -97,7 +97,7 @@ public class TestMovementArrow extends TestCase {
       movementArrow.addPoint(new Position(1, 0));
       List<MovementArrowSection> arrowList =  movementArrow.getSpriteList();
       assertTrue(arrowList.size() == 1);
-      assertTrue(arrowList.get(0).equals(MovementArrowSection.END_E));
+      assertTrue(arrowList.get(0) == MovementArrowSection.END_E);
    }
 
    public void testBacktrackBend() {
@@ -109,7 +109,7 @@ public class TestMovementArrow extends TestCase {
       movementArrow.addPoint(new Position(1, 0));
       List<MovementArrowSection> arrowList =  movementArrow.getSpriteList();
       assertTrue(arrowList.size() == 1);
-      assertTrue(arrowList.get(0).equals(MovementArrowSection.END_E));
+      assertTrue(arrowList.get(0) == MovementArrowSection.END_E);
    }
 
    public void testBuildFromScratch() {
@@ -119,7 +119,7 @@ public class TestMovementArrow extends TestCase {
       movementArrow.addPoint(new Position(1, 0));
       List<MovementArrowSection> arrowList =  movementArrow.getSpriteList();
       assertTrue(arrowList.size() == 1);
-      assertTrue(arrowList.get(0).equals(MovementArrowSection.END_E));
+      assertTrue(arrowList.get(0) == MovementArrowSection.END_E);
    }
 
 }

@@ -62,7 +62,7 @@ public class MovementArrow {
    }
 
    private MovementArrowSection getArrowSectionForDirections(Direction inDirection, Direction outDirection) {
-      assert !getMirror(inDirection).equals(outDirection);
+      assert !(getMirror(inDirection) == outDirection);
       assert inDirection != null;
       assert outDirection != null;
       if (directionPairsYieldSameArrowSection(inDirection, outDirection, Direction.UP, Direction.UP)) {
@@ -92,8 +92,8 @@ public class MovementArrow {
          Direction firstInPairTwo,
          Direction secondInPairTwo) {
       return directionsEqualPairWise(firstInPairOne, secondInPairOne, firstInPairTwo, secondInPairTwo) ||
-            (getMirror(firstInPairOne).equals(secondInPairTwo) &&
-                  getMirror(secondInPairOne).equals(firstInPairTwo));
+            (getMirror(firstInPairOne) == secondInPairTwo &&
+                  getMirror(secondInPairOne) == firstInPairTwo);
    }
 
    private Direction getMirror(Direction direction) {
@@ -115,8 +115,8 @@ public class MovementArrow {
          Direction secondInPairOne,
          Direction firstInPairTwo,
          Direction secondInPairTwo) {
-      return (firstInPairOne.equals(firstInPairTwo) &&
-            secondInPairOne.equals(secondInPairTwo));
+      return (firstInPairOne == firstInPairTwo &&
+            secondInPairOne == secondInPairTwo);
    }
 
    private Direction getDirection(Position fromPosition, Position toPosition) {
