@@ -7,4 +7,5 @@ public interface WarGameListener {
    void unitWasDestroyed(LogicalUnit logicalUnit);
    void unitJoined(LogicalUnit logicalUnit);
    void transportedUnitWasDestroyed(LogicalUnit logicalUnit);
+   void baseWasCaptured(Base base);
 }

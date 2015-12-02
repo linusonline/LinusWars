@@ -1,5 +1,6 @@
 package se.lolektivet.linus.linuswars.logic.game;
 
+import se.lolektivet.linus.linuswars.logic.InitializationException;
 import se.lolektivet.linus.linuswars.logic.LogicException;
 import se.lolektivet.linus.linuswars.logic.PathFinder;
 import se.lolektivet.linus.linuswars.logic.Position;
@@ -23,7 +24,6 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    static class UnitNotFoundException extends RuntimeException {}
    static class FactionAlreadySetException extends RuntimeException {}
    static class FactionNotInGameException extends RuntimeException {}
-   static class HqNotSetException extends RuntimeException {}
 
    private final LogicalWarMap _logicalWarMap;
    private final MovementLogic _movementLogic;
@@ -34,7 +34,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    private final ModuleMoney _moneyModule;
    private final ModuleTurnOrder _turnOrderModule;
    private final ModuleUnits _unitModule;
-   private final ModuleBases _basesModule;
+   private ModuleBases _basesModule;
 
    private boolean _gameStarted;
 
@@ -55,7 +55,6 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       _turnOrderModule = new ModuleTurnOrder(factionsInTurnOrder);
       _moneyModule = new ModuleMoney();
       _moneyModule.init(factionsInTurnOrder);
-      _basesModule = new ModuleBases();
 
       System.out.println("Current Faction is " + factionsInTurnOrder.get(0).toString());
       _gameStarted = false;
@@ -96,19 +95,19 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       }
    }
 
+   private void fireBaseCaptured(Base base) {
+      for (WarGameListener listener : _listeners) {
+         listener.baseWasCaptured(base);
+      }
+   }
+
    // Setup
 
-   @Override
-   public void setFactionForProperty(Position positionOfProperty, Faction faction) {
-      if (_gameStarted) {
-         throw new IllegalStateException("setFactionForProperty not allowed after game start!");
+   void setBases(ModuleBases basesModule) {
+      if (_basesModule != null) {
+         throw new InitializationException("BasesModule can only be set once!");
       }
-      if (_basesModule.hasBaseAtPosition(positionOfProperty)) {
-         throw new FactionAlreadySetException();
-      }
-
-      TerrainType terrain = _logicalWarMap.getTerrainForTile(positionOfProperty);
-      _basesModule.addBase(positionOfProperty, terrain, faction);
+      _basesModule = basesModule;
    }
 
    @Override
@@ -129,24 +128,13 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
 
    @Override
    public void callGameStart() {
-      if (!allFactionsHaveSetTheirHq()) {
-         throw new HqNotSetException();
+      if (_basesModule == null) {
+         throw new InitializationException("No BasesModule was set!");
+      } else if (_basesModule.getFactions().size() != _turnOrderModule.numberOfFactions()) {
+         throw new InitializationException("BaseModule had wrong number of factions! (" + _basesModule.getFactions().size() + " instead of " + _turnOrderModule.numberOfFactions() + ")");
       }
-      createNeutralBases();
       _gameStarted = true;
       doBeginningOfTurn();
-   }
-
-   private boolean allFactionsHaveSetTheirHq() {
-      return _basesModule.getNumberOfHqs() == _turnOrderModule.numberOfFactions();
-   }
-
-   private void createNeutralBases() {
-      for (Position position : _logicalWarMap.findBases()) {
-         if (!_basesModule.hasBaseAtPosition(position)) {
-            _basesModule.addBase(position, _logicalWarMap.getTerrainForTile(position), Faction.NEUTRAL);
-         }
-      }
    }
 
    @Override
@@ -348,7 +336,8 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
 
    @Override
    public boolean canJoinWith(LogicalUnit joiningUnit, LogicalUnit joinedUnit) {
-      return !areEnemies(joiningUnit, joinedUnit) &&
+      return !joiningUnit.equals(joinedUnit) &&
+            !areEnemies(joiningUnit, joinedUnit) &&
             joiningUnit.getType() == joinedUnit.getType() &&
             joiningUnit.isDamaged() && joinedUnit.isDamaged();
    }
@@ -401,9 +390,13 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       if (!_basesModule.hasBaseAtPosition(movementPath.getFinalPosition())) {
          throw new LogicException("No base at position " + movementPath.getFinalPosition() + "! Cannot do capture move.");
       }
+      _unitModule.expendUnitsTurn(movingUnit);
       internalExecuteMove(movingUnit, movementPath);
       Base base = _basesModule.getBaseAtPosition(movementPath.getFinalPosition());
       base.doCapture(movingUnit.getHp1To10(), _unitModule.getFactionForUnit(movingUnit));
+      if (!base.isCapturing()) {
+         fireBaseCaptured(base);
+      }
    }
 
    private boolean canJoin(LogicalUnit joiningUnit, LogicalUnit joinedUnit) {

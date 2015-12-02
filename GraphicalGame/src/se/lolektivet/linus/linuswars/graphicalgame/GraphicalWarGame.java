@@ -2,6 +2,7 @@ package se.lolektivet.linus.linuswars.graphicalgame;
 
 import org.newdawn.slick.*;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
+import se.lolektivet.linus.linuswars.logic.game.Base;
 import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.game.WarGameListener;
@@ -63,6 +64,13 @@ public class GraphicalWarGame implements WarGameListener {
    public void transportedUnitWasDestroyed(LogicalUnit logicalUnit) {
       _graphicsForUnits.remove(logicalUnit);
       _hiddenUnits.remove(logicalUnit);
+   }
+
+   @Override
+   public void baseWasCaptured(Base base) {
+      int posX = base.getPosition().getX();
+      int posY = base.getPosition().getY();
+      _theMap.addBuilding(_sprites.getBuildingSprite(base.getBaseType(), base.getFaction()), posX, posY);
    }
 
    public void setHudOnLeft(boolean left) {

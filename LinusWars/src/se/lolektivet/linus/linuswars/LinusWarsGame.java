@@ -31,20 +31,6 @@ public class LinusWarsGame extends BasicGame {
 
    private Font _mainFont;
 
-   private LogicalWarGame createGameFromMapAndFactions(LogicalWarMap logicalWarMap, List<Faction> factions) {
-      LogicalWarGame logicalWarGame = new LogicalWarGame(logicalWarMap, factions);
-      List<Position> hqs = logicalWarMap.findHqs();
-      if (hqs.size() != factions.size()) {
-         throw new RuntimeException("This map needs " + hqs.size() + " factions, but you supplied " + factions.size());
-      }
-      int factionIndex = 0;
-      for (Position hqPosition : hqs) {
-         logicalWarGame.setFactionForProperty(hqPosition, factions.get(factionIndex));
-         factionIndex++;
-      }
-      return logicalWarGame;
-   }
-
    @Override
    public void init(GameContainer gc) throws SlickException {
       // System.out.println("Container: [ " + gc.getWidth() + "," + gc.getHeight() + "], Screen: [" + gc.getScreenWidth() + "," + gc.getScreenHeight() + "]");
@@ -62,7 +48,8 @@ public class LinusWarsGame extends BasicGame {
       List<Faction> factions = new ArrayList<>(2);
       factions.add(Faction.ORANGE_STAR);
       factions.add(Faction.BLUE_MOON);
-      LogicalWarGame logicalWarGame = createGameFromMapAndFactions(logicalWarMap, factions);
+      LogicalWarGameCreator gameCreator = new LogicalWarGameCreator();
+      LogicalWarGame logicalWarGame = gameCreator.createGameFromMapAndFactions(logicalWarMap, factions);
 
       ScrollingTileViewImpl scrollingTileViewImpl = new ScrollingTileViewImpl();
       scrollingTileViewImpl.setVisibleRectSize(15, 10);

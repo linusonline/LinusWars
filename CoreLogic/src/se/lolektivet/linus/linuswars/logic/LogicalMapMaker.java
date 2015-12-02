@@ -22,7 +22,7 @@ public class LogicalMapMaker implements MapMaker {
 
    @Override
    public void addBuilding(TerrainType buildingType, Faction faction, int x, int y) {
-      _logicalWarMap.setBuilding(x, y, buildingType);
+      _logicalWarMap.setBuilding(x, y, buildingType, faction);
    }
 
    @Override
