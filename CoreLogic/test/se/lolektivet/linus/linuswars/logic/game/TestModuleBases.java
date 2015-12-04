@@ -1,3 +1,5 @@
+package se.lolektivet.linus.linuswars.logic.game;
+
 import org.junit.Assert;
 import org.junit.Test;
 import se.lolektivet.linus.linuswars.logic.Position;
