@@ -2,6 +2,7 @@ package se.lolektivet.linus.linuswars.logic.game;
 
 import org.junit.Assert;
 import org.junit.Test;
+import se.lolektivet.linus.linuswars.logic.InitializationException;
 import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
@@ -56,4 +57,42 @@ public class TestModuleBases {
 
       Assert.assertTrue(basesModule.hasBaseAtPosition(hqPosition));
    }
+
+   @Test (expected = InitializationException.class)
+   public void throwsOnTwoHqsForSameFaction() {
+      ModuleBases basesModule = new ModuleBases();
+      basesModule.addBase(new Position(1, 1), TerrainType.HQ, Faction.BLUE_MOON);
+      basesModule.addBase(new Position(1, 2), TerrainType.HQ, Faction.BLUE_MOON);
+   }
+
+   @Test (expected = InitializationException.class)
+   public void throwsOnNeutralHq() {
+      ModuleBases basesModule = new ModuleBases();
+      basesModule.addBase(new Position(1, 1), TerrainType.HQ, Faction.NEUTRAL);
+   }
+
+   @Test
+   public void validationAcceptsMinimumSetup() {
+      ModuleBases basesModule = new ModuleBases();
+      basesModule.addBase(new Position(1, 2), TerrainType.HQ, Faction.BLUE_MOON);
+      basesModule.addBase(new Position(1, 2), TerrainType.HQ, Faction.GREEN_EARTH);
+      basesModule.validateSetup();
+   }
+
+   @Test (expected = InitializationException.class)
+   public void validationRejectsSingleHq() {
+      ModuleBases basesModule = new ModuleBases();
+      basesModule.addBase(new Position(1, 2), TerrainType.HQ, Faction.BLUE_MOON);
+      basesModule.validateSetup();
+   }
+
+   @Test (expected = InitializationException.class)
+   public void validationRejectsOrphanBase() {
+      ModuleBases basesModule = new ModuleBases();
+      basesModule.addBase(new Position(1, 1), TerrainType.HQ, Faction.BLUE_MOON);
+      basesModule.addBase(new Position(2, 2), TerrainType.HQ, Faction.ORANGE_STAR);
+      basesModule.addBase(new Position(2, 2), TerrainType.BASE, Faction.GREEN_EARTH);
+      basesModule.validateSetup();
+   }
+
 }

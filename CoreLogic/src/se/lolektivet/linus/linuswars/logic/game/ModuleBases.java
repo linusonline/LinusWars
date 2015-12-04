@@ -27,7 +27,10 @@ public class ModuleBases {
    public void addBase(Position position, TerrainType buildingType, Faction faction) {
       if (buildingType == TerrainType.HQ) {
          if (faction == Faction.NEUTRAL) {
-            throw new LogicException("HQs cannot be neutral!");
+            throw new InitializationException("HQs cannot be neutral!");
+         }
+         if (_hqsOfFactions.get(faction) != null) {
+            throw new InitializationException("Only one HQ per faction!");
          }
          _hqsOfFactions.put(faction, position);
       }
@@ -76,6 +79,9 @@ public class ModuleBases {
    void validateSetup() {
       if (getFactions().size() != _hqsOfFactions.size()) {
          throw new InitializationException("All participating factions must have an HQ!");
+      }
+      if (getFactions().size() < 2) {
+         throw new InitializationException("Setup must have at least two factions with one HQ each!");
       }
    }
 
