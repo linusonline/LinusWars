@@ -15,16 +15,18 @@ public class RowMapMaker {
    private boolean _widthDetermined;
    private int _mapWidth;
    private boolean _buildingAdded;
+   private int _expectedNumberOfRows;
 
-   public RowMapMaker(MapMaker mapMaker) {
+   protected RowMapMaker(MapMaker mapMaker, int totalNumberOfRows) {
       _mapMaker = mapMaker;
       _currentPlaceInRow = 0;
       _currentRow = 0;
       _widthDetermined = false;
       _buildingAdded = false;
+      _expectedNumberOfRows = totalNumberOfRows;
    }
 
-   public void addTerrain(TerrainTile terrainTile) {
+   protected void addTerrain(TerrainTile terrainTile) {
       if (_buildingAdded) {
          throw new InitializationException("You must add all terrain before you start adding buildings!");
       }
@@ -32,19 +34,29 @@ public class RowMapMaker {
       _currentPlaceInRow++;
    }
 
-   public void addBuilding(TerrainType buildingType, Faction faction, int x, int y) {
+   protected void addBuilding(TerrainType buildingType, Faction faction, int x, int y) {
       if (!isValid()) {
-         throw new InitializationException("You must complete the map (all rows the same length) before you start adding buildings!");
+         throw new InitializationException("You must complete the map (all rows the same length, end with nextRow) before you start adding buildings!");
+      }
+      if (x < 0 || x > _mapWidth || y < 0 || y > _currentRow) {
+         throw new InitializationException("Building is outside map!");
       }
       _mapMaker.addBuilding(buildingType, faction, x, y);
       _buildingAdded = true;
    }
 
-   private boolean isValid() {
-      return !_widthDetermined || _mapWidth == _currentPlaceInRow;
+   protected void validate() {
+      if (!isValid()) {
+         throw new InitializationException("Map is invalid! All rows must be the same length, end with nextRow.");
+      }
    }
 
-   public void nextRow() {
+   private boolean isValid() {
+      return (!_widthDetermined || _mapWidth == _currentPlaceInRow)
+            && _currentRow == _expectedNumberOfRows;
+   }
+
+   protected void nextRow() {
       if (_widthDetermined) {
          if (_mapWidth != _currentPlaceInRow) {
             throw new InitializationException("All rows in map must be the same length!");

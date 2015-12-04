@@ -21,7 +21,7 @@ public class TestPathFinder extends TestCase {
    public void setUp() {
       LogicalWarMap logicalWarMap = new LogicalWarMap();
       MapMaker mapMaker = new LogicalMapMaker(logicalWarMap);
-      Map1 map = new Map1(new RowMapMaker(mapMaker));
+      Map1 map = new Map1(mapMaker);
       map.create();
       List<Faction> factions = new ArrayList<Faction>(2);
       factions.add(Faction.ORANGE_STAR);
