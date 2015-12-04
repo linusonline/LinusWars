@@ -44,7 +44,6 @@ public class LinusWarsGame extends BasicGame {
       MapMaker mapMaker = new GraphicalAndLogicalMapMaker(_allSprites, logicalWarMap, graphicalWarMap);
       Map2 map = new Map2(mapMaker);
       map.create();
-      mapMaker.validate();
 
       List<Faction> factions = new ArrayList<>(2);
       factions.add(Faction.ORANGE_STAR);

@@ -49,6 +49,7 @@ public class RowMapMaker {
       if (!isValid()) {
          throw new InitializationException("Map is invalid! All rows must be the same length, end with nextRow.");
       }
+      _mapMaker.validate();
    }
 
    private boolean isValid() {

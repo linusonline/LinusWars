@@ -27,7 +27,7 @@ public class Path {
    }
 
    public Path(Position origin, boolean isAutoBackTrack) {
-      this(origin, new ArrayList<Position>(0), isAutoBackTrack);
+      this(origin, new ArrayList<>(0), isAutoBackTrack);
    }
 
    public Path(Path otherPath) {
@@ -93,13 +93,14 @@ public class Path {
       }
       if (_isAutoBackTrack) {
          if (_length > 0) {
+            //noinspection ConstantConditions
             if (getPointBeforeLast().equals(newPoint)) {
                backUpOneStep();
                return;
             }
          }
       }
-      _pointsOnPath.add(newPoint);
+      _pointsOnPath.add(new Position(newPoint));
       _length++;
    }
 

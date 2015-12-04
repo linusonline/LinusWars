@@ -125,6 +125,10 @@ public class ModuleUnits {
       _transportedUnitsInFaction.get(_factionsOfUnits.get(transportedUnit)).remove(transportedUnit);
    }
 
+   Set<LogicalUnit> getAllUnitsFromFaction(Faction faction) {
+      return new HashSet<>(_unitsInFaction.get(faction));
+   }
+
    Set<LogicalUnit> getAllUnitsFromFactionOfType(Faction faction, UnitType type) {
       Set<LogicalUnit> unitsFromFactionOfType = new HashSet<>();
       for (LogicalUnit logicalUnit : _unitsInFaction.get(faction)) {

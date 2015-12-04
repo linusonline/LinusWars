@@ -212,23 +212,31 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       }
    }
 
+   private void throwOnGameNotStarted() {
+      if (!_gameStarted) {
+         throw new LogicException("Cannot execute move before game has started!");
+      }
+   }
+
    @Override
    public void executeMove(LogicalUnit logicalUnit, Path path) {
+      throwOnGameNotStarted();
+      throwOnIllegalPath(logicalUnit, path);
       internalExecuteMove(logicalUnit, path);
       _unitModule.expendUnitsTurn(logicalUnit);
    }
 
    private void internalExecuteMove(LogicalUnit logicalUnit, Path path) {
-      // TODO: Check if move is allowed
-
       _unitModule.moveUnit(logicalUnit, path.getFinalPosition());
-
       subtractFuelForUnitAndPath(path, logicalUnit);
       invalidateOptimalPathsCache();
    }
 
-   private void subtractFuelForUnitAndPath(Path path, LogicalUnit logicalUnit) {
+   private void throwOnIllegalPath(LogicalUnit logicalUnit, Path path) {
       Cost cost = getCostForUnitAndPath(path, logicalUnit);
+      if (cost.getMovementCost().isInfinite() || cost.getMovementCost().getInteger() > getMovementRangeForUnit(logicalUnit)) {
+         throw new LogicException("Move is illegal for unit!");
+      }
       PotentiallyInfiniteInteger fuelCost = cost.getFuelCost();
       if (fuelCost.isInfinite()) {
          throw new LogicException("Path is illegal for unit!");
@@ -236,11 +244,22 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       if (logicalUnit.getFuel() < fuelCost.getInteger()) {
          throw new LogicException("Unit has too little fuel for this path!");
       }
-      logicalUnit.subtractFuel(fuelCost.getInteger());
+   }
+
+   private int getMovementRangeForUnit(LogicalUnit logicalUnit) {
+      // TODO: CO Modifiers
+      return logicalUnit.getBaseMovementRange();
+   }
+
+   private void subtractFuelForUnitAndPath(Path path, LogicalUnit logicalUnit) {
+      Cost cost = getCostForUnitAndPath(path, logicalUnit);
+      logicalUnit.subtractFuel(cost.getFuelCost().getInteger());
    }
 
    @Override
    public void executeAttackMove(LogicalUnit movingUnit, Path path, LogicalUnit attackedUnit) {
+      throwOnGameNotStarted();
+      throwOnIllegalPath(movingUnit, path);
       // TODO: Check if move + attack is allowed
       internalExecuteMove(movingUnit, path);
       internalExecuteAttack(movingUnit, attackedUnit);
@@ -279,6 +298,8 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
 
    @Override
    public void executeSupplyMove(LogicalUnit movingUnit, Path path) {
+      throwOnGameNotStarted();
+      throwOnIllegalPath(movingUnit, path);
       internalExecuteMove(movingUnit, path);
       internalExecuteSupply(movingUnit);
       _unitModule.expendUnitsTurn(movingUnit);
@@ -307,6 +328,8 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
 
    @Override
    public void executeUnloadMove(LogicalUnit transport, LogicalUnit unloadingUnit, Path movementPath, Position unloadPosition) {
+      throwOnGameNotStarted();
+      throwOnIllegalPath(transport, movementPath);
       internalExecuteMove(transport, movementPath);
       _unitModule.unloadUnitFromTransport(transport, unloadingUnit, unloadPosition);
       _unitModule.expendUnitsTurn(transport);
@@ -314,6 +337,8 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
 
    @Override
    public void executeLoadMove(LogicalUnit movingUnit, Path path) {
+      throwOnGameNotStarted();
+      throwOnIllegalPath(movingUnit, path);
       LogicalUnit transport = getUnitAtPosition(path.getFinalPosition());
       if (!canLoadOnto(movingUnit, transport)) {
          throw new LogicException("Cannot load onto that unit!");
@@ -371,31 +396,50 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
 
    @Override
    public void executeJoinMove(LogicalUnit movingUnit, Path movementPath) {
-      LogicalUnit joinedUnit = getUnitAtPosition(movementPath.getFinalPosition());
-      // TODO: Check if path is allowed.
+      throwOnGameNotStarted();
+      throwOnIllegalPath(movingUnit, movementPath);
+      throwOnIllegalJoinMove(movingUnit, movementPath);
+
       // TODO: Expend fuel for moving unit.
+      LogicalUnit joinedUnit = getUnitAtPosition(movementPath.getFinalPosition());
+      internalExecuteJoin(movingUnit, joinedUnit);
+      fireUnitJoined(movingUnit);
+      _unitModule.expendUnitsTurn(joinedUnit);
+   }
+
+   private void throwOnIllegalJoinMove(LogicalUnit movingUnit, Path movementPath) {
+      LogicalUnit joinedUnit = getUnitAtPosition(movementPath.getFinalPosition());
       if (!canJoin(movingUnit, joinedUnit)) {
          throw new LogicException("Units cannot join!");
       }
-      internalExecuteJoinMove(movingUnit, joinedUnit);
-      _unitModule.expendUnitsTurn(joinedUnit);
-      _unitModule.expendUnitsTurn(movingUnit);
    }
 
    @Override
    public void executeCaptureMove(LogicalUnit movingUnit, Path movementPath) {
+      throwOnGameNotStarted();
+      throwOnIllegalPath(movingUnit, movementPath);
+      throwOnIllegalCapture(movingUnit, movementPath);
+
+      internalExecuteMove(movingUnit, movementPath);
+      _unitModule.expendUnitsTurn(movingUnit);
+      internalExecuteCapture(movingUnit, movementPath);
+   }
+
+   private void internalExecuteCapture(LogicalUnit movingUnit, Path movementPath) {
+      Base base = _basesModule.getBaseAtPosition(movementPath.getFinalPosition());
+      base.doCapture(movingUnit.getHp1To10(), _unitModule.getFactionForUnit(movingUnit));
+      boolean completedCapture = !base.isCapturing();
+      if (completedCapture) {
+         fireBaseCaptured(base);
+      }
+   }
+
+   private void throwOnIllegalCapture(LogicalUnit movingUnit, Path movementPath) {
       if (!movingUnit.canCapture()) {
          throw new LogicException("Unit type " + movingUnit.getType() + " cannot capture property!");
       }
       if (!_basesModule.hasBaseAtPosition(movementPath.getFinalPosition())) {
          throw new LogicException("No base at position " + movementPath.getFinalPosition() + "! Cannot do capture move.");
-      }
-      _unitModule.expendUnitsTurn(movingUnit);
-      internalExecuteMove(movingUnit, movementPath);
-      Base base = _basesModule.getBaseAtPosition(movementPath.getFinalPosition());
-      base.doCapture(movingUnit.getHp1To10(), _unitModule.getFactionForUnit(movingUnit));
-      if (!base.isCapturing()) {
-         fireBaseCaptured(base);
       }
    }
 
@@ -414,15 +458,15 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       return unitOne.getType() == unitTwo.getType();
    }
 
-   private void internalExecuteJoinMove(LogicalUnit movingUnit, LogicalUnit joinedUnit) {
+   private void internalExecuteJoin(LogicalUnit movingUnit, LogicalUnit joinedUnit) {
       joinedUnit.setHp1To100(Math.min(movingUnit.getHp1To100() + joinedUnit.getHp1To100(), 100));
       joinedUnit.addFuel(movingUnit.getFuel());
-      fireUnitJoined(movingUnit);
       _unitModule.removeUnit(movingUnit);
    }
 
    @Override
    public void endTurn() {
+      throwOnGameNotStarted();
       _unitModule.expendAllUnitsTurns();
       _turnOrderModule.advanceToNextFactionInTurn();
       doBeginningOfTurn();
@@ -520,6 +564,11 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       public NoSuppliableUnitsInRangeException(String s) {
          super(s);
       }
+   }
+
+   @Override
+   public Set<LogicalUnit> getAllUnitsInActiveFaction() {
+      return _unitModule.getAllUnitsFromFaction(_turnOrderModule.currentlyActiveFaction());
    }
 
    @Override
