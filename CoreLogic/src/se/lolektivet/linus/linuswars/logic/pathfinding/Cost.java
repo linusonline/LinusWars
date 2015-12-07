@@ -4,14 +4,14 @@ package se.lolektivet.linus.linuswars.logic.pathfinding;
  * Created by Linus on 2014-09-23.
  */
 public class Cost {
-   private final PotentiallyInfiniteInteger _movementCost;
-   private final PotentiallyInfiniteInteger _fuelCost;
+   private final InfiniteInteger _movementCost;
+   private final InfiniteInteger _fuelCost;
 
    public Cost() {
-      this(PotentiallyInfiniteInteger.create(0), PotentiallyInfiniteInteger.create(0));
+      this(InfiniteInteger.create(0), InfiniteInteger.create(0));
    }
 
-   public Cost(PotentiallyInfiniteInteger movementCost, PotentiallyInfiniteInteger fuelCost) {
+   public Cost(InfiniteInteger movementCost, InfiniteInteger fuelCost) {
       _movementCost = movementCost;
       _fuelCost = fuelCost;
    }
@@ -34,16 +34,16 @@ public class Cost {
       return other._fuelCost.greaterThan(_fuelCost);
    }
 
-   public PotentiallyInfiniteInteger getMovementCost() {
+   public InfiniteInteger getMovementCost() {
       return _movementCost;
    }
 
-   public PotentiallyInfiniteInteger getFuelCost() {
+   public InfiniteInteger getFuelCost() {
       return _fuelCost;
    }
 
    public static Cost add(Cost one, Cost other) {
-      return new Cost(PotentiallyInfiniteInteger.add(one.getMovementCost(), other.getMovementCost()),
-            PotentiallyInfiniteInteger.add(one.getFuelCost(), other.getFuelCost()));
+      return new Cost(InfiniteInteger.add(one.getMovementCost(), other.getMovementCost()),
+            InfiniteInteger.add(one.getFuelCost(), other.getFuelCost()));
    }
 }

@@ -6,9 +6,11 @@ import org.junit.Test;
 import se.lolektivet.linus.linuswars.logic.LogicException;
 import se.lolektivet.linus.linuswars.logic.LogicalGamePredeployer;
 import se.lolektivet.linus.linuswars.logic.LogicalMapMaker;
-import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
+import se.lolektivet.linus.linuswars.logic.enums.MovementType;
+import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
+import se.lolektivet.linus.linuswars.logic.pathfinding.InfiniteInteger;
 import se.lolektivet.linus.linuswars.logic.pathfinding.Path;
 import se.lolektivet.linus.linuswars.logic.pathfinding.PathFactory;
 
@@ -99,6 +101,18 @@ public class TestLogicGame_executeMove {
 
       _theGame.executeMove(unit, PathFactory.create(_gameQueries.getPositionOfUnit(unit), Direction.RIGHT));
       _theGame.executeMove(unit, PathFactory.create(_gameQueries.getPositionOfUnit(unit), Direction.RIGHT));
+   }
+
+   @Test
+   public void testMovingExpendsFuel() {
+      LogicalUnit unit = _gameQueries.getAllUnitsInActiveFaction().iterator().next();
+      int fuelBefore = unit.getFuel();
+      InfiniteInteger fuelCost = new FuelLogic().getFuelCostForMovementTypeOnTerrainType(MovementType.FOOT, TerrainType.PLAINS);
+
+      _theGame.executeMove(unit, PathFactory.create(_gameQueries.getPositionOfUnit(unit), Direction.RIGHT));
+
+      int fuelAfter = unit.getFuel();
+      Assert.assertTrue(fuelBefore - fuelAfter == fuelCost.getInteger());
    }
 
 }

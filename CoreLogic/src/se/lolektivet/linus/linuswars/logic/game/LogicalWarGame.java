@@ -138,14 +138,14 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    }
 
    @Override
-   public PotentiallyInfiniteInteger getFuelCostForUnitOnTile(LogicalUnit travellingUnit, Position tile) {
+   public InfiniteInteger getFuelCostForUnitOnTile(LogicalUnit travellingUnit, Position tile) {
       return _fuelLogic.getFuelCostForMovementTypeOnTerrainType(travellingUnit.getMovementType(), _logicalWarMap.getTerrainForTile(tile));
    }
 
    @Override
-   public PotentiallyInfiniteInteger getTravelCostForUnitOnTile(LogicalUnit travellingUnit, Position tile) {
+   public InfiniteInteger getTravelCostForUnitOnTile(LogicalUnit travellingUnit, Position tile) {
       if (hasUnitAtPosition(tile) && areEnemies(travellingUnit, getUnitAtPosition(tile))) {
-         return PotentiallyInfiniteInteger.infinite();
+         return InfiniteInteger.infinite();
       }
       return _movementLogic.getTravelCostForMovementTypeOnTerrainType(travellingUnit.getMovementType(), _logicalWarMap.getTerrainForTile(tile));
    }
@@ -247,7 +247,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       if (cost.getMovementCost().isInfinite() || cost.getMovementCost().getInteger() > getMovementRangeForUnit(logicalUnit)) {
          throw new LogicException("Move is illegal for unit!");
       }
-      PotentiallyInfiniteInteger fuelCost = cost.getFuelCost();
+      InfiniteInteger fuelCost = cost.getFuelCost();
       if (fuelCost.isInfinite()) {
          throw new LogicException("Path is illegal for unit!");
       }
@@ -704,16 +704,16 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       return new CostCalculator() {
          @Override
          public Cost getCostForPosition(Position position) {
-            PotentiallyInfiniteInteger movementCost = getTravelCostForUnitOnTile(logicalUnit, position);
-            PotentiallyInfiniteInteger fuelCost = getFuelCostForUnitOnTile(logicalUnit, position);
+            InfiniteInteger movementCost = getTravelCostForUnitOnTile(logicalUnit, position);
+            InfiniteInteger fuelCost = getFuelCostForUnitOnTile(logicalUnit, position);
             return new Cost(movementCost, fuelCost);
          }
       };
    }
 
    private Cost getCostLimitForUnit(LogicalUnit logicalUnit) {
-      PotentiallyInfiniteInteger movementLimit = PotentiallyInfiniteInteger.create(logicalUnit.getBaseMovementRange());
-      PotentiallyInfiniteInteger fuelLimit = PotentiallyInfiniteInteger.create(logicalUnit.getFuel());
+      InfiniteInteger movementLimit = InfiniteInteger.create(logicalUnit.getBaseMovementRange());
+      InfiniteInteger fuelLimit = InfiniteInteger.create(logicalUnit.getFuel());
       return new Cost(movementLimit, fuelLimit);
    }
 
