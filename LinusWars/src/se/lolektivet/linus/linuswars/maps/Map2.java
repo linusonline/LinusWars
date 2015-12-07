@@ -256,10 +256,10 @@ public class Map2 extends RowMapMaker {
 
       nextRow();
 
-      validate();
-
       addBuilding(TerrainType.HQ, Faction.ORANGE_STAR, 0, 1);
       addBuilding(TerrainType.HQ, Faction.BLUE_MOON, 14, 5);
       addBuilding(TerrainType.BASE, Faction.BLUE_MOON, 0, 4);
+
+      validate();
    }
 }

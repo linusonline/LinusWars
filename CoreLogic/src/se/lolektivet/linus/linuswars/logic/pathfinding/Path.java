@@ -22,19 +22,15 @@ public class Path {
       _isAutoBackTrack = isAutoBackTrack;
    }
 
-   public Path(Position origin) {
-      this(origin, false);
-   }
-
-   public Path(Position origin, boolean isAutoBackTrack) {
+   Path(Position origin, boolean isAutoBackTrack) {
       this(origin, new ArrayList<>(0), isAutoBackTrack);
    }
 
-   public Path(Path otherPath) {
+   Path(Path otherPath) {
       this(otherPath._origin, otherPath._pointsOnPath, otherPath._isAutoBackTrack);
    }
 
-   public Path(Path otherPath, boolean isAutoBackTrack) {
+   Path(Path otherPath, boolean isAutoBackTrack) {
       this(otherPath._origin, otherPath._pointsOnPath, isAutoBackTrack);
    }
 
@@ -51,7 +47,7 @@ public class Path {
    }
 
    public List<Position> getPositionList() {
-      return new ArrayList<Position>(_pointsOnPath);
+      return new ArrayList<>(_pointsOnPath);
    }
 
    public int getLength() {

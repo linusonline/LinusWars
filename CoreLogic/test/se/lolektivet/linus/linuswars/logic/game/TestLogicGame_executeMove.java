@@ -10,6 +10,7 @@ import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.pathfinding.Path;
+import se.lolektivet.linus.linuswars.logic.pathfinding.PathFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,65 +59,38 @@ public class TestLogicGame_executeMove {
    @Test
    public void testAllowWaitMove() {
       LogicalUnit unit = _gameQueries.getAllUnitsInActiveFaction().iterator().next();
-      Path path = new Path(_gameQueries.getPositionOfUnit(unit));
+      Path path = PathFactory.create(_gameQueries.getPositionOfUnit(unit));
       _theGame.executeMove(unit, path);
    }
 
    @Test
    public void testMoveOneSquare() {
       LogicalUnit unit = _gameQueries.getAllUnitsInActiveFaction().iterator().next();
-      Position origin = _gameQueries.getPositionOfUnit(unit);
-      Path path = new Path(origin);
-      Position destination = origin.getPositionAfterStep(Direction.RIGHT);
-      path.addPoint(destination);
+      Path path = PathFactory.create(_gameQueries.getPositionOfUnit(unit), Direction.RIGHT);
+
       _theGame.executeMove(unit, path);
 
-      Assert.assertTrue(_gameQueries.getPositionOfUnit(unit).equals(destination));
+      Assert.assertTrue(_gameQueries.getPositionOfUnit(unit).equals(path.getFinalPosition()));
    }
 
    @Test
    public void testMoveMaximum() {
       LogicalUnit unit = _gameQueries.getAllUnitsInActiveFaction().iterator().next();
-      Position movingPosition = _gameQueries.getPositionOfUnit(unit);
-
-      Path path = new Path(movingPosition);
-
-      movingPosition = movingPosition.getPositionAfterStep(Direction.RIGHT);
-      path.addPoint(movingPosition);
-
-      movingPosition = movingPosition.getPositionAfterStep(Direction.RIGHT);
-      path.addPoint(movingPosition);
-
-      movingPosition = movingPosition.getPositionAfterStep(Direction.RIGHT);
-      path.addPoint(movingPosition);
+      Path path = PathFactory.create(_gameQueries.getPositionOfUnit(unit),
+            Direction.RIGHT, Direction.RIGHT, Direction.RIGHT);
 
       _theGame.executeMove(unit, path);
 
-      Assert.assertTrue(_gameQueries.getPositionOfUnit(unit).equals(movingPosition));
+      Assert.assertTrue(_gameQueries.getPositionOfUnit(unit).equals(path.getFinalPosition()));
    }
 
    @Test (expected = LogicException.class)
    public void testMoveBeyondMaximum() {
       LogicalUnit unit = _gameQueries.getAllUnitsInActiveFaction().iterator().next();
-      Position movingPosition = _gameQueries.getPositionOfUnit(unit);
-
-      Path path = new Path(movingPosition);
-
-      movingPosition = movingPosition.getPositionAfterStep(Direction.RIGHT);
-      path.addPoint(movingPosition);
-
-      movingPosition = movingPosition.getPositionAfterStep(Direction.RIGHT);
-      path.addPoint(movingPosition);
-
-      movingPosition = movingPosition.getPositionAfterStep(Direction.RIGHT);
-      path.addPoint(movingPosition);
-
-      movingPosition = movingPosition.getPositionAfterStep(Direction.DOWN);
-      path.addPoint(movingPosition);
+      Path path = PathFactory.create(_gameQueries.getPositionOfUnit(unit),
+            Direction.RIGHT, Direction.RIGHT, Direction.RIGHT, Direction.DOWN);
 
       _theGame.executeMove(unit, path);
-
-      Assert.assertTrue(_gameQueries.getPositionOfUnit(unit).equals(movingPosition));
    }
 
 }

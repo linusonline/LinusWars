@@ -5,6 +5,7 @@ import se.lolektivet.linus.linuswars.MovementArrow;
 import se.lolektivet.linus.linuswars.graphics.MovementArrowSection;
 import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.pathfinding.Path;
+import se.lolektivet.linus.linuswars.logic.pathfinding.PathFactory;
 
 import java.util.List;
 
@@ -14,14 +15,14 @@ import java.util.List;
 public class TestMovementArrow extends TestCase {
 
    public void testTrivial() {
-      Path path = new Path(new Position(0, 0), true);
+      Path path = PathFactory.create(new Position(0, 0), true);
       MovementArrow movementArrow = new MovementArrow(path);
       movementArrow.build();
       assertTrue(movementArrow.getSpriteList().isEmpty());
    }
 
    public void testOneStepSouth() {
-      Path path = new Path(new Position(0, 0), true);
+      Path path = PathFactory.create(new Position(0, 0), true);
       path.addPoint(new Position(0, 1));
       MovementArrow movementArrow = new MovementArrow(path);
       movementArrow.build();
@@ -31,7 +32,7 @@ public class TestMovementArrow extends TestCase {
    }
 
    public void testOneStepNorth() {
-      Path path = new Path(new Position(1, 1), true);
+      Path path = PathFactory.create(new Position(1, 1), true);
       path.addPoint(new Position(1, 0));
       MovementArrow movementArrow = new MovementArrow(path);
       movementArrow.build();
@@ -41,7 +42,7 @@ public class TestMovementArrow extends TestCase {
    }
 
    public void testTwoDown() {
-      Path path = new Path(new Position(0, 0), true);
+      Path path = PathFactory.create(new Position(0, 0), true);
       path.addPoint(new Position(0, 1));
       path.addPoint(new Position(0, 2));
       MovementArrow movementArrow = new MovementArrow(path);
@@ -53,7 +54,7 @@ public class TestMovementArrow extends TestCase {
    }
 
    public void testTwoRight() {
-      Path path = new Path(new Position(0, 0), true);
+      Path path = PathFactory.create(new Position(0, 0), true);
       path.addPoint(new Position(1, 0));
       path.addPoint(new Position(2, 0));
       MovementArrow movementArrow = new MovementArrow(path);
@@ -65,7 +66,7 @@ public class TestMovementArrow extends TestCase {
    }
 
    public void testBendSE() {
-      Path path = new Path(new Position(0, 0), true);
+      Path path = PathFactory.create(new Position(0, 0), true);
       path.addPoint(new Position(1, 0));
       path.addPoint(new Position(1, 1));
       MovementArrow movementArrow = new MovementArrow(path);
@@ -77,7 +78,7 @@ public class TestMovementArrow extends TestCase {
    }
 
    public void testBendNW() {
-      Path path = new Path(new Position(1, 1), true);
+      Path path = PathFactory.create(new Position(1, 1), true);
       path.addPoint(new Position(1, 0));
       path.addPoint(new Position(0, 0));
       MovementArrow movementArrow = new MovementArrow(path);
@@ -89,7 +90,7 @@ public class TestMovementArrow extends TestCase {
    }
 
    public void testBacktrack() {
-      Path path = new Path(new Position(0, 0), true);
+      Path path = PathFactory.create(new Position(0, 0), true);
       path.addPoint(new Position(1, 0));
       path.addPoint(new Position(2, 0));
       MovementArrow movementArrow = new MovementArrow(path);
@@ -101,7 +102,7 @@ public class TestMovementArrow extends TestCase {
    }
 
    public void testBacktrackBend() {
-      Path path = new Path(new Position(0, 0), true);
+      Path path = PathFactory.create(new Position(0, 0), true);
       path.addPoint(new Position(1, 0));
       path.addPoint(new Position(1, 1));
       MovementArrow movementArrow = new MovementArrow(path);
@@ -113,7 +114,7 @@ public class TestMovementArrow extends TestCase {
    }
 
    public void testBuildFromScratch() {
-      Path path = new Path(new Position(0, 0), true);
+      Path path = PathFactory.create(new Position(0, 0), true);
       MovementArrow movementArrow = new MovementArrow(path);
       movementArrow.build();
       movementArrow.addPoint(new Position(1, 0));

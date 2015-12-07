@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class TestPathFinder extends TestCase {
 
-   LogicalWarGame _logicalWarGame;
+   private LogicalWarGame _logicalWarGame;
 
    public void setUp() {
       LogicalWarMap logicalWarMap = new LogicalWarMap();

@@ -11,7 +11,7 @@ public class TestPath {
 
    @Test
    public void testAddPointMakesCopy() {
-      Path path = new Path(new Position(0, 0));
+      Path path = PathFactory.create(new Position(0, 0));
       Position position = new Position(0, 1);
       path.addPoint(position);
       position.setX(1);
