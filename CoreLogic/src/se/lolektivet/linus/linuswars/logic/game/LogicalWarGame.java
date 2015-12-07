@@ -218,9 +218,19 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       }
    }
 
+   private void throwOnUnitNotMovable(LogicalUnit logicalUnit) {
+      if (!unitBelongsToCurrentlyActiveFaction(logicalUnit)) {
+         throw new LogicException("Tried to move unit of faction " + _unitModule.getFactionForUnit(logicalUnit) +
+               " on other faction's turn (" + getCurrentlyActiveFaction() + ")!");
+      } else if (!unitCanStillMoveThisTurn(logicalUnit)) {
+         throw new LogicException("Unit has already moved this turn!");
+      }
+   }
+
    @Override
    public void executeMove(LogicalUnit logicalUnit, Path path) {
       throwOnGameNotStarted();
+      throwOnUnitNotMovable(logicalUnit);
       throwOnIllegalPath(logicalUnit, path);
       internalExecuteMove(logicalUnit, path);
       _unitModule.expendUnitsTurn(logicalUnit);
@@ -259,6 +269,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    @Override
    public void executeAttackMove(LogicalUnit movingUnit, Path path, LogicalUnit attackedUnit) {
       throwOnGameNotStarted();
+      throwOnUnitNotMovable(movingUnit);
       throwOnIllegalPath(movingUnit, path);
       // TODO: Check if move + attack is allowed
       internalExecuteMove(movingUnit, path);
@@ -299,6 +310,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    @Override
    public void executeSupplyMove(LogicalUnit movingUnit, Path path) {
       throwOnGameNotStarted();
+      throwOnUnitNotMovable(movingUnit);
       throwOnIllegalPath(movingUnit, path);
       internalExecuteMove(movingUnit, path);
       internalExecuteSupply(movingUnit);
@@ -329,6 +341,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    @Override
    public void executeUnloadMove(LogicalUnit transport, LogicalUnit unloadingUnit, Path movementPath, Position unloadPosition) {
       throwOnGameNotStarted();
+      throwOnUnitNotMovable(transport);
       throwOnIllegalPath(transport, movementPath);
       internalExecuteMove(transport, movementPath);
       _unitModule.unloadUnitFromTransport(transport, unloadingUnit, unloadPosition);
@@ -338,6 +351,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    @Override
    public void executeLoadMove(LogicalUnit movingUnit, Path path) {
       throwOnGameNotStarted();
+      throwOnUnitNotMovable(movingUnit);
       throwOnIllegalPath(movingUnit, path);
       LogicalUnit transport = getUnitAtPosition(path.getFinalPosition());
       if (!canLoadOnto(movingUnit, transport)) {
@@ -397,6 +411,8 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    @Override
    public void executeJoinMove(LogicalUnit movingUnit, Path movementPath) {
       throwOnGameNotStarted();
+      throwOnUnitNotMovable(movingUnit);
+      // TODO: Check: other unit needs also to be fresh?
       throwOnIllegalPath(movingUnit, movementPath);
       throwOnIllegalJoinMove(movingUnit, movementPath);
 
@@ -417,6 +433,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    @Override
    public void executeCaptureMove(LogicalUnit movingUnit, Path movementPath) {
       throwOnGameNotStarted();
+      throwOnUnitNotMovable(movingUnit);
       throwOnIllegalPath(movingUnit, movementPath);
       throwOnIllegalCapture(movingUnit, movementPath);
 

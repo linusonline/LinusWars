@@ -93,4 +93,12 @@ public class TestLogicGame_executeMove {
       _theGame.executeMove(unit, path);
    }
 
+   @Test (expected = LogicException.class)
+   public void testCannotMoveTwice() {
+      LogicalUnit unit = _gameQueries.getAllUnitsInActiveFaction().iterator().next();
+
+      _theGame.executeMove(unit, PathFactory.create(_gameQueries.getPositionOfUnit(unit), Direction.RIGHT));
+      _theGame.executeMove(unit, PathFactory.create(_gameQueries.getPositionOfUnit(unit), Direction.RIGHT));
+   }
+
 }
