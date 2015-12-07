@@ -115,4 +115,22 @@ public class TestLogicGame_executeMove {
       Assert.assertTrue(fuelBefore - fuelAfter == fuelCost.getInteger());
    }
 
+   @Test (expected = LogicException.class)
+   public void testCannotMoveToOtherEnemyUnit() {
+      LogicalUnit unit = _gameQueries.getAllUnitsInActiveFaction().iterator().next();
+      Path path = PathFactory.create(_gameQueries.getPositionOfUnit(unit),
+            Direction.DOWN, Direction.DOWN, Direction.DOWN);
+
+      _theGame.executeMove(unit, path);
+   }
+
+   @Test (expected = LogicException.class)
+   public void testCannotMoveOutsideMap() {
+      LogicalUnit unit = _gameQueries.getAllUnitsInActiveFaction().iterator().next();
+      Path path = PathFactory.create(_gameQueries.getPositionOfUnit(unit),
+            Direction.LEFT);
+
+      _theGame.executeMove(unit, path);
+   }
+
 }

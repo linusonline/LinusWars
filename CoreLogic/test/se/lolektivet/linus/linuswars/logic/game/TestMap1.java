@@ -43,9 +43,10 @@ public class TestMap1 extends RowMapMaker {
 
       nextRow();
 
-      addBuilding(TerrainType.HQ, Faction.ORANGE_STAR, 0, 0);
 
-      addBuilding(TerrainType.HQ, Faction.BLUE_MOON, 3, 3);
+      addBuilding(TerrainType.HQ, Faction.BLUE_MOON, 0, 0);
       addBuilding(TerrainType.BASE, Faction.BLUE_MOON, 0, 1);
+
+      addBuilding(TerrainType.HQ, Faction.ORANGE_STAR, 0, 3);
    }
 }

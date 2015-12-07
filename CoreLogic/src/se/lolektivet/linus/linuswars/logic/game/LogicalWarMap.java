@@ -1,6 +1,7 @@
 package se.lolektivet.linus.linuswars.logic.game;
 
 import se.lolektivet.linus.linuswars.logic.InitializationException;
+import se.lolektivet.linus.linuswars.logic.LogicException;
 import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
@@ -31,7 +32,11 @@ public class LogicalWarMap {
    }
 
    TerrainType getTerrainForTile(Position tile) {
-      return _terrainTiles.get(tile);
+      TerrainType type = _terrainTiles.get(tile);
+      if (type == null) {
+         throw new LogicException("Position " + tile + " is outside map!");
+      }
+      return type;
    }
 
    public void setBuilding(int x, int y, TerrainType terrainType, Faction faction) {
