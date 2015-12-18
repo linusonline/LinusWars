@@ -3,21 +3,21 @@ package se.lolektivet.linus.linuswars;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.logic.WarGameMoves;
-import se.lolektivet.linus.linuswars.logic.WarGameQueries;
+import se.lolektivet.linus.linuswars.logic.game.WarGameMoves;
+import se.lolektivet.linus.linuswars.logic.game.WarGameQueries;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 
 /**
  * Created by Linus on 2014-09-20.
  */
-public class QuickMenuState implements InteractiveGameState {
+public class StateQuickMenu implements InteractiveGameState {
    private final InteractiveWarGame _interactiveWarGame;
    private final WarGameQueries _warGameQueries;
    private final WarGameMoves _warGameMoves;
    private GraphicalMenu _theMenu;
    private Sprites _sprites;
 
-   public QuickMenuState(InteractiveWarGame interactiveWarGame, WarGameQueries warGameQueries, WarGameMoves warGameMoves) {
+   public StateQuickMenu(InteractiveWarGame interactiveWarGame, WarGameQueries warGameQueries, WarGameMoves warGameMoves) {
       _interactiveWarGame = interactiveWarGame;
       _warGameQueries = warGameQueries;
       _warGameMoves = warGameMoves;
@@ -37,7 +37,7 @@ public class QuickMenuState implements InteractiveGameState {
             break;
          default:
       }
-      return new StartingState(_interactiveWarGame, _warGameQueries, _warGameMoves);
+      return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
    }
 
    @Override
@@ -47,7 +47,7 @@ public class QuickMenuState implements InteractiveGameState {
 
    @Override
    public InteractiveGameState handleCancel() {
-      return new StartingState(_interactiveWarGame, _warGameQueries, _warGameMoves);
+      return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
    }
 
    @Override

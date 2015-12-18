@@ -33,7 +33,7 @@ public class UnitSprite {
    }
 
    public Renderable getUnitSprite(Direction direction, boolean moving) {
-      if (!moving && (direction.equals(Direction.UP) || direction.equals(Direction.DOWN))) {
+      if (!moving && (direction == Direction.UP || direction == Direction.DOWN)) {
          throw new SpriteNotFoundException();
       }
       switch (direction) {

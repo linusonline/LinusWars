@@ -7,9 +7,9 @@ import org.newdawn.slick.geom.Shape;
 import se.lolektivet.linus.linuswars.graphicalgame.GraphicalWarGame;
 import se.lolektivet.linus.linuswars.graphicalgame.ScrollingTileView;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.logic.LogicalUnit;
+import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.Position;
-import se.lolektivet.linus.linuswars.logic.WarGameQueries;
+import se.lolektivet.linus.linuswars.logic.game.WarGameQueries;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 
 import java.util.Collection;
@@ -48,12 +48,15 @@ public class InteractiveWarGame {
       _cursorImage = sprites.getCursor();
    }
 
+   public void hideMovementArrow() {
+      _movementArrowController = new NullMovementArrowController();
+   }
+
    public void setMovementArrowController(MovementArrowController movementArrowController) {
       if (movementArrowController == null) {
-         _movementArrowController = new NullMovementArrowController();
-      } else {
-         _movementArrowController = movementArrowController;
+         throw new NullPointerException("MovementArrowController can not be null. Use hideMovementArrow() instead.");
       }
+      _movementArrowController = movementArrowController;
    }
 
    Position getCursorPosition() {
@@ -139,8 +142,8 @@ public class InteractiveWarGame {
             Shape fillShape = new Rectangle(
                   x + _scrollingTileView.tileToPixelX(indicatedPosition.getX()),
                   y + _scrollingTileView.tileToPixelY(indicatedPosition.getY()),
-                  _scrollingTileView.tileToPixelX(1),
-                  _scrollingTileView.tileToPixelY(1));
+                  _scrollingTileView.tileWidthInPixels(1),
+                  _scrollingTileView.tileHeightInPixels(1));
             gc.getGraphics().fill(fillShape, new GradientFill(0, 0, new Color(255, 255, 255, 128), 0, 1, new Color(255, 255, 255, 128)));
          }
       }
@@ -161,5 +164,9 @@ public class InteractiveWarGame {
 
    void setPositionOfGraphicForUnit(LogicalUnit logicalUnit, Position newPosition) {
       _graphicalWarGame.setPositionOfGraphicForUnit(logicalUnit, newPosition);
+   }
+
+   void resetUnitGraphicToUnitPosition(LogicalUnit logicalUnit) {
+      _graphicalWarGame.resetUnitGraphicToUnitPosition(logicalUnit);
    }
 }

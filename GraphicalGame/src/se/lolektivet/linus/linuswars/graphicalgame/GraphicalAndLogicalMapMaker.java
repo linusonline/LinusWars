@@ -1,7 +1,7 @@
 package se.lolektivet.linus.linuswars.graphicalgame;
 
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.logic.LogicalWarMap;
+import se.lolektivet.linus.linuswars.logic.game.LogicalWarMap;
 import se.lolektivet.linus.linuswars.logic.MapMaker;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainTile;
@@ -29,7 +29,7 @@ public class GraphicalAndLogicalMapMaker implements MapMaker {
 
    @Override
    public void addBuilding(TerrainType buildingType, Faction faction, int x, int y) {
-      _logicalWarMap.setBuilding(x, y, buildingType);
+      _logicalWarMap.setBuilding(x, y, buildingType, faction);
       _graphicalWarMap.addBuilding(_sprites.getBuildingSprite(buildingType, faction), x, y);
    }
 

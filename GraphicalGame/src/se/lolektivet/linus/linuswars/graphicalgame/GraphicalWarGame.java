@@ -2,10 +2,11 @@ package se.lolektivet.linus.linuswars.graphicalgame;
 
 import org.newdawn.slick.*;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.logic.LogicalUnit;
+import se.lolektivet.linus.linuswars.logic.game.Base;
+import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.Position;
-import se.lolektivet.linus.linuswars.logic.WarGameListener;
-import se.lolektivet.linus.linuswars.logic.WarGameQueries;
+import se.lolektivet.linus.linuswars.logic.game.WarGameListener;
+import se.lolektivet.linus.linuswars.logic.game.WarGameQueries;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 
@@ -65,6 +66,13 @@ public class GraphicalWarGame implements WarGameListener {
       _hiddenUnits.remove(logicalUnit);
    }
 
+   @Override
+   public void baseWasCaptured(Base base) {
+      int posX = base.getPosition().getX();
+      int posY = base.getPosition().getY();
+      _theMap.addBuilding(_sprites.getBuildingSprite(base.getBaseType(), base.getFaction()), posX, posY);
+   }
+
    public void setHudOnLeft(boolean left) {
       _hudIsOnTheLeft = left;
    }
@@ -80,6 +88,10 @@ public class GraphicalWarGame implements WarGameListener {
 
    public void setPositionOfGraphicForUnit(LogicalUnit logicalUnit, Position newPosition) {
       setUnitPosition(getGraphicForUnit(logicalUnit), newPosition);
+   }
+
+   public void resetUnitGraphicToUnitPosition(LogicalUnit logicalUnit) {
+      setUnitPosition(getGraphicForUnit(logicalUnit), _warGameQueries.getPositionOfUnit(logicalUnit));
    }
 
    private void setUnitPosition(GraphicalUnit graphicalUnit, Position newPosition) {
@@ -101,10 +113,9 @@ public class GraphicalWarGame implements WarGameListener {
    }
 
    public void makeUnitFaceEnemyHq(LogicalUnit logicalUnit) {
-      Faction friendlyFaction = _warGameQueries.getFactionForUnit(logicalUnit);
       Position unitPosition = _warGameQueries.getPositionOfUnit(logicalUnit);
       for (Faction otherFaction : _warGameQueries.getFactionsInGame()) {
-         if (!friendlyFaction.equals(otherFaction)) {
+         if (_warGameQueries.areEnemies(logicalUnit, otherFaction)) {
             Position enemyHq = _warGameQueries.getHqPosition(otherFaction);
             Direction directionToFace = enemyHq.getX() < unitPosition.getX() ? Direction.LEFT : Direction.RIGHT;
             _graphicsForUnits.get(logicalUnit).setDirection(directionToFace);

@@ -3,9 +3,9 @@ package se.lolektivet.linus.linuswars;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.logic.LogicalUnit;
-import se.lolektivet.linus.linuswars.logic.WarGameMoves;
-import se.lolektivet.linus.linuswars.logic.WarGameQueries;
+import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
+import se.lolektivet.linus.linuswars.logic.game.WarGameMoves;
+import se.lolektivet.linus.linuswars.logic.game.WarGameQueries;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 
 import java.util.ArrayList;
@@ -15,28 +15,31 @@ import java.util.Set;
 /**
  * Created by Linus on 2014-09-20.
  */
-public class SelectAttackState implements InteractiveGameState {
+public class StateSelectAttack implements InteractiveGameState {
    private final InteractiveWarGame _interactiveWarGame;
    private WarGameQueries _warGameQueries;
    private WarGameMoves _warGameMoves;
    private final LogicalUnit _logicalUnit;
    private final MovementArrow _movementArrow;
    private final List<LogicalUnit> _attackableUnits;
+   private final InteractiveGameState _previousState;
    private int _currentlySelectedTargetIndex;
    private GraphicalMenu _fireOrNothingMenu;
 
-   public SelectAttackState(InteractiveWarGame interactiveWarGame,
+   public StateSelectAttack(InteractiveWarGame interactiveWarGame,
                             WarGameQueries warGameQueries,
                             WarGameMoves warGameMoves,
                             LogicalUnit logicalUnit,
                             MovementArrow movementArrow,
-                            Set<LogicalUnit> attackableUnits) {
+                            Set<LogicalUnit> attackableUnits,
+                            InteractiveGameState previousState) {
       _interactiveWarGame = interactiveWarGame;
       _warGameQueries = warGameQueries;
       _warGameMoves = warGameMoves;
       _logicalUnit = logicalUnit;
       _movementArrow = movementArrow;
-      _attackableUnits = new ArrayList<LogicalUnit>(attackableUnits);
+      _attackableUnits = new ArrayList<>(attackableUnits);
+      _previousState = previousState;
       _currentlySelectedTargetIndex = 0;
       _interactiveWarGame.showAttackCursorOnUnit(getTargetUnit());
       printAttackInfo();
@@ -57,9 +60,9 @@ public class SelectAttackState implements InteractiveGameState {
       _warGameMoves.executeAttackMove(_logicalUnit, _movementArrow.getPath(), defendingUnit);
       _interactiveWarGame.stopIndicatingPositions();
       _interactiveWarGame.hideAttackCursor();
-      _interactiveWarGame.setMovementArrowController(null);
+      _interactiveWarGame.hideMovementArrow();
       // TODO: Check if game was won!
-      return new StartingState(_interactiveWarGame, _warGameQueries, _warGameMoves);
+      return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
    }
 
    @Override
@@ -70,7 +73,7 @@ public class SelectAttackState implements InteractiveGameState {
    @Override
    public InteractiveGameState handleCancel() {
       _interactiveWarGame.hideAttackCursor();
-      return new ActionMenuState(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
+      return _previousState;
    }
 
    @Override

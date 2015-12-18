@@ -1,8 +1,8 @@
 package se.lolektivet.linus.linuswars.graphicalgame;
 
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.logic.LogicalUnit;
-import se.lolektivet.linus.linuswars.logic.LogicalWarGame;
+import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
+import se.lolektivet.linus.linuswars.logic.game.LogicalWarGame;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 
 /**

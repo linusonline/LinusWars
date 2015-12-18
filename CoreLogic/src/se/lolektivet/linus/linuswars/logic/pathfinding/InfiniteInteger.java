@@ -3,24 +3,24 @@ package se.lolektivet.linus.linuswars.logic.pathfinding;
 /**
  * Created by Linus on 2014-09-19.
  */
-public class PotentiallyInfiniteInteger {
+public class InfiniteInteger {
    private final int _specificInteger;
    private final boolean _isInfinite;
 
-   public static PotentiallyInfiniteInteger infinite() {
-      return new PotentiallyInfiniteInteger();
+   public static InfiniteInteger infinite() {
+      return new InfiniteInteger();
    }
 
-   public static PotentiallyInfiniteInteger create(int cost) {
-      return new PotentiallyInfiniteInteger(cost);
+   public static InfiniteInteger create(int cost) {
+      return new InfiniteInteger(cost);
    }
 
-   private PotentiallyInfiniteInteger(int specificCost) {
+   private InfiniteInteger(int specificCost) {
       _isInfinite = false;
       _specificInteger = specificCost;
    }
 
-   private PotentiallyInfiniteInteger() {
+   private InfiniteInteger() {
       _specificInteger = 0;
       _isInfinite = true;
    }
@@ -33,15 +33,15 @@ public class PotentiallyInfiniteInteger {
       return _specificInteger;
    }
 
-   static PotentiallyInfiniteInteger add(PotentiallyInfiniteInteger one, PotentiallyInfiniteInteger other) {
+   static InfiniteInteger add(InfiniteInteger one, InfiniteInteger other) {
       if (one.isInfinite() || other.isInfinite()) {
-         return PotentiallyInfiniteInteger.infinite();
+         return InfiniteInteger.infinite();
       } else {
-         return PotentiallyInfiniteInteger.create(one.getInteger() + other.getInteger());
+         return InfiniteInteger.create(one.getInteger() + other.getInteger());
       }
    }
 
-   boolean greaterThan(PotentiallyInfiniteInteger other) {
+   boolean greaterThan(InfiniteInteger other) {
       if (other.isInfinite()) {
          return false;
       } else {

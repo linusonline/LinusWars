@@ -1,5 +1,8 @@
-package se.lolektivet.linus.linuswars.logic;
+package se.lolektivet.linus.linuswars.logic.game;
 
+import se.lolektivet.linus.linuswars.logic.BasicWarGameQueries;
+import se.lolektivet.linus.linuswars.logic.Position;
+import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.pathfinding.Cost;
 import se.lolektivet.linus.linuswars.logic.pathfinding.Path;
 
@@ -10,6 +13,7 @@ import java.util.Set;
  */
 public interface WarGameQueries extends BasicWarGameQueries {
 
+   Set<LogicalUnit> getAllUnitsInActiveFaction();
    // For re-routing travel arrow when user is selecting path.
    Path getOptimalPathForUnitToDestination(LogicalUnit travellingUnit, Position destination);
    // For showing all reachable points for a unit.
@@ -21,7 +25,10 @@ public interface WarGameQueries extends BasicWarGameQueries {
    boolean hasActiveUnitAtPosition(Position position);
    Set<Position> getAdjacentVacantPositionsAfterMove(LogicalUnit movingUnit, Path path);
    Set<LogicalUnit> getAttackableUnitsAfterMove(LogicalUnit attackingUnit, Path path);
-   boolean unitsAreEnemies(LogicalUnit oneUnit, LogicalUnit otherUnit);
+   boolean areEnemies(Faction oneFaction, Faction anotherFaction);
+   boolean areEnemies(LogicalUnit oneUnit, LogicalUnit anotherUnit);
+   boolean areEnemies(LogicalUnit unit, Faction faction);
    Set<LogicalUnit> getSuppliableUnitsAfterMove(LogicalUnit supplier, Path path);
+   boolean hasEnemyBaseAtPosition(LogicalUnit movingUnit, Position position);
 
 }

@@ -1,5 +1,6 @@
-package se.lolektivet.linus.linuswars.logic;
+package se.lolektivet.linus.linuswars.logic.game;
 
+import se.lolektivet.linus.linuswars.logic.LogicException;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
 import se.lolektivet.linus.linuswars.logic.enums.UnitType;
 
@@ -9,11 +10,11 @@ import java.util.Map;
 /**
  * Created by Linus on 2014-09-18.
  */
-public class AttackLogic {
+class AttackLogic {
    private final Map<TerrainType, Integer> _defenseRatingForTerrainTypes;
    private final Map<UnitType, Map<UnitType, BaseDamage>> _baseDamageChart;
 
-   public AttackLogic() {
+   AttackLogic() {
       _defenseRatingForTerrainTypes = createDefenseRatingsForTerrain();
       _baseDamageChart = createBaseDamageChart();
    }

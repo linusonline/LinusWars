@@ -1,7 +1,8 @@
-package se.lolektivet.linus.linuswars.logic;
+package se.lolektivet.linus.linuswars.logic.game;
 
 import se.lolektivet.linus.linuswars.logic.enums.MovementType;
 import se.lolektivet.linus.linuswars.logic.enums.UnitType;
+import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
 
 /**
  * Created by Linus on 2014-09-18.

@@ -2,15 +2,15 @@ package se.lolektivet.linus.linuswars.pathfinding;
 
 import junit.framework.TestCase;
 import se.lolektivet.linus.linuswars.logic.pathfinding.Cost;
-import se.lolektivet.linus.linuswars.logic.pathfinding.PotentiallyInfiniteInteger;
+import se.lolektivet.linus.linuswars.logic.pathfinding.InfiniteInteger;
 
 /**
  * Created by Linus on 2014-09-24.
  */
 public class TestCost extends TestCase {
    public void testCost() {
-      final PotentiallyInfiniteInteger infinity = PotentiallyInfiniteInteger.infinite();
-      final PotentiallyInfiniteInteger finite = PotentiallyInfiniteInteger.create(3);
+      final InfiniteInteger infinity = InfiniteInteger.infinite();
+      final InfiniteInteger finite = InfiniteInteger.create(3);
       Cost cost1 = new Cost(finite, finite);
       Cost cost2 = new Cost(finite, finite);
       assertTrue(cost1.isEqualOrBetterThan(cost2));

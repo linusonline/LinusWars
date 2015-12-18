@@ -1,7 +1,9 @@
 package se.lolektivet.linus.linuswars.logic;
 
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
-import se.lolektivet.linus.linuswars.logic.pathfinding.PotentiallyInfiniteInteger;
+import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
+import se.lolektivet.linus.linuswars.logic.game.WarGameListener;
+import se.lolektivet.linus.linuswars.logic.pathfinding.InfiniteInteger;
 
 import java.util.Collection;
 import java.util.List;
@@ -47,10 +49,10 @@ public interface BasicWarGameQueries {
    Set<LogicalUnit> getUnitsAttackableByUnit(Set<LogicalUnit> targetUnits, LogicalUnit attacker);
 
    // Fuel and map
-   PotentiallyInfiniteInteger getFuelCostForUnitOnTile(LogicalUnit travellingUnit, Position tile);
+   InfiniteInteger getFuelCostForUnitOnTile(LogicalUnit travellingUnit, Position tile);
 
    // Movement and map
-   PotentiallyInfiniteInteger getTravelCostForUnitOnTile(LogicalUnit travellingUnit, Position tile);
+   InfiniteInteger getTravelCostForUnitOnTile(LogicalUnit travellingUnit, Position tile);
 
       // Extended
    Set<LogicalUnit> getAdjacentUnits(Position position);

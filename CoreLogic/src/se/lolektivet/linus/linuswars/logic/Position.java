@@ -37,7 +37,7 @@ public class Position {
       _y = y;
    }
 
-   Collection<Position> getAdjacentPositions() {
+   public Collection<Position> getAdjacentPositions() {
       Collection<Position> adjacentPositions = new HashSet<Position>(4);
       adjacentPositions.add(new Position(getX(), getY() + 1));
       adjacentPositions.add(new Position(getX(), getY() - 1));

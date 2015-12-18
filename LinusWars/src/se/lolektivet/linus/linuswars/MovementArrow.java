@@ -4,6 +4,7 @@ import se.lolektivet.linus.linuswars.graphics.MovementArrowSection;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.pathfinding.Path;
+import se.lolektivet.linus.linuswars.logic.pathfinding.PathFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +18,12 @@ public class MovementArrow {
    private final List<Direction> _listOfDirections;
 
    public MovementArrow(Position origin) {
-      this(new Path(new Position(origin), true));
+      this(PathFactory.create(new Position(origin), true));
    }
 
    public MovementArrow(Path arrowPath) {
       _spriteList = new ArrayList<>(arrowPath.getLength());
-      _arrowPath = new Path(arrowPath, true);
+      _arrowPath = PathFactory.create(arrowPath, true);
       _listOfDirections = new ArrayList<>(_spriteList.size());
    }
 
@@ -62,7 +63,7 @@ public class MovementArrow {
    }
 
    private MovementArrowSection getArrowSectionForDirections(Direction inDirection, Direction outDirection) {
-      assert !getMirror(inDirection).equals(outDirection);
+      assert !(getMirror(inDirection) == outDirection);
       assert inDirection != null;
       assert outDirection != null;
       if (directionPairsYieldSameArrowSection(inDirection, outDirection, Direction.UP, Direction.UP)) {
@@ -92,8 +93,8 @@ public class MovementArrow {
          Direction firstInPairTwo,
          Direction secondInPairTwo) {
       return directionsEqualPairWise(firstInPairOne, secondInPairOne, firstInPairTwo, secondInPairTwo) ||
-            (getMirror(firstInPairOne).equals(secondInPairTwo) &&
-                  getMirror(secondInPairOne).equals(firstInPairTwo));
+            (getMirror(firstInPairOne) == secondInPairTwo &&
+                  getMirror(secondInPairOne) == firstInPairTwo);
    }
 
    private Direction getMirror(Direction direction) {
@@ -115,8 +116,8 @@ public class MovementArrow {
          Direction secondInPairOne,
          Direction firstInPairTwo,
          Direction secondInPairTwo) {
-      return (firstInPairOne.equals(firstInPairTwo) &&
-            secondInPairOne.equals(secondInPairTwo));
+      return (firstInPairOne == firstInPairTwo &&
+            secondInPairOne == secondInPairTwo);
    }
 
    private Direction getDirection(Position fromPosition, Position toPosition) {
@@ -136,7 +137,7 @@ public class MovementArrow {
    }
 
    public Path getPath() {
-      return new Path(_arrowPath);
+      return PathFactory.create(_arrowPath);
    }
 
    public int getLength() {

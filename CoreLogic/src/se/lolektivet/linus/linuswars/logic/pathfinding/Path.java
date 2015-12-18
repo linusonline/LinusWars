@@ -10,31 +10,27 @@ import java.util.List;
  */
 public class Path {
 
-   private Position _origin;
+   private final Position _origin;
    private final List<Position> _pointsOnPath;
-   private int _length;
    private final boolean _isAutoBackTrack;
+   private int _length;
 
    private Path(Position origin, List<Position> pointsOnPath, boolean isAutoBackTrack) {
       _origin = origin;
-      _pointsOnPath = new ArrayList<Position>(pointsOnPath);
+      _pointsOnPath = new ArrayList<>(pointsOnPath);
       _length = _pointsOnPath.size();
       _isAutoBackTrack = isAutoBackTrack;
    }
 
-   public Path(Position origin) {
-      this(origin, false);
+   Path(Position origin, boolean isAutoBackTrack) {
+      this(origin, new ArrayList<>(0), isAutoBackTrack);
    }
 
-   public Path(Position origin, boolean isAutoBackTrack) {
-      this(origin, new ArrayList<Position>(0), isAutoBackTrack);
-   }
-
-   public Path(Path otherPath) {
+   Path(Path otherPath) {
       this(otherPath._origin, otherPath._pointsOnPath, otherPath._isAutoBackTrack);
    }
 
-   public Path(Path otherPath, boolean isAutoBackTrack) {
+   Path(Path otherPath, boolean isAutoBackTrack) {
       this(otherPath._origin, otherPath._pointsOnPath, isAutoBackTrack);
    }
 
@@ -51,7 +47,7 @@ public class Path {
    }
 
    public List<Position> getPositionList() {
-      return new ArrayList<Position>(_pointsOnPath);
+      return new ArrayList<>(_pointsOnPath);
    }
 
    public int getLength() {
@@ -93,13 +89,14 @@ public class Path {
       }
       if (_isAutoBackTrack) {
          if (_length > 0) {
+            //noinspection ConstantConditions
             if (getPointBeforeLast().equals(newPoint)) {
                backUpOneStep();
                return;
             }
          }
       }
-      _pointsOnPath.add(newPoint);
+      _pointsOnPath.add(new Position(newPoint));
       _length++;
    }
 

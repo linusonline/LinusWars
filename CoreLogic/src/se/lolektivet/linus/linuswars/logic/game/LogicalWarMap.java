@@ -1,5 +1,9 @@
-package se.lolektivet.linus.linuswars.logic;
+package se.lolektivet.linus.linuswars.logic.game;
 
+import se.lolektivet.linus.linuswars.logic.InitializationException;
+import se.lolektivet.linus.linuswars.logic.LogicException;
+import se.lolektivet.linus.linuswars.logic.Position;
+import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
 
 import java.util.ArrayList;
@@ -15,6 +19,8 @@ public class LogicalWarMap {
    private int _mapSizeX;
    private int _mapSizeY;
 
+   private ModuleBases _basesModule;
+
    // TODO: Need way of specifying which properties belong to which faction. Problem is, maps should be playable with any factions!
    // Still, some properties might be owned by the same faction as one specific HQ.
 
@@ -22,16 +28,27 @@ public class LogicalWarMap {
       _terrainTiles = new HashMap<>();
       _mapSizeX = 0;
       _mapSizeY = 0;
+      _basesModule = new ModuleBases();
    }
 
    TerrainType getTerrainForTile(Position tile) {
-      return _terrainTiles.get(tile);
+      TerrainType type = _terrainTiles.get(tile);
+      if (type == null) {
+         throw new LogicException("Position " + tile + " is outside map!");
+      }
+      return type;
    }
 
-   public void setBuilding(int x, int y, TerrainType terrainType) {
+   public void setBuilding(int x, int y, TerrainType terrainType, Faction faction) {
       if (!terrainType.isBuilding()) {
          throw new InitializationException();
       }
+      Position tilePosition = new Position(x, y);
+      TerrainType previousType = _terrainTiles.get(tilePosition);
+      if (previousType.isBuilding()) {
+         throw new InitializationException("Tried to set two bases at same position!");
+      }
+      _basesModule.addBase(tilePosition, terrainType, faction);
       internalSetTerrainType(x, y, terrainType);
    }
 
@@ -60,16 +77,16 @@ public class LogicalWarMap {
       if (_mapSizeX * _mapSizeY != _terrainTiles.size()) {
          throw new MapUninitializedException("Some tiles of the map were not set!");
       }
+      _basesModule.validateSetup();
    }
 
-   public List<Position> findHqs() {
-      List<Position> positionsOfHqs = new ArrayList<Position>();
-      for (Map.Entry<Position, TerrainType> entry : _terrainTiles.entrySet()) {
-         if (entry.getValue().equals(TerrainType.HQ)) {
-            positionsOfHqs.add(entry.getKey());
-         }
+   ModuleBases takeOverBasesModule() {
+      if (_basesModule == null) {
+         throw new InitializationException("Bases Module already taken over from LogicalWarMap!");
       }
-      return positionsOfHqs;
+      ModuleBases basesModule = _basesModule;
+      _basesModule = null;
+      return basesModule;
    }
 
    public int getWidth() {

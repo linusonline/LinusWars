@@ -6,7 +6,9 @@ import se.lolektivet.linus.linuswars.graphics.*;
 import se.lolektivet.linus.linuswars.logic.*;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
+import se.lolektivet.linus.linuswars.logic.game.*;
 import se.lolektivet.linus.linuswars.maps.GameSetup1;
+import se.lolektivet.linus.linuswars.maps.Map1;
 import se.lolektivet.linus.linuswars.maps.Map2;
 
 import java.util.ArrayList;
@@ -30,20 +32,6 @@ public class LinusWarsGame extends BasicGame {
 
    private Font _mainFont;
 
-   private LogicalWarGame createGameFromMapAndFactions(LogicalWarMap logicalWarMap, List<Faction> factions) {
-      LogicalWarGame logicalWarGame = new LogicalWarGame(logicalWarMap, factions);
-      List<Position> hqs = logicalWarMap.findHqs();
-      if (hqs.size() != factions.size()) {
-         throw new RuntimeException("This map needs " + hqs.size() + " factions, but you supplied " + factions.size());
-      }
-      int factionIndex = 0;
-      for (Position hqPosition : hqs) {
-         logicalWarGame.setFactionForProperty(hqPosition, factions.get(factionIndex));
-         factionIndex++;
-      }
-      return logicalWarGame;
-   }
-
    @Override
    public void init(GameContainer gc) throws SlickException {
       // System.out.println("Container: [ " + gc.getWidth() + "," + gc.getHeight() + "], Screen: [" + gc.getScreenWidth() + "," + gc.getScreenHeight() + "]");
@@ -54,23 +42,21 @@ public class LinusWarsGame extends BasicGame {
       LogicalWarMap logicalWarMap = new LogicalWarMap();
       GraphicalWarMap graphicalWarMap = new GraphicalWarMap(logicalWarMap);
       MapMaker mapMaker = new GraphicalAndLogicalMapMaker(_allSprites, logicalWarMap, graphicalWarMap);
-      Map2 map = new Map2(new RowMapMaker(mapMaker));
+      Map2 map = new Map2(mapMaker);
       map.create();
-      mapMaker.validate();
 
       List<Faction> factions = new ArrayList<>(2);
       factions.add(Faction.ORANGE_STAR);
       factions.add(Faction.BLUE_MOON);
-      LogicalWarGame logicalWarGame = createGameFromMapAndFactions(logicalWarMap, factions);
-      WarGameQueries warGameQueries = new WarGameQueriesImpl(logicalWarGame);
-      logicalWarGame.setQueries(warGameQueries);
+      LogicalWarGameCreator gameCreator = new LogicalWarGameCreator();
+      LogicalWarGame logicalWarGame = gameCreator.createGameFromMapAndFactions(logicalWarMap, factions);
 
       ScrollingTileViewImpl scrollingTileViewImpl = new ScrollingTileViewImpl();
       scrollingTileViewImpl.setVisibleRectSize(15, 10);
-      GraphicalWarGame graphicalWarGame = new GraphicalWarGame(warGameQueries);
+      GraphicalWarGame graphicalWarGame = new GraphicalWarGame(logicalWarGame);
       graphicalWarGame.init(_allSprites);
       graphicalWarGame.setMap(graphicalWarMap);
-      _interactiveWarGame = new InteractiveWarGame(graphicalWarGame, warGameQueries, scrollingTileViewImpl);
+      _interactiveWarGame = new InteractiveWarGame(graphicalWarGame, logicalWarGame, scrollingTileViewImpl);
       _interactiveWarGame.init(_allSprites);
 
       // Deploy logical units
@@ -84,7 +70,7 @@ public class LinusWarsGame extends BasicGame {
       logicalWarGame.callGameStart();
       graphicalWarGame.callGameStart();
 
-      _gameState = new StartingState(_interactiveWarGame, warGameQueries, logicalWarGame);
+      _gameState = new StateStarting(_interactiveWarGame, logicalWarGame, logicalWarGame);
    }
 
    @Override

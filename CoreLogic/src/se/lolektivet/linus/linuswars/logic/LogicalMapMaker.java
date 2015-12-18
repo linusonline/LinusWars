@@ -3,6 +3,7 @@ package se.lolektivet.linus.linuswars.logic;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainTile;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
+import se.lolektivet.linus.linuswars.logic.game.LogicalWarMap;
 
 /**
  * Created by Linus on 2014-09-24.
@@ -21,7 +22,7 @@ public class LogicalMapMaker implements MapMaker {
 
    @Override
    public void addBuilding(TerrainType buildingType, Faction faction, int x, int y) {
-      _logicalWarMap.setBuilding(x, y, buildingType);
+      _logicalWarMap.setBuilding(x, y, buildingType, faction);
    }
 
    @Override
