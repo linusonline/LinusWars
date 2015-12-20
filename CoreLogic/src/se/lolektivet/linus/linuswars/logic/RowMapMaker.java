@@ -7,8 +7,8 @@ import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
 /**
  * Created by Linus on 2015-11-23.
  */
-public class RowMapMaker {
-   private final MapMaker _mapMaker;
+public abstract class RowMapMaker {
+   private MapMaker _mapMaker;
 
    private int _currentPlaceInRow;
    private int _currentRow;
@@ -17,12 +17,15 @@ public class RowMapMaker {
    private boolean _buildingAdded;
    private int _expectedNumberOfRows;
 
-   protected RowMapMaker(MapMaker mapMaker, int totalNumberOfRows) {
-      _mapMaker = mapMaker;
+   protected RowMapMaker() {
       _currentPlaceInRow = 0;
       _currentRow = 0;
       _widthDetermined = false;
       _buildingAdded = false;
+   }
+
+   protected void init(MapMaker mapMaker, int totalNumberOfRows) {
+      _mapMaker = mapMaker;
       _expectedNumberOfRows = totalNumberOfRows;
    }
 

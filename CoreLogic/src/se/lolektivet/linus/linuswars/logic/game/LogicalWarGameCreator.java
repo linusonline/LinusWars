@@ -8,7 +8,7 @@ import java.util.List;
  * Created by Linus on 2015-12-02.
  */
 public class LogicalWarGameCreator {
-   public LogicalWarGame createGameFromMapAndFactions(LogicalWarMap logicalWarMap, List<Faction> factions) {
+   public LogicalWarGame createGameFromMapAndFactions(LogicalWarMapImpl logicalWarMap, List<Faction> factions) {
 
       // TODO: Separate init steps:
       // 1. create logical map

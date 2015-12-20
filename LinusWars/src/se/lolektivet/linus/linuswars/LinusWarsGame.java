@@ -8,7 +8,6 @@ import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.game.*;
 import se.lolektivet.linus.linuswars.maps.GameSetup1;
-import se.lolektivet.linus.linuswars.maps.Map1;
 import se.lolektivet.linus.linuswars.maps.Map2;
 
 import java.util.ArrayList;
@@ -39,11 +38,11 @@ public class LinusWarsGame extends BasicGame {
       _allSprites = Sprites.initializeSprites();
       _mainFont = _allSprites.getMainFont();
 
-      LogicalWarMap logicalWarMap = new LogicalWarMap();
+      LogicalWarMapImpl logicalWarMap = new LogicalWarMapImpl();
       GraphicalWarMap graphicalWarMap = new GraphicalWarMap(logicalWarMap);
       MapMaker mapMaker = new GraphicalAndLogicalMapMaker(_allSprites, logicalWarMap, graphicalWarMap);
-      Map2 map = new Map2(mapMaker);
-      map.create();
+      Map2 map = new Map2();
+      map.create(mapMaker);
 
       List<Faction> factions = new ArrayList<>(2);
       factions.add(Faction.ORANGE_STAR);

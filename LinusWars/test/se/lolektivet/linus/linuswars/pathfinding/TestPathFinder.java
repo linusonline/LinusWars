@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 import se.lolektivet.linus.linuswars.logic.*;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.game.LogicalWarGame;
-import se.lolektivet.linus.linuswars.logic.game.LogicalWarMap;
+import se.lolektivet.linus.linuswars.logic.game.LogicalWarMapImpl;
 import se.lolektivet.linus.linuswars.maps.Map1;
 
 import java.util.ArrayList;
@@ -19,10 +19,10 @@ public class TestPathFinder extends TestCase {
    private LogicalWarGame _logicalWarGame;
 
    public void setUp() {
-      LogicalWarMap logicalWarMap = new LogicalWarMap();
+      LogicalWarMapImpl logicalWarMap = new LogicalWarMapImpl();
       MapMaker mapMaker = new LogicalMapMaker(logicalWarMap);
-      Map1 map = new Map1(mapMaker);
-      map.create();
+      Map1 map = new Map1();
+      map.create(mapMaker);
       List<Faction> factions = new ArrayList<Faction>(2);
       factions.add(Faction.ORANGE_STAR);
       factions.add(Faction.BLUE_MOON);

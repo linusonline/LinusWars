@@ -1,21 +1,21 @@
 package se.lolektivet.linus.linuswars.graphicalgame;
 
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.logic.game.LogicalWarMap;
 import se.lolektivet.linus.linuswars.logic.MapMaker;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainTile;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
+import se.lolektivet.linus.linuswars.logic.game.LogicalWarMapImpl;
 
 /**
  * Created by Linus on 2014-09-22.
  */
 public class GraphicalAndLogicalMapMaker implements MapMaker {
-   private final LogicalWarMap _logicalWarMap;
+   private final LogicalWarMapImpl _logicalWarMap;
    private final GraphicalWarMap _graphicalWarMap;
    private final Sprites _sprites;
 
-   public GraphicalAndLogicalMapMaker(Sprites sprites, LogicalWarMap logicalWarMap, GraphicalWarMap graphicalWarMap) {
+   public GraphicalAndLogicalMapMaker(Sprites sprites, LogicalWarMapImpl logicalWarMap, GraphicalWarMap graphicalWarMap) {
       _logicalWarMap = logicalWarMap;
       _graphicalWarMap = graphicalWarMap;
       _sprites = sprites;

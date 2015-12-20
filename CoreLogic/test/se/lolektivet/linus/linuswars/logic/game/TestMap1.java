@@ -2,6 +2,7 @@ package se.lolektivet.linus.linuswars.logic.game;
 
 import se.lolektivet.linus.linuswars.logic.MapMaker;
 import se.lolektivet.linus.linuswars.logic.RowMapMaker;
+import se.lolektivet.linus.linuswars.logic.WarMap;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainTile;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
@@ -9,12 +10,11 @@ import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
 /**
  * Created by Linus on 2014-09-21.
  */
-public class TestMap1 extends RowMapMaker {
-   public TestMap1(MapMaker mapMaker) {
-      super(mapMaker, 4);
-   }
+public class TestMap1 extends RowMapMaker implements WarMap {
 
-   public void create() {
+   @Override
+   public void create(MapMaker mapMaker) {
+      super.init(mapMaker, 4);
       addTerrain(TerrainTile.PLAIN);
       addTerrain(TerrainTile.PLAIN);
       addTerrain(TerrainTile.PLAIN);
