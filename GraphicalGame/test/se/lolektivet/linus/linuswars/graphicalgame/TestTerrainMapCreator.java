@@ -63,6 +63,17 @@ public class TestTerrainMapCreator {
    }
 
    @Test
+   public void testSingleMountain() {
+      MapTestCase testCase = new MapTestCase();
+      testCase.addTerrain(new Position(0, 0), TerrainType.MOUNTAINS, TerrainTile.MOUNTAIN_SMALL);
+      testCase.setSize(1, 1);
+
+      TerrainMap terrainMap = _terrainMapCreator.create(testCase.getLogicalMapMock());
+
+      Assert.assertTrue(testCase.pass(terrainMap));
+   }
+
+   @Test
    public void testDoublePlain() {
       MapTestCase testCase = new MapTestCase();
       testCase.addTerrain(new Position(0, 0), TerrainType.PLAINS, TerrainTile.PLAIN);

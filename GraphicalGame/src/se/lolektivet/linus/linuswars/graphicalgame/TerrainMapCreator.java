@@ -25,6 +25,7 @@ public class TerrainMapCreator {
       _defaults.put(TerrainType.ROAD, TerrainTile.ROAD_HORIZONTAL);
       _defaults.put(TerrainType.WOODS, TerrainTile.WOODS_SINGLE);
       _defaults.put(TerrainType.BRIDGE, TerrainTile.BRIDGE_HORIZONTAL);
+      _defaults.put(TerrainType.MOUNTAINS, TerrainTile.MOUNTAIN_SMALL);
    }
 
    public TerrainMap create(LogicalWarMap logicalWarMap) {
