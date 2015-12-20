@@ -25,6 +25,7 @@ class MovementLogic {
       costsForTreads.put(TerrainType.PLAINS, InfiniteInteger.create(1));
       costsForTreads.put(TerrainType.WOODS, InfiniteInteger.create(2));
       costsForTreads.put(TerrainType.MOUNTAINS, InfiniteInteger.infinite());
+      costsForTreads.put(TerrainType.BRIDGE, InfiniteInteger.create(1));
       costsForTreads.put(TerrainType.CITY, InfiniteInteger.create(1));
       costsForTreads.put(TerrainType.BASE, InfiniteInteger.create(1));
       costsForTreads.put(TerrainType.AIRPORT, InfiniteInteger.create(1));
@@ -40,6 +41,7 @@ class MovementLogic {
       costsForTires.put(TerrainType.PLAINS, InfiniteInteger.create(2));
       costsForTires.put(TerrainType.WOODS, InfiniteInteger.create(3));
       costsForTires.put(TerrainType.MOUNTAINS, InfiniteInteger.infinite());
+      costsForTires.put(TerrainType.BRIDGE, InfiniteInteger.create(1));
       costsForTires.put(TerrainType.CITY, InfiniteInteger.create(1));
       costsForTires.put(TerrainType.BASE, InfiniteInteger.create(1));
       costsForTires.put(TerrainType.AIRPORT, InfiniteInteger.create(1));
@@ -55,6 +57,7 @@ class MovementLogic {
       costsForFoot.put(TerrainType.PLAINS, InfiniteInteger.create(1));
       costsForFoot.put(TerrainType.WOODS, InfiniteInteger.create(1));
       costsForFoot.put(TerrainType.MOUNTAINS, InfiniteInteger.create(2));
+      costsForFoot.put(TerrainType.BRIDGE, InfiniteInteger.create(1));
       costsForFoot.put(TerrainType.CITY, InfiniteInteger.create(1));
       costsForFoot.put(TerrainType.BASE, InfiniteInteger.create(1));
       costsForFoot.put(TerrainType.AIRPORT, InfiniteInteger.create(1));
@@ -70,6 +73,7 @@ class MovementLogic {
       costsForMech.put(TerrainType.PLAINS, InfiniteInteger.create(1));
       costsForMech.put(TerrainType.WOODS, InfiniteInteger.create(1));
       costsForMech.put(TerrainType.MOUNTAINS, InfiniteInteger.create(1));
+      costsForMech.put(TerrainType.BRIDGE, InfiniteInteger.create(1));
       costsForMech.put(TerrainType.CITY, InfiniteInteger.create(1));
       costsForMech.put(TerrainType.BASE, InfiniteInteger.create(1));
       costsForMech.put(TerrainType.AIRPORT, InfiniteInteger.create(1));
@@ -85,6 +89,7 @@ class MovementLogic {
       costsForSea.put(TerrainType.PLAINS, InfiniteInteger.infinite());
       costsForSea.put(TerrainType.WOODS, InfiniteInteger.infinite());
       costsForSea.put(TerrainType.MOUNTAINS, InfiniteInteger.infinite());
+      costsForSea.put(TerrainType.BRIDGE, InfiniteInteger.infinite());
       costsForSea.put(TerrainType.CITY, InfiniteInteger.infinite());
       costsForSea.put(TerrainType.BASE, InfiniteInteger.infinite());
       costsForSea.put(TerrainType.AIRPORT, InfiniteInteger.infinite());
@@ -100,6 +105,7 @@ class MovementLogic {
       costsForSeaTransport.put(TerrainType.PLAINS, InfiniteInteger.infinite());
       costsForSeaTransport.put(TerrainType.WOODS, InfiniteInteger.infinite());
       costsForSeaTransport.put(TerrainType.MOUNTAINS, InfiniteInteger.infinite());
+      costsForSeaTransport.put(TerrainType.BRIDGE, InfiniteInteger.infinite());
       costsForSeaTransport.put(TerrainType.CITY, InfiniteInteger.infinite());
       costsForSeaTransport.put(TerrainType.BASE, InfiniteInteger.infinite());
       costsForSeaTransport.put(TerrainType.AIRPORT, InfiniteInteger.infinite());
@@ -115,6 +121,7 @@ class MovementLogic {
       costsForAir.put(TerrainType.PLAINS, InfiniteInteger.create(1));
       costsForAir.put(TerrainType.WOODS, InfiniteInteger.create(1));
       costsForAir.put(TerrainType.MOUNTAINS, InfiniteInteger.create(1));
+      costsForAir.put(TerrainType.BRIDGE, InfiniteInteger.create(1));
       costsForAir.put(TerrainType.CITY, InfiniteInteger.create(1));
       costsForAir.put(TerrainType.BASE, InfiniteInteger.create(1));
       costsForAir.put(TerrainType.AIRPORT, InfiniteInteger.create(1));

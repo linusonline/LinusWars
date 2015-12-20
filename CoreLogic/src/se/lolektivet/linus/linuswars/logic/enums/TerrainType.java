@@ -10,6 +10,7 @@ public enum TerrainType {
    PLAINS,
    WOODS,
    MOUNTAINS,
+   BRIDGE,
 
    CITY,
    BASE,

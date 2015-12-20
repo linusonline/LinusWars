@@ -43,6 +43,17 @@ class Terrain {
       setSpriteCoordinatesForTile(TerrainTile.ROAD_BEND_NW, 19, 0);
       setSpriteCoordinatesForTile(TerrainTile.ROAD_BEND_SE, 20, 0);
       setSpriteCoordinatesForTile(TerrainTile.BRIDGE_HORIZONTAL, 21, 0);
+
+      // No sprites for these yet.
+      setSpriteCoordinatesForTile(TerrainTile.BRIDGE_VERTICAL, 0, 0);
+      setSpriteCoordinatesForTile(TerrainTile.ROAD_T_SOUTH, 0, 0);
+      setSpriteCoordinatesForTile(TerrainTile.ROAD_T_NORTH, 0, 0);
+      setSpriteCoordinatesForTile(TerrainTile.ROAD_T_WEST, 0, 0);
+      setSpriteCoordinatesForTile(TerrainTile.ROAD_T_EAST, 0, 0);
+      setSpriteCoordinatesForTile(TerrainTile.ROAD_X, 0, 0);
+      setSpriteCoordinatesForTile(TerrainTile.RIVER_T_WEST, 0, 0);
+      setSpriteCoordinatesForTile(TerrainTile.RIVER_T_EAST, 0, 0);
+      setSpriteCoordinatesForTile(TerrainTile.RIVER_X, 0, 0);
    }
 
    private void setSpriteCoordinatesForTile(TerrainTile tile, int x, int y) {
