@@ -19,10 +19,6 @@ public class LogicalWarGameCreator {
       // 6. deploy units with SAME faction replacement as in step 2!
 
       ModuleBases basesModule = logicalWarMap.takeOverBasesModule();
-      if (basesModule.getFactions().size() != factions.size()) {
-         throw new RuntimeException("This map needs " + basesModule.getFactions().size() + " factions, but you supplied " + factions.size());
-      }
-      basesModule.replaceFactions(factions);
 
       LogicalWarGame logicalWarGame = new LogicalWarGame(logicalWarMap, factions);
       logicalWarGame.setBases(basesModule);

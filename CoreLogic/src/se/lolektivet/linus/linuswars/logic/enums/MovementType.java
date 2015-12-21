@@ -3,8 +3,7 @@ package se.lolektivet.linus.linuswars.logic.enums;
 /**
  * Created by Linus on 2014-09-18.
  */
-public enum MovementType
-{
+public enum MovementType {
     FOOT,
     MECH,
     TREADS,

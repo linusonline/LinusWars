@@ -7,6 +7,7 @@ import se.lolektivet.linus.linuswars.logic.*;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.game.*;
+import se.lolektivet.linus.linuswars.maps.GameSetup;
 import se.lolektivet.linus.linuswars.maps.GameSetup1;
 import se.lolektivet.linus.linuswars.maps.Map2;
 
@@ -38,15 +39,30 @@ public class LinusWarsGame extends BasicGame {
       _allSprites = Sprites.initializeSprites();
       _mainFont = _allSprites.getMainFont();
 
+      List<Faction> factions = new ArrayList<>(2);
+      factions.add(Faction.BLUE_MOON);
+      factions.add(Faction.ORANGE_STAR);
+
+      Map2 map = new Map2();
+      GameSetup gameSetup = new GameSetup1();
+
+      startGame(map, gameSetup, factions);
+   }
+
+   private void startGame(WarMap warMap, GameSetup gameSetup, List<Faction> factions) {
+      if (warMap.getNrOfFactions() != factions.size()) {
+         throw new RuntimeException("This map needs " + warMap.getNrOfFactions() + " factions, but you supplied " + factions.size());
+      }
+
+      if (gameSetup.getNrOfFactions() != factions.size()) {
+         throw new RuntimeException("This setup needs " + gameSetup.getNrOfFactions() + " factions, but you supplied " + factions.size());
+      }
+
       LogicalWarMapImpl logicalWarMap = new LogicalWarMapImpl();
       GraphicalWarMap graphicalWarMap = new GraphicalWarMap(logicalWarMap);
       MapMaker mapMaker = new GraphicalAndLogicalMapMaker(_allSprites, logicalWarMap, graphicalWarMap);
-      Map2 map = new Map2();
-      map.create(mapMaker);
+      warMap.create(mapMaker, factions);
 
-      List<Faction> factions = new ArrayList<>(2);
-      factions.add(Faction.ORANGE_STAR);
-      factions.add(Faction.BLUE_MOON);
       LogicalWarGameCreator gameCreator = new LogicalWarGameCreator();
       LogicalWarGame logicalWarGame = gameCreator.createGameFromMapAndFactions(logicalWarMap, factions);
 
@@ -59,7 +75,7 @@ public class LinusWarsGame extends BasicGame {
       _interactiveWarGame.init(_allSprites);
 
       // Deploy logical units
-      new GameSetup1().preDeploy(new LogicalGamePredeployer(logicalWarGame, new LogicalUnitFactory()));
+      gameSetup.preDeploy(new LogicalGamePredeployer(logicalWarGame, new LogicalUnitFactory()), factions);
 
       // Deploy graphical units
       GraphicalGamePreDeployer graphicalGamePreDeployer = new GraphicalGamePreDeployer();

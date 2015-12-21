@@ -132,7 +132,7 @@ class MoveAnalyzer {
    }
 
    private boolean canCaptureAtDestination() {
-      return _warGameQueries.hasEnemyBaseAtPosition(_logicalUnit, _thePath.getFinalPosition());
+      return _logicalUnit.canCapture() &&
+            _warGameQueries.hasEnemyBaseAtPosition(_logicalUnit, _thePath.getFinalPosition());
    }
-
 }

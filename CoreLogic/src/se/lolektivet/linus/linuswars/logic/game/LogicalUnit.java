@@ -103,8 +103,9 @@ public class LogicalUnit {
       return !_isRanged && !_isTransport;
    }
 
-   boolean canCapture() {
-      return _movement == MovementType.FOOT;
+   public boolean canCapture() {
+      return _movement == MovementType.FOOT ||
+            _movement == MovementType.MECH;
    }
 
    public int getBaseMovementRange() {

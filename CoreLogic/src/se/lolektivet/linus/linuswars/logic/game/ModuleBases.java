@@ -64,10 +64,6 @@ public class ModuleBases {
       return _hqsOfFactions.get(faction);
    }
 
-   public int getNumberOfHqs() {
-      return _hqsOfFactions.size();
-   }
-
    public List<Faction> getFactions() {
       if (_listOfFactions == null) {
          _listOfFactions = new ArrayList<>(_basesForFaction.keySet());
@@ -82,41 +78,6 @@ public class ModuleBases {
       }
       if (getFactions().size() < 2) {
          throw new InitializationException("Setup must have at least two factions with one HQ each!");
-      }
-   }
-
-   public void replaceFactions(List<Faction> newFactions) {
-      List<Faction> oldFactions = getFactions();
-      if (newFactions.size() != oldFactions.size()) {
-         throw new InitializationException("Map has " + _basesForFaction.size() + " factions, tried to initialize with " + newFactions.size());
-      }
-
-      Map<Faction, Faction> factionReplacementMap = new HashMap<>(_basesForFaction.size());
-      for (int i = 0; i < newFactions.size(); i++) {
-         factionReplacementMap.put(oldFactions.get(i), newFactions.get(i));
-      }
-      factionReplacementMap.put(Faction.NEUTRAL, Faction.NEUTRAL);
-
-      {
-         Map<Faction, Collection<Base>> newBasesForFaction = new HashMap<>(_basesForFaction.size());
-         for (Map.Entry<Faction, Collection<Base>> entry : _basesForFaction.entrySet()) {
-            Faction newFaction = factionReplacementMap.get(entry.getKey());
-            for (Base base : entry.getValue()) {
-               base.setFaction(newFaction);
-            }
-            newBasesForFaction.put(newFaction, entry.getValue());
-         }
-         _basesForFaction.clear();
-         _basesForFaction.putAll(newBasesForFaction);
-      }
-
-      {
-         Map<Faction, Position> newHqsOfFactions = new HashMap<>(_basesForFaction.size());
-         for (Map.Entry<Faction, Position> entry : _hqsOfFactions.entrySet()) {
-            newHqsOfFactions.put(factionReplacementMap.get(entry.getKey()), entry.getValue());
-         }
-         _hqsOfFactions.clear();
-         _hqsOfFactions.putAll(newHqsOfFactions);
       }
    }
 }
