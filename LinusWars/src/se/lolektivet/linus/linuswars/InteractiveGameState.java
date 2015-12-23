@@ -13,6 +13,7 @@ public interface InteractiveGameState {
    InteractiveGameState handleExecuteUp();
    InteractiveGameState handleCancel();
    InteractiveGameState handleDirection(Direction direction);
+   InteractiveGameState update();
    void setSprites(Sprites sprites);
    void draw(GameContainer gc, Font font, int x, int y);
 }

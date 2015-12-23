@@ -87,7 +87,7 @@ public class LinusWarsGame extends BasicGame {
       logicalWarGame.callGameStart();
       graphicalWarGame.callGameStart();
 
-      _gameState = new StateStarting(_interactiveWarGame, logicalWarGame, logicalWarGame);
+      _gameState = new StateTurnTransition(_interactiveWarGame, logicalWarGame, logicalWarGame);
    }
 
    @Override
@@ -138,7 +138,11 @@ public class LinusWarsGame extends BasicGame {
    }
 
    @Override
-   public void update(GameContainer gc, int i) throws SlickException {}
+   public void update(GameContainer gc, int i) throws SlickException {
+      synchronized (_gameStateLock) {
+         _gameState = _gameState.update();
+      }
+   }
 
    @Override
    public void render(GameContainer gc, Graphics graphics) throws SlickException {

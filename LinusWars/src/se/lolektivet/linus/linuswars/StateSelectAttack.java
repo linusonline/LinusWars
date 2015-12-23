@@ -65,7 +65,7 @@ public class StateSelectAttack implements InteractiveGameState {
       _interactiveWarGame.hideAttackCursor();
       _interactiveWarGame.hideMovementArrow();
       // TODO: Check if game was won!
-      return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
+      return new StateTurnTransition(_interactiveWarGame, _warGameQueries, _warGameMoves);
    }
 
    @Override
@@ -100,6 +100,11 @@ public class StateSelectAttack implements InteractiveGameState {
       }
       _interactiveWarGame.showAttackCursorOnUnit(getTargetUnit());
       printAttackInfo();
+      return this;
+   }
+
+   @Override
+   public InteractiveGameState update() {
       return this;
    }
 

@@ -14,10 +14,12 @@ public class StateQuickMenu implements InteractiveGameState {
    private final InteractiveWarGame _interactiveWarGame;
    private final WarGameQueries _warGameQueries;
    private final WarGameMoves _warGameMoves;
+   private final InteractiveGameState _previousState;
    private GraphicalMenu _theMenu;
    private Sprites _sprites;
 
-   public StateQuickMenu(InteractiveWarGame interactiveWarGame, WarGameQueries warGameQueries, WarGameMoves warGameMoves) {
+   public StateQuickMenu(InteractiveGameState previousState, InteractiveWarGame interactiveWarGame, WarGameQueries warGameQueries, WarGameMoves warGameMoves) {
+      _previousState = previousState;
       _interactiveWarGame = interactiveWarGame;
       _warGameQueries = warGameQueries;
       _warGameMoves = warGameMoves;
@@ -32,12 +34,12 @@ public class StateQuickMenu implements InteractiveGameState {
             _warGameMoves.endTurn();
             // TODO: Play end-of-turn animations, change some graphics and bg sound.
             System.out.println("Turn ended!");
-            break;
+            return new StateTurnTransition(_interactiveWarGame, _warGameQueries, _warGameMoves);
          case NOTHING:
-            break;
+            return _previousState;
          default:
+            return this;
       }
-      return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
    }
 
    @Override
@@ -47,12 +49,17 @@ public class StateQuickMenu implements InteractiveGameState {
 
    @Override
    public InteractiveGameState handleCancel() {
-      return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
+      return _previousState;
    }
 
    @Override
    public InteractiveGameState handleDirection(Direction direction) {
       _theMenu.moveCursor(direction);
+      return this;
+   }
+
+   @Override
+   public InteractiveGameState update() {
       return this;
    }
 

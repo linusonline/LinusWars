@@ -101,6 +101,11 @@ public class StateSelectMove implements InteractiveGameState {
    }
 
    @Override
+   public InteractiveGameState update() {
+      return this;
+   }
+
+   @Override
    public void setSprites(Sprites sprites) {
       _reachablePositions = _warGameQueries.getAllReachablePoints(_logicalUnit);
       _interactiveWarGame.indicateSelectedPositions(_reachablePositions);

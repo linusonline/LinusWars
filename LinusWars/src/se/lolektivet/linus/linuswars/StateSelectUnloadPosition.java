@@ -62,7 +62,7 @@ public class StateSelectUnloadPosition implements InteractiveGameState {
       _interactiveWarGame.hideAttackCursor();
       _interactiveWarGame.showGraphicForUnit(unloadingUnit);
       _interactiveWarGame.setPositionOfGraphicForUnit(unloadingUnit, unloadingPosition);
-      return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
+      return new StateTurnTransition(_interactiveWarGame, _warGameQueries, _warGameMoves);
    }
 
    @Override
@@ -96,6 +96,11 @@ public class StateSelectUnloadPosition implements InteractiveGameState {
          _currentlySelectedPositionIndex -= _candidatePositions.size();
       }
       _interactiveWarGame.showAttackCursorOnPosition(getSelectedPosition());
+      return this;
+   }
+
+   @Override
+   public InteractiveGameState update() {
       return this;
    }
 

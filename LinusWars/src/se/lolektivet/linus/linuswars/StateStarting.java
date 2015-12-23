@@ -30,7 +30,7 @@ public class StateStarting implements InteractiveGameState {
          LogicalUnit logicalUnit = _warGameQueries.getUnitAtPosition(_interactiveWarGame.getCursorPosition());
          return new StateSelectMove(_interactiveWarGame, _warGameQueries, _warGameMoves, logicalUnit);
       } else {
-         return new StateQuickMenu(_interactiveWarGame, _warGameQueries, _warGameMoves);
+         return new StateQuickMenu(this, _interactiveWarGame, _warGameQueries, _warGameMoves);
       }
    }
 
@@ -54,6 +54,11 @@ public class StateStarting implements InteractiveGameState {
          _interactiveWarGame.moveCursor(direction);
       } catch (InteractiveWarGame.CursorOutsideMapException ignored) {
       }
+      return this;
+   }
+
+   @Override
+   public InteractiveGameState update() {
       return this;
    }
 
