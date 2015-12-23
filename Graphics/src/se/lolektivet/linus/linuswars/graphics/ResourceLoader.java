@@ -72,6 +72,14 @@ class ResourceLoader {
       return getImage(HUD_PATH + "goldnumbers.png");
    }
 
+   Image getDamageCounter() {
+      return getImage(HUD_PATH + "damagecounter.png");
+   }
+
+   Image getDamageNumbersSpriteSheet() {
+      return getImage(HUD_PATH + "damagenrs.png");
+   }
+
    private Image getImage(String path) {
       Image image;
       image = _imageCache.get(path);

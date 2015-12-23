@@ -4,21 +4,21 @@ import org.newdawn.slick.Renderable;
 import org.newdawn.slick.SpriteSheet;
 
 /**
- * Created by Linus on 2015-11-25.
+ * Created by Linus on 2015-12-23.
  */
-class MoneyNumbers {
+public class DamageNumbers {
    private SpriteSheet _spriteSheet;
 
    void init(ResourceLoader resourceLoader) {
       if (_spriteSheet == null) {
-         _spriteSheet = new SpriteSheet(resourceLoader.getMoneyNumbersSpriteSheet(), 8, 7);
+         _spriteSheet = new SpriteSheet(resourceLoader.getDamageNumbersSpriteSheet(), 7, 12);
       }
    }
 
-   Renderable getMoneyNumberImage(int nr) {
+   Renderable getDamageNumberImage(int nr) {
       if (nr < 0 || nr > 9) {
          throw new SpriteNotFoundException();
       }
-      return _spriteSheet.getSubImage(nr % 5, nr / 5);
+      return _spriteSheet.getSubImage(nr, 0);
    }
 }
