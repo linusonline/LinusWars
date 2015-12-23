@@ -112,7 +112,7 @@ public class GraphicalWarGame implements WarGameListener {
       }
    }
 
-   public void makeUnitFaceEnemyHq(LogicalUnit logicalUnit) {
+   private void makeUnitFaceEnemyHq(LogicalUnit logicalUnit) {
       Position unitPosition = _warGameQueries.getPositionOfUnit(logicalUnit);
       for (Faction otherFaction : _warGameQueries.getFactionsInGame()) {
          if (_warGameQueries.areEnemies(logicalUnit, otherFaction)) {
