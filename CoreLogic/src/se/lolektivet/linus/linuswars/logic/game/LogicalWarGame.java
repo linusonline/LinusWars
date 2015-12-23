@@ -717,7 +717,8 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       return new Cost(movementLimit, fuelLimit);
    }
 
-   private boolean unitHasMovedThisTurn(LogicalUnit unit) {
+   @Override
+   public boolean unitHasMovedThisTurn(LogicalUnit unit) {
       return unitBelongsToCurrentlyActiveFaction(unit) && !unitCanStillMoveThisTurn(unit);
    }
 

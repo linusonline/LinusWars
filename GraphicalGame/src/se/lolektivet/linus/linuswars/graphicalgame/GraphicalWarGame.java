@@ -137,7 +137,11 @@ public class GraphicalWarGame implements WarGameListener {
          if (hp < 10) {
             hpNumber = _sprites.getHpNumberImage(hp);
          }
-         entry.getValue().draw(x, y, hpNumber, tileView);
+         if (_warGameQueries.unitHasMovedThisTurn(entry.getKey())) {
+            entry.getValue().drawGreyed(x, y, hpNumber, tileView);
+         } else {
+            entry.getValue().draw(x, y, hpNumber, tileView);
+         }
       }
    }
 

@@ -32,7 +32,7 @@ public class UnitSprite {
       _movingUpAnimation = new Animation(unitSpriteSheet, 3, 2, 5, 2, true, 500, false);
    }
 
-   public Renderable getUnitSprite(Direction direction, boolean moving) {
+   public Animation getUnitSprite(Direction direction, boolean moving) {
       if (!moving && (direction == Direction.UP || direction == Direction.DOWN)) {
          throw new SpriteNotFoundException();
       }

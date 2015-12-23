@@ -21,6 +21,7 @@ public interface BasicWarGameQueries {
 
    boolean unitBelongsToCurrentlyActiveFaction(LogicalUnit unit);
    boolean unitCanStillMoveThisTurn(LogicalUnit logicalUnit);
+   boolean unitHasMovedThisTurn(LogicalUnit logicalUnit);
 
    boolean hasUnitAtPosition(Position position);
    LogicalUnit getUnitAtPosition(Position position);
