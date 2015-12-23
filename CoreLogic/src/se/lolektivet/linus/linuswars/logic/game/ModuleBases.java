@@ -52,6 +52,14 @@ public class ModuleBases {
       return new ArrayList<>(getBaseListForFaction(faction));
    }
 
+   public Collection<Base> getAllBases() {
+      Collection<Base> allBases = new HashSet<>();
+      for (Collection<Base> factionBases : _basesForFaction.values()) {
+         allBases.addAll(factionBases);
+      }
+      return allBases;
+   }
+
    public Base getBaseAtPosition(Position position) {
       return _baseAtPosition.get(position);
    }
