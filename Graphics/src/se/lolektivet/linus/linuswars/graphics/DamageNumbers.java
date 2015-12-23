@@ -6,7 +6,7 @@ import org.newdawn.slick.SpriteSheet;
 /**
  * Created by Linus on 2015-12-23.
  */
-public class DamageNumbers {
+class DamageNumbers {
    private SpriteSheet _spriteSheet;
 
    void init(ResourceLoader resourceLoader) {

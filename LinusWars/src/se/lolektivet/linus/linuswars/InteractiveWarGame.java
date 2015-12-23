@@ -6,6 +6,7 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import se.lolektivet.linus.linuswars.graphicalgame.GraphicalWarGame;
 import se.lolektivet.linus.linuswars.graphicalgame.ScrollingTileView;
+import se.lolektivet.linus.linuswars.graphicalgame.TileView;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
 import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.Position;
@@ -61,6 +62,10 @@ public class InteractiveWarGame {
 
    Position getCursorPosition() {
       return _cursorPosition;
+   }
+
+   TileView getTileView() {
+      return _scrollingTileView;
    }
 
    void moveCursor(Direction direction) throws CursorOutsideMapException {

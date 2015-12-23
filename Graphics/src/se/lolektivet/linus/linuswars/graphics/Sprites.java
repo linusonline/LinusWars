@@ -14,23 +14,39 @@ public class Sprites {
    private final Units _unitSpriteLoader;
    private final HpNumbers _hpNumbers;
    private final MoneyNumbers _moneyNumbers;
+   private final DamageCounterPane _damageCounterPane;
    private final DamageNumbers _damageNumbers;
    private final MovementArrowSprites _movementArrowSprites;
    private final Buildings _buildings;
    private final Terrain _terrain;
 
-   public static Sprites initializeSprites() {
-      Sprites sprites = new Sprites(new Units(), new HpNumbers(), new MovementArrowSprites(), new Buildings(), new Terrain(), new MoneyNumbers(), new DamageNumbers());
+   public static Sprites createSprites() {
+      Sprites sprites = new Sprites(new Units(),
+            new HpNumbers(),
+            new MovementArrowSprites(),
+            new Buildings(),
+            new Terrain(),
+            new MoneyNumbers(),
+            new DamageNumbers(),
+            new DamageCounterPane());
       ResourceLoader resourceLoader = new ResourceLoader();
       sprites.init(resourceLoader);
       return sprites;
    }
 
-   private Sprites(Units unitSpriteLoader, HpNumbers hpNumbers, MovementArrowSprites movementArrowSprites, Buildings buildings, Terrain terrain, MoneyNumbers moneyNumbers, DamageNumbers damageNumbers) {
+   private Sprites(Units unitSpriteLoader,
+                   HpNumbers hpNumbers,
+                   MovementArrowSprites movementArrowSprites,
+                   Buildings buildings,
+                   Terrain terrain,
+                   MoneyNumbers moneyNumbers,
+                   DamageNumbers damageNumbers,
+                   DamageCounterPane damageCounterPane) {
       _unitSpriteLoader = unitSpriteLoader;
       _hpNumbers = hpNumbers;
       _moneyNumbers = moneyNumbers;
       _damageNumbers = damageNumbers;
+      _damageCounterPane = damageCounterPane;
       _movementArrowSprites = movementArrowSprites;
       _buildings = buildings;
       _terrain = terrain;
@@ -43,6 +59,7 @@ public class Sprites {
       _hpNumbers.init(_resourceLoader);
       _moneyNumbers.init(_resourceLoader);
       _damageNumbers.init(_resourceLoader);
+      _damageCounterPane.init(_resourceLoader);
       _movementArrowSprites.init(_resourceLoader);
       _buildings.init(_resourceLoader);
       _terrain.init(_resourceLoader);
@@ -90,8 +107,12 @@ public class Sprites {
       return _damageNumbers.getDamageNumberImage(nr);
    }
 
-   public Renderable getDamageCounter() {
-      return _resourceLoader.getDamageCounter();
+   public Image getDamageCounterAbove() {
+      return _damageCounterPane.getDamageCounterAbove();
+   }
+
+   public Image getDamageCounterBelow() {
+      return _damageCounterPane.getDamageCounterBelow();
    }
 
    public Renderable getBuildingSprite(TerrainType buildingType, Faction faction) {

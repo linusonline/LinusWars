@@ -2,7 +2,9 @@ package se.lolektivet.linus.linuswars;
 
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Renderable;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
+import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.game.WarGameMoves;
 import se.lolektivet.linus.linuswars.logic.game.WarGameQueries;
@@ -25,6 +27,7 @@ public class StateSelectAttack implements InteractiveGameState {
    private final InteractiveGameState _previousState;
    private int _currentlySelectedTargetIndex;
    private GraphicalMenu _fireOrNothingMenu;
+   private DamageCounter _damageCounter;
 
    public StateSelectAttack(InteractiveWarGame interactiveWarGame,
                             WarGameQueries warGameQueries,
@@ -106,6 +109,10 @@ public class StateSelectAttack implements InteractiveGameState {
          _fireOrNothingMenu = new GraphicalMenu(sprites.getMenuCursor());
          _fireOrNothingMenu.addItem(ActionMenuItem.FIRE.getName());
       }
+      if (_damageCounter == null) {
+         _damageCounter = new DamageCounter();
+         _damageCounter.init(sprites);
+      }
    }
 
    @Override
@@ -117,5 +124,9 @@ public class StateSelectAttack implements InteractiveGameState {
    public void draw(GameContainer gc, Font font, int x, int y) {
       _interactiveWarGame.draw(gc, 0, 0);
       _fireOrNothingMenu.draw(gc.getGraphics(), font);
+      // Possible optimization to do here.
+      Position position = _warGameQueries.getPositionOfUnit(getTargetUnit());
+      int damage = _warGameQueries.calculateDamageInPercent(_logicalUnit, getTargetUnit());
+      _damageCounter.draw(position.getX(), position.getY(), _interactiveWarGame.getTileView(), damage);
    }
 }

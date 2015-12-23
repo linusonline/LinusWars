@@ -9,7 +9,6 @@ import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.game.*;
 import se.lolektivet.linus.linuswars.maps.GameSetup;
 import se.lolektivet.linus.linuswars.maps.GameSetup1;
-import se.lolektivet.linus.linuswars.maps.Map2;
 import se.lolektivet.linus.linuswars.maps.Map3;
 
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class LinusWarsGame extends BasicGame {
    public void init(GameContainer gc) throws SlickException {
       // System.out.println("Container: [ " + gc.getWidth() + "," + gc.getHeight() + "], Screen: [" + gc.getScreenWidth() + "," + gc.getScreenHeight() + "]");
 
-      _allSprites = Sprites.initializeSprites();
+      _allSprites = Sprites.createSprites();
       _mainFont = _allSprites.getMainFont();
 
       List<Faction> factions = new ArrayList<>(2);
