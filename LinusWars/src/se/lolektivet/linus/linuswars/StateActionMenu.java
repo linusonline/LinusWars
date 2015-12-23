@@ -78,7 +78,7 @@ public class StateActionMenu implements InteractiveGameState {
    private InteractiveGameState endMoveAndGoToStartingState() {
       _interactiveWarGame.stopIndicatingPositions();
       _interactiveWarGame.hideMovementArrow();
-      return new StateTurnTransition(_interactiveWarGame, _warGameQueries, _warGameMoves);
+      return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
    }
 
    @Override

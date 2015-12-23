@@ -62,7 +62,7 @@ public class StateSelectUnloadPosition implements InteractiveGameState {
       _interactiveWarGame.hideAttackCursor();
       _interactiveWarGame.showGraphicForUnit(unloadingUnit);
       _interactiveWarGame.setPositionOfGraphicForUnit(unloadingUnit, unloadingPosition);
-      return new StateTurnTransition(_interactiveWarGame, _warGameQueries, _warGameMoves);
+      return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
    }
 
    @Override

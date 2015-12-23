@@ -46,7 +46,12 @@ public class StateTurnTransition implements InteractiveGameState {
 
    @Override
    public InteractiveGameState update() {
-      return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
+      // TODO: This should probably be based on real time, and ignore the number of calls.
+      if (++steps > 2000) {
+         return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
+      } else {
+         return this;
+      }
    }
 
    @Override
@@ -54,8 +59,12 @@ public class StateTurnTransition implements InteractiveGameState {
 
    }
 
+   private int steps = 0;
    @Override
    public void draw(GameContainer gc, Font font, int x, int y) {
+      int i = _warGameQueries.getDayNumber();
       _interactiveWarGame.draw(gc, 0, 0);
+      font.drawString(100, 100, "Day " + i);
+//      gc.getGraphics().drawString("Day " + i, 100, 100);
    }
 }
