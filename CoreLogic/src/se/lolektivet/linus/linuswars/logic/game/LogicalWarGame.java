@@ -77,6 +77,11 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       return _logicalWarMap.getHeight();
    }
 
+   @Override
+   public int getDayNumber() {
+      return _turnOrderModule.getDayNumber();
+   }
+
    private void fireTransportedUnitDestroyed(LogicalUnit logicalUnit) {
       for (WarGameListener listener : _listeners) {
          listener.transportedUnitWasDestroyed(logicalUnit);

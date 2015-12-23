@@ -19,6 +19,8 @@ public interface BasicWarGameQueries {
    int getMapWidth();
    int getMapHeight();
 
+   int getDayNumber();
+
    boolean unitBelongsToCurrentlyActiveFaction(LogicalUnit unit);
    boolean unitCanStillMoveThisTurn(LogicalUnit logicalUnit);
    boolean unitHasMovedThisTurn(LogicalUnit logicalUnit);
