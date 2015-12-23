@@ -33,10 +33,14 @@ public class RowMapMaker {
    }
 
    public void addTerrain(TerrainTile terrainTile) {
+      addTerrain(terrainTile.getTerrainType());
+   }
+
+   public void addTerrain(TerrainType terrainType) {
       if (_buildingAdded) {
          throw new InitializationException("You must add all terrain before you start adding buildings!");
       }
-      _mapMaker.addTerrain(terrainTile, _currentPlaceInRow, _currentRow);
+      _mapMaker.addTerrain(terrainType, _currentPlaceInRow, _currentRow);
       _currentPlaceInRow++;
    }
 

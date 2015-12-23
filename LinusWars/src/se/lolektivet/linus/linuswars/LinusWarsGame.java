@@ -10,6 +10,7 @@ import se.lolektivet.linus.linuswars.logic.game.*;
 import se.lolektivet.linus.linuswars.maps.GameSetup;
 import se.lolektivet.linus.linuswars.maps.GameSetup1;
 import se.lolektivet.linus.linuswars.maps.Map2;
+import se.lolektivet.linus.linuswars.maps.Map3;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,7 @@ public class LinusWarsGame extends BasicGame {
       factions.add(Faction.BLUE_MOON);
       factions.add(Faction.ORANGE_STAR);
 
-      Map2 map = new Map2();
+      Map3 map = new Map3();
       GameSetup gameSetup = new GameSetup1();
 
       startGame(map, gameSetup, factions);
@@ -59,19 +60,21 @@ public class LinusWarsGame extends BasicGame {
       }
 
       LogicalWarMapImpl logicalWarMap = new LogicalWarMapImpl();
-      GraphicalWarMap graphicalWarMap = new GraphicalWarMap(logicalWarMap);
-      MapMaker mapMaker = new GraphicalAndLogicalMapMaker(_allSprites, logicalWarMap, graphicalWarMap);
+      MapMaker mapMaker = new LogicalMapMaker(logicalWarMap);
       warMap.create(mapMaker, factions);
+
+      GraphicalWarMap graphicalWarMap = GraphicalWarMap.createFromLogicalWarMap(_allSprites, logicalWarMap);
 
       LogicalWarGameCreator gameCreator = new LogicalWarGameCreator();
       LogicalWarGame logicalWarGame = gameCreator.createGameFromMapAndFactions(logicalWarMap, factions);
 
-      ScrollingTileViewImpl scrollingTileViewImpl = new ScrollingTileViewImpl();
-      scrollingTileViewImpl.setVisibleRectSize(15, 10);
       GraphicalWarGame graphicalWarGame = new GraphicalWarGame(logicalWarGame);
       graphicalWarGame.init(_allSprites);
       graphicalWarGame.setMap(graphicalWarMap);
-      _interactiveWarGame = new InteractiveWarGame(graphicalWarGame, logicalWarGame, scrollingTileViewImpl);
+
+      ScrollingTileViewImpl scrollingTileView = new ScrollingTileViewImpl();
+      scrollingTileView.setVisibleRectSize(15, 10);
+      _interactiveWarGame = new InteractiveWarGame(graphicalWarGame, logicalWarGame, scrollingTileView);
       _interactiveWarGame.init(_allSprites);
 
       // Deploy logical units

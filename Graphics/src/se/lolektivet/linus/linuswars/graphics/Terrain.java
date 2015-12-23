@@ -38,10 +38,10 @@ class Terrain {
       setSpriteCoordinatesForTile(TerrainTile.RIVER_T_NORTH, 10, 0);
       setSpriteCoordinatesForTile(TerrainTile.ROAD_HORIZONTAL, 15, 0);
       setSpriteCoordinatesForTile(TerrainTile.ROAD_VERTICAL, 16, 0);
-      setSpriteCoordinatesForTile(TerrainTile.ROAD_BEND_NE, 17, 0);
-      setSpriteCoordinatesForTile(TerrainTile.ROAD_BEND_SW, 18, 0);
-      setSpriteCoordinatesForTile(TerrainTile.ROAD_BEND_NW, 19, 0);
-      setSpriteCoordinatesForTile(TerrainTile.ROAD_BEND_SE, 20, 0);
+      setSpriteCoordinatesForTile(TerrainTile.ROAD_BEND_SW, 17, 0);
+      setSpriteCoordinatesForTile(TerrainTile.ROAD_BEND_NE, 18, 0);
+      setSpriteCoordinatesForTile(TerrainTile.ROAD_BEND_SE, 19, 0);
+      setSpriteCoordinatesForTile(TerrainTile.ROAD_BEND_NW, 20, 0);
       setSpriteCoordinatesForTile(TerrainTile.BRIDGE_HORIZONTAL, 21, 0);
 
       // No sprites for these yet.

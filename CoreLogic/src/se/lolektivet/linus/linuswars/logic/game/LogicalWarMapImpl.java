@@ -6,6 +6,7 @@ import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -80,12 +81,21 @@ public class LogicalWarMapImpl implements LogicalWarMap {
    }
 
    ModuleBases takeOverBasesModule() {
-      if (_basesModule == null) {
-         throw new InitializationException("Bases Module already taken over from LogicalWarMap!");
-      }
+      throwIfNoBasesModule();
       ModuleBases basesModule = _basesModule;
       _basesModule = null;
       return basesModule;
+   }
+
+   public Collection<Base> getAllBases() {
+      throwIfNoBasesModule();
+      return _basesModule.getAllBases();
+   }
+
+   private void throwIfNoBasesModule() {
+      if (_basesModule == null) {
+         throw new InitializationException("Bases Module already taken over from LogicalWarMap!");
+      }
    }
 
    @Override

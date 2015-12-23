@@ -1,6 +1,7 @@
 package se.lolektivet.linus.linuswars.graphicalgame;
 
 import se.lolektivet.linus.linuswars.graphics.Sprites;
+import se.lolektivet.linus.linuswars.logic.InitializationException;
 import se.lolektivet.linus.linuswars.logic.MapMaker;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainTile;
@@ -25,6 +26,11 @@ public class GraphicalAndLogicalMapMaker implements MapMaker {
    public void addTerrain(TerrainTile terrainTile, int x, int y) {
       _logicalWarMap.setTerrain(x, y, terrainTile.getTerrainType());
       _graphicalWarMap.addTerrain(_sprites.getTerrainSprite(terrainTile), x, y);
+   }
+
+   @Override
+   public void addTerrain(TerrainType terrainType, int x, int y) {
+      throw new InitializationException("You cannot create a graphical map on-the-fly from only TerrainTypes! (It would look weird anyway.)");
    }
 
    @Override

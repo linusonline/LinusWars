@@ -26,6 +26,14 @@ public class TerrainMapCreator {
       _defaults.put(TerrainType.WOODS, TerrainTile.WOODS_SINGLE);
       _defaults.put(TerrainType.BRIDGE, TerrainTile.BRIDGE_HORIZONTAL);
       _defaults.put(TerrainType.MOUNTAINS, TerrainTile.MOUNTAIN_SMALL);
+
+      // There are no terrain tiles for bases, since they look different according to faction.
+      // Expected to be replaced by actual bases later.
+      _defaults.put(TerrainType.CITY, TerrainTile.PLAIN);
+      _defaults.put(TerrainType.BASE, TerrainTile.PLAIN);
+      _defaults.put(TerrainType.AIRPORT, TerrainTile.PLAIN);
+      _defaults.put(TerrainType.PORT, TerrainTile.PLAIN);
+      _defaults.put(TerrainType.HQ, TerrainTile.PLAIN);
    }
 
    public TerrainMap create(LogicalWarMap logicalWarMap) {

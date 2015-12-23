@@ -9,6 +9,7 @@ import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
  */
 public interface MapMaker {
    void addTerrain(TerrainTile terrainTile, int x, int y);
+   void addTerrain(TerrainType terrainType, int x, int y);
 
    void addBuilding(TerrainType buildingType, Faction faction, int x, int y);
 
