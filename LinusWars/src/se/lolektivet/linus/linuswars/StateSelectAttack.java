@@ -109,7 +109,7 @@ public class StateSelectAttack implements InteractiveGameState {
    }
 
    @Override
-   public void setSprites(Sprites sprites) {
+   public void init(Sprites sprites) {
       if (_fireOrNothingMenu == null) {
          _fireOrNothingMenu = new GraphicalMenu(sprites.getMenuCursor());
          _fireOrNothingMenu.addItem(ActionMenuItem.FIRE.getName());

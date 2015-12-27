@@ -103,7 +103,7 @@ public class StateActionMenu implements InteractiveGameState {
    }
 
    @Override
-   public void setSprites(Sprites sprites) {
+   public void init(Sprites sprites) {
       if (_theActionMenu == null) {
          _theActionMenu = new GraphicalMenu(sprites.getMenuCursor());
          // Note: The first three moves are logically mutually exclusive.

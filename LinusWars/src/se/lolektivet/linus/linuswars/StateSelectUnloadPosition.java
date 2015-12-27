@@ -105,7 +105,7 @@ public class StateSelectUnloadPosition implements InteractiveGameState {
    }
 
    @Override
-   public void setSprites(Sprites sprites) {
+   public void init(Sprites sprites) {
 
    }
 

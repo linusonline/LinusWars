@@ -117,7 +117,7 @@ public class LinusWarsGame extends BasicGame {
                newGameState = _gameState;
          }
          _gameState = newGameState;
-         _gameState.setSprites(_allSprites);
+         _gameState.init(_allSprites);
       }
       System.out.println(_gameState);
    }

@@ -64,7 +64,7 @@ public class StateQuickMenu implements InteractiveGameState {
    }
 
    @Override
-   public void setSprites(Sprites sprites) {
+   public void init(Sprites sprites) {
       if (_sprites == null) {
          _sprites = sprites;
          _theMenu = new GraphicalMenu(_sprites.getMenuCursor());
