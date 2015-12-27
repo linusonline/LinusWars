@@ -1,6 +1,6 @@
 package se.lolektivet.linus.linuswars.logic.game;
 
-import se.lolektivet.linus.linuswars.logic.LogicalGamePredeployer;
+import se.lolektivet.linus.linuswars.logic.GamePredeployer;
 import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.UnitType;
@@ -10,7 +10,7 @@ import se.lolektivet.linus.linuswars.logic.enums.UnitType;
  */
 public class TestGameSetup1 {
 
-   public void preDeploy(LogicalGamePredeployer predeployer) {
+   public void preDeploy(GamePredeployer predeployer) {
       predeployer.addNewUnit(UnitType.INFANTRY, new Position(0, 0), Faction.ORANGE_STAR);
 
       predeployer.addNewUnit(UnitType.INFANTRY, new Position(0, 3), Faction.BLUE_MOON);

@@ -48,6 +48,27 @@ public class LinusWarsGame extends BasicGame {
       startGame(map, gameSetup, factions);
    }
 
+   private void startGame(WarMap warMap, GameSetup gameSetup, List<Faction> factions) {
+      LogicalWarMap logicalWarMap = createLogicalMap(warMap, gameSetup, factions);
+
+      LogicalWarGame logicalWarGame = createLogicalWarGame((LogicalWarMapImpl)logicalWarMap, factions);
+
+      GraphicalWarMap graphicalWarMap = GraphicalWarMap.createFromLogicalWarMap(_allSprites, (LogicalWarMapImpl)logicalWarMap);
+
+      GraphicalWarGame graphicalWarGame = createGraphicalWarGame(logicalWarGame, graphicalWarMap);
+
+      InteractiveWarGame interactiveWarGame = createInteractiveWarGame(logicalWarGame, graphicalWarGame);
+
+      deployToLogicalGame(logicalWarGame, gameSetup, factions);
+
+      deployToGraphicalGame(graphicalWarGame, gameSetup, factions);
+
+      logicalWarGame.callGameStart();
+      graphicalWarGame.callGameStart();
+
+      _gameState = new StateTurnTransition(interactiveWarGame, logicalWarGame, logicalWarGame);
+   }
+
    private LogicalWarMap createLogicalMap(WarMap warMap, GameSetup gameSetup, List<Faction> factions) {
       if (warMap.getNrOfFactions() != factions.size()) {
          throw new RuntimeException("This map needs " + warMap.getNrOfFactions() + " factions, but you supplied " + factions.size());
@@ -84,29 +105,14 @@ public class LinusWarsGame extends BasicGame {
       return interactiveWarGame;
    }
 
-   private void startGame(WarMap warMap, GameSetup gameSetup, List<Faction> factions) {
-      LogicalWarMap logicalWarMap = createLogicalMap(warMap, gameSetup, factions);
-
-      LogicalWarGame logicalWarGame = createLogicalWarGame((LogicalWarMapImpl)logicalWarMap, factions);
-
-      GraphicalWarMap graphicalWarMap = GraphicalWarMap.createFromLogicalWarMap(_allSprites, (LogicalWarMapImpl)logicalWarMap);
-
-      GraphicalWarGame graphicalWarGame = createGraphicalWarGame(logicalWarGame, graphicalWarMap);
-
-      InteractiveWarGame interactiveWarGame = createInteractiveWarGame(logicalWarGame, graphicalWarGame);
-
-      // Deploy logical units
+   private void deployToLogicalGame(LogicalWarGame logicalWarGame, GameSetup gameSetup, List<Faction> factions) {
       gameSetup.preDeploy(new LogicalGamePredeployer(logicalWarGame, new LogicalUnitFactory()), factions);
+   }
 
-      // Deploy graphical units
-      GraphicalGamePreDeployer graphicalGamePreDeployer = new GraphicalGamePreDeployer();
+   private void deployToGraphicalGame(GraphicalWarGame graphicalWarGame, GameSetup gameSetup, List<Faction> factions) {
+      GraphicalGamePreDeployer graphicalGamePreDeployer = new GraphicalGamePreDeployer(graphicalWarGame);
       graphicalGamePreDeployer.init(_allSprites);
-      graphicalGamePreDeployer.preDeploy(logicalWarGame, graphicalWarGame);
-
-      logicalWarGame.callGameStart();
-      graphicalWarGame.callGameStart();
-
-      _gameState = new StateTurnTransition(interactiveWarGame, logicalWarGame, logicalWarGame);
+      gameSetup.preDeploy(graphicalGamePreDeployer, factions);
    }
 
    @Override

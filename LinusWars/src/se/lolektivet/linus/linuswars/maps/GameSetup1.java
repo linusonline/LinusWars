@@ -1,6 +1,6 @@
 package se.lolektivet.linus.linuswars.maps;
 
-import se.lolektivet.linus.linuswars.logic.LogicalGamePredeployer;
+import se.lolektivet.linus.linuswars.logic.GamePredeployer;
 import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.UnitType;
@@ -18,7 +18,7 @@ public class GameSetup1 extends GameSetupAdapter {
    }
 
    @Override
-   public void preDeploy(LogicalGamePredeployer predeployer, List<Faction> factions) {
+   public void preDeploy(GamePredeployer predeployer, List<Faction> factions) {
       Faction factionOne = factions.get(0);
 
       predeployer.addNewUnit(UnitType.MD_TANK, new Position(3, 1), factionOne);

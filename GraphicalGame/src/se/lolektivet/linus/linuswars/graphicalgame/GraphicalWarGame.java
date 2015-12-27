@@ -77,9 +77,9 @@ public class GraphicalWarGame implements WarGameListener {
       _hudIsOnTheLeft = left;
    }
 
-   public void addUnit(GraphicalUnit graphicalUnit, LogicalUnit logicalUnit, Position position) {
+   public void addUnit(GraphicalUnit graphicalUnit, Position position) {
       graphicalUnit.setTilePosition(position);
-      _graphicsForUnits.put(logicalUnit, graphicalUnit);
+      _graphicsForUnits.put(_warGameQueries.getUnitAtPosition(position), graphicalUnit);
    }
 
    public GraphicalUnit getGraphicForUnit(LogicalUnit unit) {

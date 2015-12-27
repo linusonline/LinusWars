@@ -9,7 +9,7 @@ import se.lolektivet.linus.linuswars.logic.game.WarGameSetup;
 /**
  * Created by Linus on 2014-09-22.
  */
-public class LogicalGamePredeployer {
+public class LogicalGamePredeployer implements GamePredeployer {
    private final WarGameSetup _logicalWarGame;
    private final LogicalUnitFactory _unitFactory;
 
@@ -18,6 +18,7 @@ public class LogicalGamePredeployer {
       _unitFactory = logicalUnitFactory;
    }
 
+   @Override
    public void addNewUnit(UnitType type, Position position, Faction faction, int hpPercent) {
       if (hpPercent < 1 || hpPercent > 100) {
          throw new InternalError("Unit must have 1 to 100 HP%!");
@@ -27,6 +28,7 @@ public class LogicalGamePredeployer {
       _logicalWarGame.addUnit(logicalUnit, position, faction);
    }
 
+   @Override
    public void addNewUnit(UnitType type, Position position, Faction faction) {
       _logicalWarGame.addUnit(_unitFactory.createLogicalUnit(type), position, faction);
    }
