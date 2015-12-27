@@ -7,6 +7,7 @@ import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
  * Created by Linus on 2015-12-20.
  */
 public interface LogicalWarMap {
+   boolean hasTerrainForTile(Position tile);
    TerrainType getTerrainForTile(Position tile);
 
    int getWidth();

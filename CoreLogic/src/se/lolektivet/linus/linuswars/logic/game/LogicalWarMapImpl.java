@@ -1,6 +1,5 @@
 package se.lolektivet.linus.linuswars.logic.game;
 
-import se.lolektivet.linus.linuswars.logic.InitializationException;
 import se.lolektivet.linus.linuswars.logic.LogicException;
 import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
@@ -28,6 +27,11 @@ public class LogicalWarMapImpl implements LogicalWarMap {
    }
 
    @Override
+   public boolean hasTerrainForTile(Position tile) {
+      return _terrainTiles.get(tile) != null;
+   }
+
+   @Override
    public TerrainType getTerrainForTile(Position tile) {
       TerrainType type = _terrainTiles.get(tile);
       if (type == null) {
@@ -37,26 +41,11 @@ public class LogicalWarMapImpl implements LogicalWarMap {
    }
 
    public void setBuilding(int x, int y, TerrainType terrainType, Faction faction) {
-      if (!terrainType.isBuilding()) {
-         throw new InitializationException();
-      }
-      Position tilePosition = new Position(x, y);
-      TerrainType previousType = _terrainTiles.get(tilePosition);
-      if (previousType.isBuilding()) {
-         throw new InitializationException("Tried to set two bases at same position!");
-      }
-      _basesModule.addBase(tilePosition, terrainType, faction);
+      _basesModule.addBase(new Position(x, y), terrainType, faction);
       internalSetTerrainType(x, y, terrainType);
    }
 
    public void setTerrain(int x, int y, TerrainType terrainType) {
-      if (terrainType.isBuilding()) {
-         throw new InitializationException();
-      }
-      Position tilePosition = new Position(x, y);
-      if (_terrainTiles.get(tilePosition) != null) {
-         throw new TileAlreadySetException("Tile in position " + tilePosition + " was set twice!");
-      }
       internalSetTerrainType(x, y, terrainType);
    }
 
@@ -101,12 +90,6 @@ public class LogicalWarMapImpl implements LogicalWarMap {
             position.getX() < getWidth() &&
             position.getY() >= 0 &&
             position.getY() < getHeight();
-   }
-
-   static class TileAlreadySetException extends RuntimeException {
-      public TileAlreadySetException(String message) {
-         super(message);
-      }
    }
 
    static class MapUninitializedException extends RuntimeException {

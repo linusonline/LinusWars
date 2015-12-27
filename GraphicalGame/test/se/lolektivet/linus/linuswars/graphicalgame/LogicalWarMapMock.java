@@ -16,6 +16,11 @@ public class LogicalWarMapMock implements LogicalWarMap {
    }
 
    @Override
+   public boolean hasTerrainForTile(Position tile) {
+      return _mapMock.getTerrainForTile(tile) != null;
+   }
+
+   @Override
    public TerrainType getTerrainForTile(Position tile) {
       TerrainType type = _mapMock.getTerrainForTile(tile);
       if (type == null) {

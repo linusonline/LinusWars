@@ -17,21 +17,42 @@ public class LogicalMapMaker implements MapMaker {
 
    @Override
    public void addTerrain(TerrainTile terrainTile, int x, int y) {
-      _logicalWarMap.setTerrain(x, y, terrainTile.getTerrainType());
+      addTerrain(terrainTile.getTerrainType(), x, y);
    }
 
    @Override
    public void addTerrain(TerrainType terrainTile, int x, int y) {
+      if (terrainTile.isBuilding()) {
+         throw new InitializationException();
+      }
+      Position tilePosition = new Position(x, y);
+      if (_logicalWarMap.hasTerrainForTile(tilePosition)) {
+         throw new TileAlreadySetException("Tile in position " + tilePosition + " was set twice!");
+      }
       _logicalWarMap.setTerrain(x, y, terrainTile);
    }
 
    @Override
    public void addBuilding(TerrainType buildingType, Faction faction, int x, int y) {
+      if (!buildingType.isBuilding()) {
+         throw new InitializationException();
+      }
+      Position tilePosition = new Position(x, y);
+      TerrainType previousType = _logicalWarMap.getTerrainForTile(tilePosition);
+      if (previousType.isBuilding()) {
+         throw new InitializationException("Tried to set two bases at same position!");
+      }
       _logicalWarMap.setBuilding(x, y, buildingType, faction);
    }
 
    @Override
    public void validate() {
       _logicalWarMap.validate();
+   }
+
+   static class TileAlreadySetException extends RuntimeException {
+      public TileAlreadySetException(String message) {
+         super(message);
+      }
    }
 }
