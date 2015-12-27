@@ -2,9 +2,6 @@ package se.lolektivet.linus.linuswars;
 
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
-import se.lolektivet.linus.linuswars.InteractiveGameState;
-import se.lolektivet.linus.linuswars.InteractiveWarGame;
-import se.lolektivet.linus.linuswars.StateStarting;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.game.WarGameMoves;
@@ -13,7 +10,7 @@ import se.lolektivet.linus.linuswars.logic.game.WarGameQueries;
 /**
  * Created by Linus on 2015-12-23.
  */
-public class StateTurnTransition implements InteractiveGameState {
+public class StateTurnTransition implements GameState {
    private final InteractiveWarGame _interactiveWarGame;
    private final WarGameQueries _warGameQueries;
    private final WarGameMoves _warGameMoves;
@@ -25,27 +22,27 @@ public class StateTurnTransition implements InteractiveGameState {
    }
 
    @Override
-   public InteractiveGameState handleExecuteDown() {
+   public GameState handleExecuteDown() {
       return this;
    }
 
    @Override
-   public InteractiveGameState handleExecuteUp() {
+   public GameState handleExecuteUp() {
       return this;
    }
 
    @Override
-   public InteractiveGameState handleCancel() {
+   public GameState handleCancel() {
       return this;
    }
 
    @Override
-   public InteractiveGameState handleDirection(Direction direction) {
+   public GameState handleDirection(Direction direction) {
       return this;
    }
 
    @Override
-   public InteractiveGameState update() {
+   public GameState update() {
       // TODO: This should probably be based on real time, and ignore the number of calls.
       if (++steps > 2000) {
          return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);

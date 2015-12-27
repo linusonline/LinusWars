@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  */
 public class LinusWarsGame extends BasicGame {
    private InteractiveWarGame _interactiveWarGame;
-   private InteractiveGameState _gameState;
+   private GameState _gameState;
    private final Object _gameStateLock;
    private Sprites _allSprites;
 
@@ -92,7 +92,7 @@ public class LinusWarsGame extends BasicGame {
 
    @Override
    public void keyPressed(int key, char c) {
-      InteractiveGameState newGameState;
+      GameState newGameState;
       synchronized (_gameStateLock) {
          switch (key) {
             case Input.KEY_W:
@@ -124,7 +124,7 @@ public class LinusWarsGame extends BasicGame {
 
    @Override
    public void keyReleased(int key, char c) {
-      InteractiveGameState newGameState;
+      GameState newGameState;
       synchronized (_gameStateLock) {
          switch (key) {
             case Input.KEY_E:
