@@ -37,8 +37,10 @@ public class TestLogicGame_executeMove {
       List<Faction> factions = new ArrayList<>(2);
       factions.add(Faction.ORANGE_STAR);
       factions.add(Faction.BLUE_MOON);
-      LogicalWarGameCreator gameCreator = new LogicalWarGameCreator();
-      _theGame = gameCreator.createGameFromMapAndFactions(theMap, factions);
+
+      _theGame = new LogicalWarGame(theMap, factions);
+      LogicalWarGameCreator gameCreator = new LogicalWarGameCreator(_theGame);
+      map.create(gameCreator, factions);
 
       new TestGameSetup1().preDeploy(new LogicalGamePredeployer(_theGame, new LogicalUnitFactory()));
 

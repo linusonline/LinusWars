@@ -53,6 +53,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
 
       _unitModule = new ModuleUnits(factionsInTurnOrder);
       _turnOrderModule = new ModuleTurnOrder(factionsInTurnOrder);
+      _basesModule = new ModuleBases();
       _moneyModule = new ModuleMoney();
       _moneyModule.init(factionsInTurnOrder);
 
@@ -108,11 +109,9 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
 
    // Setup
 
-   void setBases(ModuleBases basesModule) {
-      if (_basesModule != null) {
-         throw new InitializationException("BasesModule can only be set once!");
-      }
-      _basesModule = basesModule;
+   @Override
+   public void addBase(Position position, TerrainType terrainType, Faction faction) {
+      _basesModule.addBase(position, terrainType, faction);
    }
 
    @Override

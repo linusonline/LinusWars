@@ -25,13 +25,13 @@ public class GraphicalGamePreDeployer implements GamePredeployer {
    }
 
    @Override
-   public void addNewUnit(UnitType type, Position position, Faction faction, int hpPercent) {
-      addNewUnit(type, position, faction);
+   public void addNewUnit(UnitType type, Faction faction, int x, int y) {
+      GraphicalUnit graphicalUnit = _graphicalUnitFactory.getGraphicalUnit(faction, type);
+      _graphicalWarGame.addUnit(graphicalUnit, new Position(x, y));
    }
 
    @Override
-   public void addNewUnit(UnitType type, Position position, Faction faction) {
-      GraphicalUnit graphicalUnit = _graphicalUnitFactory.getGraphicalUnit(faction, type);
-      _graphicalWarGame.addUnit(graphicalUnit, position);
+   public void addNewUnit(UnitType type, Faction faction, int x, int y, int hpPercent) {
+      addNewUnit(type, faction, x, y);
    }
 }

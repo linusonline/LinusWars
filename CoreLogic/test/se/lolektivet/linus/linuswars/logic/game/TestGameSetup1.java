@@ -11,8 +11,8 @@ import se.lolektivet.linus.linuswars.logic.enums.UnitType;
 public class TestGameSetup1 {
 
    public void preDeploy(GamePredeployer predeployer) {
-      predeployer.addNewUnit(UnitType.INFANTRY, new Position(0, 0), Faction.ORANGE_STAR);
+      predeployer.addNewUnit(UnitType.INFANTRY, Faction.ORANGE_STAR, 0, 0);
 
-      predeployer.addNewUnit(UnitType.INFANTRY, new Position(0, 3), Faction.BLUE_MOON);
+      predeployer.addNewUnit(UnitType.INFANTRY, Faction.BLUE_MOON, 0, 3);
    }
 }

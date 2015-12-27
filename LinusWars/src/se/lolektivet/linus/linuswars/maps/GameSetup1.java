@@ -21,19 +21,19 @@ public class GameSetup1 extends GameSetupAdapter {
    public void preDeploy(GamePredeployer predeployer, List<Faction> factions) {
       Faction factionOne = factions.get(0);
 
-      predeployer.addNewUnit(UnitType.MD_TANK, new Position(3, 1), factionOne);
-      predeployer.addNewUnit(UnitType.APC, new Position(4, 2), factionOne);
-      predeployer.addNewUnit(UnitType.ARTILLERY, new Position(5, 3), factionOne);
-      predeployer.addNewUnit(UnitType.INFANTRY, new Position(6, 4), factionOne);
-      predeployer.addNewUnit(UnitType.MECH, new Position(7, 3), factionOne, 50);
-      predeployer.addNewUnit(UnitType.MECH, new Position(7, 4), factionOne, 30);
+      predeployer.addNewUnit(UnitType.MD_TANK, factionOne, 3, 1);
+      predeployer.addNewUnit(UnitType.APC, factionOne, 4, 2);
+      predeployer.addNewUnit(UnitType.ARTILLERY, factionOne, 5, 3);
+      predeployer.addNewUnit(UnitType.INFANTRY, factionOne, 6, 4);
+      predeployer.addNewUnit(UnitType.MECH, factionOne, 7, 3, 50);
+      predeployer.addNewUnit(UnitType.MECH, factionOne, 7, 4, 30);
 
       Faction factionTwo = factions.get(1);
 
-      predeployer.addNewUnit(UnitType.MD_TANK, new Position(8, 1), factionTwo);
-      predeployer.addNewUnit(UnitType.APC, new Position(9, 2), factionTwo);
-      predeployer.addNewUnit(UnitType.ARTILLERY, new Position(10, 3), factionTwo);
-      predeployer.addNewUnit(UnitType.INFANTRY, new Position(11, 4), factionTwo);
-      predeployer.addNewUnit(UnitType.MECH, new Position(12, 3), factionTwo);
+      predeployer.addNewUnit(UnitType.MD_TANK, factionTwo, 8, 1);
+      predeployer.addNewUnit(UnitType.APC, factionTwo, 9, 2);
+      predeployer.addNewUnit(UnitType.ARTILLERY, factionTwo, 10, 3);
+      predeployer.addNewUnit(UnitType.INFANTRY, factionTwo, 11, 4);
+      predeployer.addNewUnit(UnitType.MECH, factionTwo, 12, 3);
    }
 }

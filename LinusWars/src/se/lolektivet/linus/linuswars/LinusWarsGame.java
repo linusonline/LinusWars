@@ -51,7 +51,7 @@ public class LinusWarsGame extends BasicGame {
    private void startGame(WarMap warMap, GameSetup gameSetup, List<Faction> factions) {
       LogicalWarMap logicalWarMap = createLogicalMap(warMap, gameSetup, factions);
 
-      LogicalWarGame logicalWarGame = createLogicalWarGame((LogicalWarMapImpl)logicalWarMap, factions);
+      LogicalWarGame logicalWarGame = createLogicalWarGame(warMap, (LogicalWarMapImpl)logicalWarMap, factions);
 
       GraphicalWarMap graphicalWarMap = GraphicalWarMap.createFromLogicalWarMap(_allSprites, (LogicalWarMapImpl)logicalWarMap);
 
@@ -84,9 +84,10 @@ public class LinusWarsGame extends BasicGame {
       return logicalWarMap;
    }
 
-   private LogicalWarGame createLogicalWarGame(LogicalWarMapImpl logicalWarMap, List<Faction> factions) {
-      LogicalWarGameCreator gameCreator = new LogicalWarGameCreator();
-      LogicalWarGame logicalWarGame = gameCreator.createGameFromMapAndFactions(logicalWarMap, factions);
+   private LogicalWarGame createLogicalWarGame(WarMap warMap, LogicalWarMapImpl logicalWarMap, List<Faction> factions) {
+      LogicalWarGame logicalWarGame = new LogicalWarGame(logicalWarMap, factions);
+      MapMaker warGameCreator = new LogicalWarGameCreator(logicalWarGame);
+      warMap.create(warGameCreator, factions);
       return logicalWarGame;
    }
 

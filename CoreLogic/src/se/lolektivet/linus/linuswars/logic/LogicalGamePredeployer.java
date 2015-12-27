@@ -19,17 +19,17 @@ public class LogicalGamePredeployer implements GamePredeployer {
    }
 
    @Override
-   public void addNewUnit(UnitType type, Position position, Faction faction, int hpPercent) {
+   public void addNewUnit(UnitType type, Faction faction, int x, int y) {
+      addNewUnit(type, faction, x, y, 100);
+   }
+
+   @Override
+   public void addNewUnit(UnitType type, Faction faction, int x, int y, int hpPercent) {
       if (hpPercent < 1 || hpPercent > 100) {
          throw new InternalError("Unit must have 1 to 100 HP%!");
       }
       LogicalUnit logicalUnit = _unitFactory.createLogicalUnit(type);
       logicalUnit.setHp1To100(hpPercent);
-      _logicalWarGame.addUnit(logicalUnit, position, faction);
-   }
-
-   @Override
-   public void addNewUnit(UnitType type, Position position, Faction faction) {
-      _logicalWarGame.addUnit(_unitFactory.createLogicalUnit(type), position, faction);
+      _logicalWarGame.addUnit(logicalUnit, new Position(x, y), faction);
    }
 }
