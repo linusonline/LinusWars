@@ -18,16 +18,13 @@ public class LogicalWarMapImpl implements LogicalWarMap {
    private int _mapSizeX;
    private int _mapSizeY;
 
-   private ModuleBases _basesModule;
+   private final BasesSetup _basesModule;
 
-   // TODO: Need way of specifying which properties belong to which faction. Problem is, maps should be playable with any factions!
-   // Still, some properties might be owned by the same faction as one specific HQ.
-
-   public LogicalWarMapImpl() {
+   public LogicalWarMapImpl(BasesSetup basesSetup) {
       _terrainTiles = new HashMap<>();
       _mapSizeX = 0;
       _mapSizeY = 0;
-      _basesModule = new ModuleBases();
+      _basesModule = basesSetup;
    }
 
    @Override
@@ -80,22 +77,12 @@ public class LogicalWarMapImpl implements LogicalWarMap {
       _basesModule.validateSetup();
    }
 
-   ModuleBases takeOverBasesModule() {
-      throwIfNoBasesModule();
-      ModuleBases basesModule = _basesModule;
-      _basesModule = null;
-      return basesModule;
+   BasesSetup getBasesModule() {
+      return _basesModule;
    }
 
    public Collection<Base> getAllBases() {
-      throwIfNoBasesModule();
       return _basesModule.getAllBases();
-   }
-
-   private void throwIfNoBasesModule() {
-      if (_basesModule == null) {
-         throw new InitializationException("Bases Module already taken over from LogicalWarMap!");
-      }
    }
 
    @Override

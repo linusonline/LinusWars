@@ -18,7 +18,7 @@ public class LogicalWarGameCreator {
       // 5. build graphical game
       // 6. deploy units with SAME faction replacement as in step 2!
 
-      ModuleBases basesModule = logicalWarMap.takeOverBasesModule();
+      ModuleBases basesModule = (ModuleBases)logicalWarMap.getBasesModule();
 
       LogicalWarGame logicalWarGame = new LogicalWarGame(logicalWarMap, factions);
       logicalWarGame.setBases(basesModule);

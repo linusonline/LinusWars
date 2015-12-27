@@ -11,7 +11,7 @@ import java.util.*;
 /**
  * Created by Linus on 2015-11-27.
  */
-public class ModuleBases {
+public class ModuleBases implements BasesSetup {
    private final Map<Faction, Collection<Base>> _basesForFaction;
    private final Map<Position, Base> _baseAtPosition;
    private final Map<Faction, Position> _hqsOfFactions;
@@ -24,6 +24,7 @@ public class ModuleBases {
       _hqsOfFactions = new HashMap<>(2);
    }
 
+   @Override
    public void addBase(Position position, TerrainType buildingType, Faction faction) {
       if (buildingType == TerrainType.HQ) {
          if (faction == Faction.NEUTRAL) {
@@ -52,6 +53,7 @@ public class ModuleBases {
       return new ArrayList<>(getBaseListForFaction(faction));
    }
 
+   @Override
    public Collection<Base> getAllBases() {
       Collection<Base> allBases = new HashSet<>();
       for (Collection<Base> factionBases : _basesForFaction.values()) {
@@ -80,7 +82,8 @@ public class ModuleBases {
       return new ArrayList<>(_listOfFactions);
    }
 
-   void validateSetup() {
+   @Override
+   public void validateSetup() {
       if (getFactions().size() != _hqsOfFactions.size()) {
          throw new InitializationException("All participating factions must have an HQ!");
       }
