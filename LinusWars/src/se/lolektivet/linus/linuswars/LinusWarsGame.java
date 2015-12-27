@@ -6,6 +6,7 @@ import se.lolektivet.linus.linuswars.graphics.*;
 import se.lolektivet.linus.linuswars.logic.*;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
+import se.lolektivet.linus.linuswars.logic.enums.TerrainTile;
 import se.lolektivet.linus.linuswars.logic.game.*;
 import se.lolektivet.linus.linuswars.maps.GameSetup;
 import se.lolektivet.linus.linuswars.maps.GameSetup1;
@@ -13,6 +14,7 @@ import se.lolektivet.linus.linuswars.maps.Map3;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,9 +53,9 @@ public class LinusWarsGame extends BasicGame {
    private void startGame(WarMap warMap, GameSetup gameSetup, List<Faction> factions) {
       LogicalWarMap logicalWarMap = createLogicalMap(warMap, gameSetup, factions);
 
-      LogicalWarGame logicalWarGame = createLogicalWarGame(warMap, (LogicalWarMapImpl)logicalWarMap, factions);
+      LogicalWarGame logicalWarGame = createLogicalWarGame(warMap, logicalWarMap, factions);
 
-      GraphicalWarMap graphicalWarMap = GraphicalWarMap.createFromLogicalWarMap(_allSprites, (LogicalWarMapImpl)logicalWarMap);
+      GraphicalWarMap graphicalWarMap = createGraphicalWarMap(warMap, logicalWarMap, factions);
 
       GraphicalWarGame graphicalWarGame = createGraphicalWarGame(logicalWarGame, graphicalWarMap);
 
@@ -84,11 +86,18 @@ public class LinusWarsGame extends BasicGame {
       return logicalWarMap;
    }
 
-   private LogicalWarGame createLogicalWarGame(WarMap warMap, LogicalWarMapImpl logicalWarMap, List<Faction> factions) {
+   private LogicalWarGame createLogicalWarGame(WarMap warMap, LogicalWarMap logicalWarMap, List<Faction> factions) {
       LogicalWarGame logicalWarGame = new LogicalWarGame(logicalWarMap, factions);
       MapMaker warGameCreator = new LogicalWarGameCreator(logicalWarGame);
       warMap.create(warGameCreator, factions);
       return logicalWarGame;
+   }
+
+   private GraphicalWarMap createGraphicalWarMap(WarMap warMap, LogicalWarMap logicalWarMap, List<Faction> factions) {
+      GraphicalWarMap newWarMap = new GraphicalWarMap(logicalWarMap);
+      GraphicalMapMaker mapMaker = new GraphicalMapMaker(_allSprites, newWarMap);
+      warMap.create(mapMaker, factions);
+      return newWarMap;
    }
 
    private GraphicalWarGame createGraphicalWarGame(LogicalWarGame logicalWarGame, GraphicalWarMap graphicalWarMap) {

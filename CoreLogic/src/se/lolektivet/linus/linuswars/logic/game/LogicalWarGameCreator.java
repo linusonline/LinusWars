@@ -34,7 +34,7 @@ public class LogicalWarGameCreator implements MapMaker {
    }
 
    @Override
-   public void validate() {
+   public void finish() {
       // Ignored
    }
 }

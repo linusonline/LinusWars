@@ -4,9 +4,6 @@ import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainTile;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Linus on 2015-11-23.
  */
@@ -55,11 +52,11 @@ public class RowMapMaker {
       _buildingAdded = true;
    }
 
-   public void validate() {
+   public void finish() {
       if (!isValid()) {
          throw new InitializationException("Map is invalid! All rows must be the same length, end with nextRow.");
       }
-      _mapMaker.validate();
+      _mapMaker.finish();
    }
 
    private boolean isValid() {

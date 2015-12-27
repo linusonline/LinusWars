@@ -22,18 +22,6 @@ public class GraphicalWarMap {
 
    private TileView _tileView;
 
-   public static GraphicalWarMap createFromLogicalWarMap(Sprites sprites, LogicalWarMapImpl logicalWarMap) {
-      GraphicalWarMap newWarMap = new GraphicalWarMap(logicalWarMap);
-      TerrainMap terrainMap = new TerrainMapCreator().create(logicalWarMap);
-      for (Map.Entry<Position, TerrainTile> entry : terrainMap.entrySet()) {
-         newWarMap.addTerrain(sprites.getTerrainSprite(entry.getValue()), entry.getKey().getX(), entry.getKey().getY());
-      }
-      for (Base base : logicalWarMap.getAllBases()) {
-         newWarMap.addBuilding(sprites.getBuildingSprite(base.getBaseType(), base.getFaction()), base.getPosition().getX(), base.getPosition().getY());
-      }
-      return newWarMap;
-   }
-
    public GraphicalWarMap(LogicalWarMap logicalWarMap) {
       _buildingSprites = new HashMap<>();
       _terrainSprites = new HashMap<>();

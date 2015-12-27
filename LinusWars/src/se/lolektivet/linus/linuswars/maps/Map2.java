@@ -2,7 +2,6 @@ package se.lolektivet.linus.linuswars.maps;
 
 import se.lolektivet.linus.linuswars.logic.MapMaker;
 import se.lolektivet.linus.linuswars.logic.RowMapMaker;
-import se.lolektivet.linus.linuswars.logic.WarMap;
 import se.lolektivet.linus.linuswars.logic.WarMapAdapter;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainTile;
@@ -271,6 +270,6 @@ public class Map2 extends WarMapAdapter {
       mm.addBuilding(TerrainType.HQ, factionTwo, 14, 5);
       mm.addBuilding(TerrainType.BASE, factionTwo, 0, 4);
 
-      mm.validate();
+      mm.finish();
    }
 }

@@ -209,6 +209,6 @@ public class Map3 extends WarMapAdapter {
       Faction factionTwo = factions.get(1);
       mm.addBuilding(TerrainType.HQ, factionTwo, 14, 9);
 
-      mm.validate();
+      mm.finish();
    }
 }

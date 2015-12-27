@@ -46,7 +46,7 @@ public class LogicalMapMaker implements MapMaker {
    }
 
    @Override
-   public void validate() {
+   public void finish() {
       _logicalWarMap.validate();
    }
 

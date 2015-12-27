@@ -25,7 +25,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    static class FactionAlreadySetException extends RuntimeException {}
    static class FactionNotInGameException extends RuntimeException {}
 
-   private final LogicalWarMapImpl _logicalWarMap;
+   private final LogicalWarMap _logicalWarMap;
    private final MovementLogic _movementLogic;
    private final FuelLogic _fuelLogic;
    private final AttackLogic _attackLogic;
@@ -43,7 +43,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    private Map<Position, PathWithCost> _cachedOptimalPathsForTravellingUnit;
    private LogicalUnit _unitForWhichOptimalPathsAreCached;
 
-   public LogicalWarGame(LogicalWarMapImpl logicalWarMap, List<Faction> factionsInTurnOrder) {
+   public LogicalWarGame(LogicalWarMap logicalWarMap, List<Faction> factionsInTurnOrder) {
       _logicalWarMap = logicalWarMap;
 
       _movementLogic = new MovementLogic();
