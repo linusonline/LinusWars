@@ -3,10 +3,8 @@ package se.lolektivet.linus.linuswars.graphicalgame;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
 import se.lolektivet.linus.linuswars.logic.GamePredeployer;
 import se.lolektivet.linus.linuswars.logic.Position;
-import se.lolektivet.linus.linuswars.logic.enums.UnitType;
-import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
-import se.lolektivet.linus.linuswars.logic.game.LogicalWarGame;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
+import se.lolektivet.linus.linuswars.logic.enums.UnitType;
 
 /**
  * Created by Linus on 2014-09-22.

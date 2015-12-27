@@ -1,20 +1,20 @@
 package se.lolektivet.linus.linuswars;
 
 import org.newdawn.slick.*;
-import se.lolektivet.linus.linuswars.graphicalgame.*;
-import se.lolektivet.linus.linuswars.graphics.*;
-import se.lolektivet.linus.linuswars.logic.*;
+import se.lolektivet.linus.linuswars.graphicalgame.GraphicalWarGame;
+import se.lolektivet.linus.linuswars.graphicalgame.GraphicalWarMap;
+import se.lolektivet.linus.linuswars.graphics.Sprites;
+import se.lolektivet.linus.linuswars.logic.WarMap;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
-import se.lolektivet.linus.linuswars.logic.enums.TerrainTile;
-import se.lolektivet.linus.linuswars.logic.game.*;
+import se.lolektivet.linus.linuswars.logic.game.LogicalWarGame;
+import se.lolektivet.linus.linuswars.logic.game.LogicalWarMap;
 import se.lolektivet.linus.linuswars.maps.GameSetup;
 import se.lolektivet.linus.linuswars.maps.GameSetup1;
 import se.lolektivet.linus.linuswars.maps.Map3;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,16 +22,20 @@ import java.util.logging.Logger;
  * Created by Linus on 2014-09-18.
  */
 public class LinusWarsGame extends BasicGame {
+   private static final float VERTICAL_SCALE = 2.0f;
+   private static final float HORIZONTAL_SCALE = 2.0f;
+   private static final int BASE_HORIZONTAL_RESOLUTION = 240;
+   private static final int BASE_VERTICAL_RESOLUTION = 160;
+
    private GameState _gameState;
    private final Object _gameStateLock;
    private Sprites _allSprites;
+   private Font _mainFont;
 
    public LinusWarsGame(String gamename) {
       super(gamename);
       _gameStateLock = new Object();
    }
-
-   private Font _mainFont;
 
    @Override
    public void init(GameContainer gc) throws SlickException {
@@ -51,78 +55,26 @@ public class LinusWarsGame extends BasicGame {
    }
 
    private void startGame(WarMap warMap, GameSetup gameSetup, List<Faction> factions) {
-      LogicalWarMap logicalWarMap = createLogicalMap(warMap, gameSetup, factions);
+      GameFactory gameFactory = new GameFactory(_allSprites);
 
-      LogicalWarGame logicalWarGame = createLogicalWarGame(warMap, logicalWarMap, factions);
+      LogicalWarMap logicalWarMap = gameFactory.createLogicalMap(warMap, gameSetup, factions);
 
-      GraphicalWarMap graphicalWarMap = createGraphicalWarMap(warMap, logicalWarMap, factions);
+      LogicalWarGame logicalWarGame = gameFactory.createLogicalWarGame(warMap, logicalWarMap, factions);
 
-      GraphicalWarGame graphicalWarGame = createGraphicalWarGame(logicalWarGame, graphicalWarMap);
+      GraphicalWarMap graphicalWarMap = gameFactory.createGraphicalWarMap(warMap, logicalWarMap, factions);
 
-      InteractiveWarGame interactiveWarGame = createInteractiveWarGame(logicalWarGame, graphicalWarGame);
+      GraphicalWarGame graphicalWarGame = gameFactory.createGraphicalWarGame(logicalWarGame, graphicalWarMap);
 
-      deployToLogicalGame(logicalWarGame, gameSetup, factions);
+      InteractiveWarGame interactiveWarGame = gameFactory.createInteractiveWarGame(logicalWarGame, graphicalWarGame);
 
-      deployToGraphicalGame(graphicalWarGame, gameSetup, factions);
+      gameFactory.deployToLogicalGame(logicalWarGame, gameSetup, factions);
+
+      gameFactory.deployToGraphicalGame(graphicalWarGame, gameSetup, factions);
 
       logicalWarGame.callGameStart();
       graphicalWarGame.callGameStart();
 
       _gameState = new StateTurnTransition(interactiveWarGame, logicalWarGame, logicalWarGame);
-   }
-
-   private LogicalWarMap createLogicalMap(WarMap warMap, GameSetup gameSetup, List<Faction> factions) {
-      if (warMap.getNrOfFactions() != factions.size()) {
-         throw new RuntimeException("This map needs " + warMap.getNrOfFactions() + " factions, but you supplied " + factions.size());
-      }
-
-      if (gameSetup.getNrOfFactions() != factions.size()) {
-         throw new RuntimeException("This setup needs " + gameSetup.getNrOfFactions() + " factions, but you supplied " + factions.size());
-      }
-
-      LogicalWarMapImpl logicalWarMap = new LogicalWarMapImpl(new ModuleBases());
-      MapMaker mapMaker = new LogicalMapMaker(logicalWarMap);
-      warMap.create(mapMaker, factions);
-      return logicalWarMap;
-   }
-
-   private LogicalWarGame createLogicalWarGame(WarMap warMap, LogicalWarMap logicalWarMap, List<Faction> factions) {
-      LogicalWarGame logicalWarGame = new LogicalWarGame(logicalWarMap, factions);
-      MapMaker warGameCreator = new LogicalWarGameCreator(logicalWarGame);
-      warMap.create(warGameCreator, factions);
-      return logicalWarGame;
-   }
-
-   private GraphicalWarMap createGraphicalWarMap(WarMap warMap, LogicalWarMap logicalWarMap, List<Faction> factions) {
-      GraphicalWarMap newWarMap = new GraphicalWarMap(logicalWarMap);
-      GraphicalMapMaker mapMaker = new GraphicalMapMaker(_allSprites, newWarMap);
-      warMap.create(mapMaker, factions);
-      return newWarMap;
-   }
-
-   private GraphicalWarGame createGraphicalWarGame(LogicalWarGame logicalWarGame, GraphicalWarMap graphicalWarMap) {
-      GraphicalWarGame graphicalWarGame = new GraphicalWarGame(logicalWarGame);
-      graphicalWarGame.init(_allSprites);
-      graphicalWarGame.setMap(graphicalWarMap);
-      return graphicalWarGame;
-   }
-
-   private InteractiveWarGame createInteractiveWarGame(LogicalWarGame logicalWarGame, GraphicalWarGame graphicalWarGame) {
-      ScrollingTileViewImpl scrollingTileView = new ScrollingTileViewImpl();
-      scrollingTileView.setVisibleRectSize(15, 10);
-      InteractiveWarGame interactiveWarGame = new InteractiveWarGame(graphicalWarGame, logicalWarGame, scrollingTileView);
-      interactiveWarGame.init(_allSprites);
-      return interactiveWarGame;
-   }
-
-   private void deployToLogicalGame(LogicalWarGame logicalWarGame, GameSetup gameSetup, List<Faction> factions) {
-      gameSetup.preDeploy(new LogicalGamePredeployer(logicalWarGame, new LogicalUnitFactory()), factions);
-   }
-
-   private void deployToGraphicalGame(GraphicalWarGame graphicalWarGame, GameSetup gameSetup, List<Faction> factions) {
-      GraphicalGamePreDeployer graphicalGamePreDeployer = new GraphicalGamePreDeployer(graphicalWarGame);
-      graphicalGamePreDeployer.init(_allSprites);
-      gameSetup.preDeploy(graphicalGamePreDeployer, factions);
    }
 
    @Override
@@ -184,11 +136,6 @@ public class LinusWarsGame extends BasicGame {
       graphics.scale(HORIZONTAL_SCALE, VERTICAL_SCALE);
       _gameState.draw(gc, _mainFont, 0, 0);
    }
-
-   private static final float VERTICAL_SCALE = 2.0f;
-   private static final float HORIZONTAL_SCALE = 2.0f;
-   private static final int BASE_HORIZONTAL_RESOLUTION = 240;
-   private static final int BASE_VERTICAL_RESOLUTION = 160;
 
    public static void main(String[] args) {
       try {
