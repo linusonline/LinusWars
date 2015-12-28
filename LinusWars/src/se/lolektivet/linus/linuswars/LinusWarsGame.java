@@ -1,15 +1,17 @@
 package se.lolektivet.linus.linuswars;
 
 import org.newdawn.slick.*;
-import se.lolektivet.linus.linuswars.graphicalgame.*;
-import se.lolektivet.linus.linuswars.graphics.*;
-import se.lolektivet.linus.linuswars.logic.*;
+import se.lolektivet.linus.linuswars.graphicalgame.GraphicalWarGame;
+import se.lolektivet.linus.linuswars.graphicalgame.GraphicalWarMap;
+import se.lolektivet.linus.linuswars.graphics.Sprites;
+import se.lolektivet.linus.linuswars.logic.WarMap;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
-import se.lolektivet.linus.linuswars.logic.game.*;
+import se.lolektivet.linus.linuswars.logic.game.LogicalWarGame;
+import se.lolektivet.linus.linuswars.logic.game.LogicalWarMap;
+import se.lolektivet.linus.linuswars.maps.GameSetup;
 import se.lolektivet.linus.linuswars.maps.GameSetup1;
-import se.lolektivet.linus.linuswars.maps.Map1;
-import se.lolektivet.linus.linuswars.maps.Map2;
+import se.lolektivet.linus.linuswars.maps.Map3;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,62 +22,64 @@ import java.util.logging.Logger;
  * Created by Linus on 2014-09-18.
  */
 public class LinusWarsGame extends BasicGame {
-   private InteractiveWarGame _interactiveWarGame;
-   private InteractiveGameState _gameState;
+   private static final float VERTICAL_SCALE = 2.0f;
+   private static final float HORIZONTAL_SCALE = 2.0f;
+   private static final int BASE_HORIZONTAL_RESOLUTION = 240;
+   private static final int BASE_VERTICAL_RESOLUTION = 160;
+
+   private GameState _gameState;
    private final Object _gameStateLock;
    private Sprites _allSprites;
+   private Font _mainFont;
 
    public LinusWarsGame(String gamename) {
       super(gamename);
       _gameStateLock = new Object();
    }
 
-   private Font _mainFont;
-
    @Override
    public void init(GameContainer gc) throws SlickException {
       // System.out.println("Container: [ " + gc.getWidth() + "," + gc.getHeight() + "], Screen: [" + gc.getScreenWidth() + "," + gc.getScreenHeight() + "]");
 
-      _allSprites = Sprites.initializeSprites();
+      _allSprites = Sprites.createSprites();
       _mainFont = _allSprites.getMainFont();
 
-      LogicalWarMap logicalWarMap = new LogicalWarMap();
-      GraphicalWarMap graphicalWarMap = new GraphicalWarMap(logicalWarMap);
-      MapMaker mapMaker = new GraphicalAndLogicalMapMaker(_allSprites, logicalWarMap, graphicalWarMap);
-      Map2 map = new Map2(mapMaker);
-      map.create();
-
       List<Faction> factions = new ArrayList<>(2);
-      factions.add(Faction.ORANGE_STAR);
       factions.add(Faction.BLUE_MOON);
-      LogicalWarGameCreator gameCreator = new LogicalWarGameCreator();
-      LogicalWarGame logicalWarGame = gameCreator.createGameFromMapAndFactions(logicalWarMap, factions);
+      factions.add(Faction.ORANGE_STAR);
 
-      ScrollingTileViewImpl scrollingTileViewImpl = new ScrollingTileViewImpl();
-      scrollingTileViewImpl.setVisibleRectSize(15, 10);
-      GraphicalWarGame graphicalWarGame = new GraphicalWarGame(logicalWarGame);
-      graphicalWarGame.init(_allSprites);
-      graphicalWarGame.setMap(graphicalWarMap);
-      _interactiveWarGame = new InteractiveWarGame(graphicalWarGame, logicalWarGame, scrollingTileViewImpl);
-      _interactiveWarGame.init(_allSprites);
+      Map3 map = new Map3();
+      GameSetup gameSetup = new GameSetup1();
 
-      // Deploy logical units
-      new GameSetup1().preDeploy(new LogicalGamePredeployer(logicalWarGame, new LogicalUnitFactory()));
+      startGame(map, gameSetup, factions);
+   }
 
-      // Deploy graphical units
-      GraphicalGamePreDeployer graphicalGamePreDeployer = new GraphicalGamePreDeployer();
-      graphicalGamePreDeployer.init(_allSprites);
-      graphicalGamePreDeployer.preDeploy(logicalWarGame, graphicalWarGame);
+   private void startGame(WarMap warMap, GameSetup gameSetup, List<Faction> factions) {
+      GameFactory gameFactory = new GameFactory(_allSprites);
+
+      LogicalWarMap logicalWarMap = gameFactory.createLogicalMap(warMap, gameSetup, factions);
+
+      LogicalWarGame logicalWarGame = gameFactory.createLogicalWarGame(warMap, logicalWarMap, factions);
+
+      GraphicalWarMap graphicalWarMap = gameFactory.createGraphicalWarMap(warMap, logicalWarMap, factions);
+
+      GraphicalWarGame graphicalWarGame = gameFactory.createGraphicalWarGame(logicalWarGame, graphicalWarMap);
+
+      InteractiveWarGame interactiveWarGame = gameFactory.createInteractiveWarGame(logicalWarGame, graphicalWarGame);
+
+      gameFactory.deployToLogicalGame(logicalWarGame, gameSetup, factions);
+
+      gameFactory.deployToGraphicalGame(graphicalWarGame, gameSetup, factions);
 
       logicalWarGame.callGameStart();
       graphicalWarGame.callGameStart();
 
-      _gameState = new StateStarting(_interactiveWarGame, logicalWarGame, logicalWarGame);
+      _gameState = new StateTurnTransition(interactiveWarGame, logicalWarGame, logicalWarGame);
    }
 
    @Override
    public void keyPressed(int key, char c) {
-      InteractiveGameState newGameState;
+      GameState newGameState;
       synchronized (_gameStateLock) {
          switch (key) {
             case Input.KEY_W:
@@ -100,14 +104,14 @@ public class LinusWarsGame extends BasicGame {
                newGameState = _gameState;
          }
          _gameState = newGameState;
-         _gameState.setSprites(_allSprites);
+         _gameState.init(_allSprites);
       }
       System.out.println(_gameState);
    }
 
    @Override
    public void keyReleased(int key, char c) {
-      InteractiveGameState newGameState;
+      GameState newGameState;
       synchronized (_gameStateLock) {
          switch (key) {
             case Input.KEY_E:
@@ -121,18 +125,17 @@ public class LinusWarsGame extends BasicGame {
    }
 
    @Override
-   public void update(GameContainer gc, int i) throws SlickException {}
+   public void update(GameContainer gc, int i) throws SlickException {
+      synchronized (_gameStateLock) {
+         _gameState = _gameState.update();
+      }
+   }
 
    @Override
    public void render(GameContainer gc, Graphics graphics) throws SlickException {
       graphics.scale(HORIZONTAL_SCALE, VERTICAL_SCALE);
       _gameState.draw(gc, _mainFont, 0, 0);
    }
-
-   private static final float VERTICAL_SCALE = 2.0f;
-   private static final float HORIZONTAL_SCALE = 2.0f;
-   private static final int BASE_HORIZONTAL_RESOLUTION = 240;
-   private static final int BASE_VERTICAL_RESOLUTION = 160;
 
    public static void main(String[] args) {
       try {

@@ -16,14 +16,14 @@ import java.util.Set;
 /**
  * Created by Linus on 2014-09-29.
  */
-public class StateSelectUnloadPosition implements InteractiveGameState {
+public class StateSelectUnloadPosition implements GameState {
    private final InteractiveWarGame _interactiveWarGame;
    private final WarGameQueries _warGameQueries;
    private final WarGameMoves _warGameMoves;
    private final LogicalUnit _logicalUnit;
    private final MovementArrow _movementArrow;
    private final List<Position> _candidatePositions;
-   private final InteractiveGameState _previousState;
+   private final GameState _previousState;
    private int _currentlySelectedPositionIndex;
 
    public StateSelectUnloadPosition(InteractiveWarGame interactiveWarGame,
@@ -32,7 +32,7 @@ public class StateSelectUnloadPosition implements InteractiveGameState {
                                     LogicalUnit logicalUnit,
                                     MovementArrow movementArrow,
                                     Set<Position> vacantPositions,
-                                    InteractiveGameState previousState) {
+                                    GameState previousState) {
       _interactiveWarGame = interactiveWarGame;
       _warGameQueries = warGameQueries;
       _warGameMoves = warGameMoves;
@@ -54,7 +54,7 @@ public class StateSelectUnloadPosition implements InteractiveGameState {
    }
 
    @Override
-   public InteractiveGameState handleExecuteDown() {
+   public GameState handleExecuteDown() {
       LogicalUnit unloadingUnit = getUnloadingUnit();
       Position unloadingPosition = _candidatePositions.get(_currentlySelectedPositionIndex);
       _warGameMoves.executeUnloadMove(_logicalUnit, unloadingUnit, _movementArrow.getPath(), unloadingPosition);
@@ -66,18 +66,18 @@ public class StateSelectUnloadPosition implements InteractiveGameState {
    }
 
    @Override
-   public InteractiveGameState handleExecuteUp() {
+   public GameState handleExecuteUp() {
       return this;
    }
 
    @Override
-   public InteractiveGameState handleCancel() {
+   public GameState handleCancel() {
       _interactiveWarGame.hideAttackCursor();
       return _previousState;
    }
 
    @Override
-   public InteractiveGameState handleDirection(Direction direction) {
+   public GameState handleDirection(Direction direction) {
       int indexStep;
       switch (direction) {
          case LEFT:
@@ -100,7 +100,12 @@ public class StateSelectUnloadPosition implements InteractiveGameState {
    }
 
    @Override
-   public void setSprites(Sprites sprites) {
+   public GameState update() {
+      return this;
+   }
+
+   @Override
+   public void init(Sprites sprites) {
 
    }
 

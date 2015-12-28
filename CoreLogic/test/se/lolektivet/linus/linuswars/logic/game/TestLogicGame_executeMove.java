@@ -6,6 +6,7 @@ import org.junit.Test;
 import se.lolektivet.linus.linuswars.logic.LogicException;
 import se.lolektivet.linus.linuswars.logic.LogicalGamePredeployer;
 import se.lolektivet.linus.linuswars.logic.LogicalMapMaker;
+import se.lolektivet.linus.linuswars.logic.WarMap;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.MovementType;
@@ -28,16 +29,18 @@ public class TestLogicGame_executeMove {
 
    @Before
    public void setup() {
-      LogicalWarMap theMap = new LogicalWarMap();
+      LogicalWarMapImpl theMap = new LogicalWarMapImpl(new ModuleBases());
       LogicalMapMaker mapMaker = new LogicalMapMaker(theMap);
-      TestMap1 map = new TestMap1(mapMaker);
-      map.create();
+      WarMap map = new TestMap1();
+      map.create(mapMaker);
 
       List<Faction> factions = new ArrayList<>(2);
       factions.add(Faction.ORANGE_STAR);
       factions.add(Faction.BLUE_MOON);
-      LogicalWarGameCreator gameCreator = new LogicalWarGameCreator();
-      _theGame = gameCreator.createGameFromMapAndFactions(theMap, factions);
+
+      _theGame = new LogicalWarGame(theMap, factions);
+      LogicalWarGameCreator gameCreator = new LogicalWarGameCreator(_theGame);
+      map.create(gameCreator, factions);
 
       new TestGameSetup1().preDeploy(new LogicalGamePredeployer(_theGame, new LogicalUnitFactory()));
 

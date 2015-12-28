@@ -12,10 +12,12 @@ import java.util.List;
 class ModuleTurnOrder {
    private final List<Faction> _factionsInTurnOrder;
    private Faction _currentlyActiveFaction;
+   private int _dayNumber;
 
    ModuleTurnOrder(List<Faction> factionsInTurnOrder) {
       _factionsInTurnOrder = new ArrayList<>(factionsInTurnOrder);
       _currentlyActiveFaction = _factionsInTurnOrder.get(0);
+      _dayNumber = 1;
    }
 
    boolean factionIsInGame(Faction faction) {
@@ -24,6 +26,10 @@ class ModuleTurnOrder {
 
    int numberOfFactions() {
       return _factionsInTurnOrder.size();
+   }
+
+   int getDayNumber() {
+      return _dayNumber;
    }
 
    Faction currentlyActiveFaction() {
@@ -44,6 +50,7 @@ class ModuleTurnOrder {
             if (iterator.hasNext()) {
                return iterator.next();
             } else {
+               _dayNumber++;
                return _factionsInTurnOrder.get(0);
             }
          }

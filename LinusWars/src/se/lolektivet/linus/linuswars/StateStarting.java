@@ -11,7 +11,7 @@ import se.lolektivet.linus.linuswars.logic.enums.Direction;
 /**
  * Created by Linus on 2014-09-19.
  */
-public class StateStarting implements InteractiveGameState {
+public class StateStarting implements GameState {
    private final InteractiveWarGame _interactiveWarGame;
    private final WarGameQueries _warGameQueries;
    private final WarGameMoves _warGameMoves;
@@ -24,18 +24,18 @@ public class StateStarting implements InteractiveGameState {
    }
 
    @Override
-   public InteractiveGameState handleExecuteDown() {
+   public GameState handleExecuteDown() {
       _executeHasBeenPressed = true;
       if (_warGameQueries.hasActiveUnitAtPosition(_interactiveWarGame.getCursorPosition())) {
          LogicalUnit logicalUnit = _warGameQueries.getUnitAtPosition(_interactiveWarGame.getCursorPosition());
          return new StateSelectMove(_interactiveWarGame, _warGameQueries, _warGameMoves, logicalUnit);
       } else {
-         return new StateQuickMenu(_interactiveWarGame, _warGameQueries, _warGameMoves);
+         return new StateQuickMenu(this, _interactiveWarGame, _warGameQueries, _warGameMoves);
       }
    }
 
    @Override
-   public InteractiveGameState handleExecuteUp() {
+   public GameState handleExecuteUp() {
       if (!_executeHasBeenPressed) {
          return this;
       }
@@ -44,12 +44,12 @@ public class StateStarting implements InteractiveGameState {
    }
 
    @Override
-   public InteractiveGameState handleCancel() {
+   public GameState handleCancel() {
       return this;
    }
 
    @Override
-   public InteractiveGameState handleDirection(Direction direction) {
+   public GameState handleDirection(Direction direction) {
       try {
          _interactiveWarGame.moveCursor(direction);
       } catch (InteractiveWarGame.CursorOutsideMapException ignored) {
@@ -58,7 +58,12 @@ public class StateStarting implements InteractiveGameState {
    }
 
    @Override
-   public void setSprites(Sprites sprites) {
+   public GameState update() {
+      return this;
+   }
+
+   @Override
+   public void init(Sprites sprites) {
 
    }
 

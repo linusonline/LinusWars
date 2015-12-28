@@ -15,7 +15,7 @@ import java.util.Collection;
 /**
  * Created by Linus on 2014-09-20.
  */
-public class StateSelectMove implements InteractiveGameState {
+public class StateSelectMove implements GameState {
    private final InteractiveWarGame _interactiveWarGame;
    private final WarGameQueries _warGameQueries;
    private final WarGameMoves _warGameMoves;
@@ -51,7 +51,7 @@ public class StateSelectMove implements InteractiveGameState {
    }
 
    @Override
-   public InteractiveGameState handleExecuteDown() {
+   public GameState handleExecuteDown() {
       MoveAnalyzer moveAnalyzer = new MoveAnalyzer(_warGameQueries, _logicalUnit, _movementArrow.getPath());
       moveAnalyzer.analyze();
       if (moveAnalyzer.canDoSomeMove()) {
@@ -65,19 +65,19 @@ public class StateSelectMove implements InteractiveGameState {
    }
 
    @Override
-   public InteractiveGameState handleExecuteUp() {
+   public GameState handleExecuteUp() {
       return this;
    }
 
    @Override
-   public InteractiveGameState handleCancel() {
+   public GameState handleCancel() {
       _interactiveWarGame.stopIndicatingPositions();
       _interactiveWarGame.hideMovementArrow();
       return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
    }
 
    @Override
-   public InteractiveGameState handleDirection(Direction direction) {
+   public GameState handleDirection(Direction direction) {
       try {
          _interactiveWarGame.moveCursor(direction);
          Position newCursorPosition = _interactiveWarGame.getCursorPosition();
@@ -101,7 +101,12 @@ public class StateSelectMove implements InteractiveGameState {
    }
 
    @Override
-   public void setSprites(Sprites sprites) {
+   public GameState update() {
+      return this;
+   }
+
+   @Override
+   public void init(Sprites sprites) {
       _reachablePositions = _warGameQueries.getAllReachablePoints(_logicalUnit);
       _interactiveWarGame.indicateSelectedPositions(_reachablePositions);
       _movementArrowController.init(sprites);

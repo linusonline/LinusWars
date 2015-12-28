@@ -77,9 +77,9 @@ public class GraphicalWarGame implements WarGameListener {
       _hudIsOnTheLeft = left;
    }
 
-   public void addUnit(GraphicalUnit graphicalUnit, LogicalUnit logicalUnit, Position position) {
+   public void addUnit(GraphicalUnit graphicalUnit, Position position) {
       graphicalUnit.setTilePosition(position);
-      _graphicsForUnits.put(logicalUnit, graphicalUnit);
+      _graphicsForUnits.put(_warGameQueries.getUnitAtPosition(position), graphicalUnit);
    }
 
    public GraphicalUnit getGraphicForUnit(LogicalUnit unit) {
@@ -112,7 +112,7 @@ public class GraphicalWarGame implements WarGameListener {
       }
    }
 
-   public void makeUnitFaceEnemyHq(LogicalUnit logicalUnit) {
+   private void makeUnitFaceEnemyHq(LogicalUnit logicalUnit) {
       Position unitPosition = _warGameQueries.getPositionOfUnit(logicalUnit);
       for (Faction otherFaction : _warGameQueries.getFactionsInGame()) {
          if (_warGameQueries.areEnemies(logicalUnit, otherFaction)) {
@@ -137,7 +137,11 @@ public class GraphicalWarGame implements WarGameListener {
          if (hp < 10) {
             hpNumber = _sprites.getHpNumberImage(hp);
          }
-         entry.getValue().draw(x, y, hpNumber, tileView);
+         if (_warGameQueries.unitHasMovedThisTurn(entry.getKey())) {
+            entry.getValue().drawGreyed(x, y, hpNumber, tileView);
+         } else {
+            entry.getValue().draw(x, y, hpNumber, tileView);
+         }
       }
    }
 

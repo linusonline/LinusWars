@@ -27,6 +27,7 @@ class AttackLogic {
       defenseRatingForTerrainTypes.put(TerrainType.PLAINS, 1);
       defenseRatingForTerrainTypes.put(TerrainType.WOODS, 2);
       defenseRatingForTerrainTypes.put(TerrainType.MOUNTAINS, 4);
+      defenseRatingForTerrainTypes.put(TerrainType.BRIDGE, 0);
       defenseRatingForTerrainTypes.put(TerrainType.CITY, 3);
       defenseRatingForTerrainTypes.put(TerrainType.BASE, 3);
       defenseRatingForTerrainTypes.put(TerrainType.AIRPORT, 3);

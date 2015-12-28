@@ -10,21 +10,23 @@ import se.lolektivet.linus.linuswars.logic.enums.Direction;
 /**
  * Created by Linus on 2014-09-20.
  */
-public class StateQuickMenu implements InteractiveGameState {
+public class StateQuickMenu implements GameState {
    private final InteractiveWarGame _interactiveWarGame;
    private final WarGameQueries _warGameQueries;
    private final WarGameMoves _warGameMoves;
+   private final GameState _previousState;
    private GraphicalMenu _theMenu;
    private Sprites _sprites;
 
-   public StateQuickMenu(InteractiveWarGame interactiveWarGame, WarGameQueries warGameQueries, WarGameMoves warGameMoves) {
+   public StateQuickMenu(GameState previousState, InteractiveWarGame interactiveWarGame, WarGameQueries warGameQueries, WarGameMoves warGameMoves) {
+      _previousState = previousState;
       _interactiveWarGame = interactiveWarGame;
       _warGameQueries = warGameQueries;
       _warGameMoves = warGameMoves;
    }
 
    @Override
-   public InteractiveGameState handleExecuteDown() {
+   public GameState handleExecuteDown() {
       String menuItemText = _theMenu.getTextForSelectedItem();
       QuickMenuItem menuItem = QuickMenuItem.fromName(menuItemText);
       switch (menuItem) {
@@ -32,32 +34,37 @@ public class StateQuickMenu implements InteractiveGameState {
             _warGameMoves.endTurn();
             // TODO: Play end-of-turn animations, change some graphics and bg sound.
             System.out.println("Turn ended!");
-            break;
+            return new StateTurnTransition(_interactiveWarGame, _warGameQueries, _warGameMoves);
          case NOTHING:
-            break;
+            return _previousState;
          default:
+            return this;
       }
-      return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
    }
 
    @Override
-   public InteractiveGameState handleExecuteUp() {
+   public GameState handleExecuteUp() {
       return this;
    }
 
    @Override
-   public InteractiveGameState handleCancel() {
-      return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
+   public GameState handleCancel() {
+      return _previousState;
    }
 
    @Override
-   public InteractiveGameState handleDirection(Direction direction) {
+   public GameState handleDirection(Direction direction) {
       _theMenu.moveCursor(direction);
       return this;
    }
 
    @Override
-   public void setSprites(Sprites sprites) {
+   public GameState update() {
+      return this;
+   }
+
+   @Override
+   public void init(Sprites sprites) {
       if (_sprites == null) {
          _sprites = sprites;
          _theMenu = new GraphicalMenu(_sprites.getMenuCursor());

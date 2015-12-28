@@ -11,7 +11,7 @@ import java.util.*;
 /**
  * Created by Linus on 2015-11-27.
  */
-public class ModuleBases {
+public class ModuleBases implements BasesSetup {
    private final Map<Faction, Collection<Base>> _basesForFaction;
    private final Map<Position, Base> _baseAtPosition;
    private final Map<Faction, Position> _hqsOfFactions;
@@ -24,6 +24,7 @@ public class ModuleBases {
       _hqsOfFactions = new HashMap<>(2);
    }
 
+   @Override
    public void addBase(Position position, TerrainType buildingType, Faction faction) {
       if (buildingType == TerrainType.HQ) {
          if (faction == Faction.NEUTRAL) {
@@ -52,6 +53,15 @@ public class ModuleBases {
       return new ArrayList<>(getBaseListForFaction(faction));
    }
 
+   @Override
+   public Collection<Base> getAllBases() {
+      Collection<Base> allBases = new HashSet<>();
+      for (Collection<Base> factionBases : _basesForFaction.values()) {
+         allBases.addAll(factionBases);
+      }
+      return allBases;
+   }
+
    public Base getBaseAtPosition(Position position) {
       return _baseAtPosition.get(position);
    }
@@ -64,10 +74,6 @@ public class ModuleBases {
       return _hqsOfFactions.get(faction);
    }
 
-   public int getNumberOfHqs() {
-      return _hqsOfFactions.size();
-   }
-
    public List<Faction> getFactions() {
       if (_listOfFactions == null) {
          _listOfFactions = new ArrayList<>(_basesForFaction.keySet());
@@ -76,47 +82,13 @@ public class ModuleBases {
       return new ArrayList<>(_listOfFactions);
    }
 
-   void validateSetup() {
+   @Override
+   public void validateSetup() {
       if (getFactions().size() != _hqsOfFactions.size()) {
          throw new InitializationException("All participating factions must have an HQ!");
       }
       if (getFactions().size() < 2) {
          throw new InitializationException("Setup must have at least two factions with one HQ each!");
-      }
-   }
-
-   public void replaceFactions(List<Faction> newFactions) {
-      List<Faction> oldFactions = getFactions();
-      if (newFactions.size() != oldFactions.size()) {
-         throw new InitializationException("Map has " + _basesForFaction.size() + " factions, tried to initialize with " + newFactions.size());
-      }
-
-      Map<Faction, Faction> factionReplacementMap = new HashMap<>(_basesForFaction.size());
-      for (int i = 0; i < newFactions.size(); i++) {
-         factionReplacementMap.put(oldFactions.get(i), newFactions.get(i));
-      }
-      factionReplacementMap.put(Faction.NEUTRAL, Faction.NEUTRAL);
-
-      {
-         Map<Faction, Collection<Base>> newBasesForFaction = new HashMap<>(_basesForFaction.size());
-         for (Map.Entry<Faction, Collection<Base>> entry : _basesForFaction.entrySet()) {
-            Faction newFaction = factionReplacementMap.get(entry.getKey());
-            for (Base base : entry.getValue()) {
-               base.setFaction(newFaction);
-            }
-            newBasesForFaction.put(newFaction, entry.getValue());
-         }
-         _basesForFaction.clear();
-         _basesForFaction.putAll(newBasesForFaction);
-      }
-
-      {
-         Map<Faction, Position> newHqsOfFactions = new HashMap<>(_basesForFaction.size());
-         for (Map.Entry<Faction, Position> entry : _hqsOfFactions.entrySet()) {
-            newHqsOfFactions.put(factionReplacementMap.get(entry.getKey()), entry.getValue());
-         }
-         _hqsOfFactions.clear();
-         _hqsOfFactions.putAll(newHqsOfFactions);
       }
    }
 }

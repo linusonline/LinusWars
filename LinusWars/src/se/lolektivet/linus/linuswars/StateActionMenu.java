@@ -3,18 +3,15 @@ package se.lolektivet.linus.linuswars;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.game.WarGameMoves;
 import se.lolektivet.linus.linuswars.logic.game.WarGameQueries;
 
-import java.util.Set;
-
 /**
  * Created by Linus on 2014-09-20.
  */
-public class StateActionMenu implements InteractiveGameState {
+public class StateActionMenu implements GameState {
    private final InteractiveWarGame _interactiveWarGame;
    private final WarGameQueries _warGameQueries;
    private final WarGameMoves _warGameMoves;
@@ -39,7 +36,7 @@ public class StateActionMenu implements InteractiveGameState {
    }
 
    @Override
-   public InteractiveGameState handleExecuteDown() {
+   public GameState handleExecuteDown() {
       String selectedItemText = _theActionMenu.getTextForSelectedItem();
       ActionMenuItem selectedItem = ActionMenuItem.fromName(selectedItemText);
       switch (selectedItem) {
@@ -75,30 +72,35 @@ public class StateActionMenu implements InteractiveGameState {
       return this;
    }
 
-   private InteractiveGameState endMoveAndGoToStartingState() {
+   private GameState endMoveAndGoToStartingState() {
       _interactiveWarGame.stopIndicatingPositions();
       _interactiveWarGame.hideMovementArrow();
       return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
    }
 
    @Override
-   public InteractiveGameState handleExecuteUp() {
+   public GameState handleExecuteUp() {
       return this;
    }
 
    @Override
-   public InteractiveGameState handleCancel() {
+   public GameState handleCancel() {
       return new StateSelectMove(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
    }
 
    @Override
-   public InteractiveGameState handleDirection(Direction direction) {
+   public GameState handleDirection(Direction direction) {
       _theActionMenu.moveCursor(direction);
       return this;
    }
 
    @Override
-   public void setSprites(Sprites sprites) {
+   public GameState update() {
+      return this;
+   }
+
+   @Override
+   public void init(Sprites sprites) {
       if (_theActionMenu == null) {
          _theActionMenu = new GraphicalMenu(sprites.getMenuCursor());
          // Note: The first three moves are logically mutually exclusive.

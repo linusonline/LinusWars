@@ -3,6 +3,7 @@ package se.lolektivet.linus.linuswars;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
+import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.game.WarGameMoves;
 import se.lolektivet.linus.linuswars.logic.game.WarGameQueries;
@@ -15,16 +16,17 @@ import java.util.Set;
 /**
  * Created by Linus on 2014-09-20.
  */
-public class StateSelectAttack implements InteractiveGameState {
+public class StateSelectAttack implements GameState {
    private final InteractiveWarGame _interactiveWarGame;
    private WarGameQueries _warGameQueries;
    private WarGameMoves _warGameMoves;
    private final LogicalUnit _logicalUnit;
    private final MovementArrow _movementArrow;
    private final List<LogicalUnit> _attackableUnits;
-   private final InteractiveGameState _previousState;
+   private final GameState _previousState;
    private int _currentlySelectedTargetIndex;
    private GraphicalMenu _fireOrNothingMenu;
+   private DamageCounter _damageCounter;
 
    public StateSelectAttack(InteractiveWarGame interactiveWarGame,
                             WarGameQueries warGameQueries,
@@ -32,7 +34,7 @@ public class StateSelectAttack implements InteractiveGameState {
                             LogicalUnit logicalUnit,
                             MovementArrow movementArrow,
                             Set<LogicalUnit> attackableUnits,
-                            InteractiveGameState previousState) {
+                            GameState previousState) {
       _interactiveWarGame = interactiveWarGame;
       _warGameQueries = warGameQueries;
       _warGameMoves = warGameMoves;
@@ -55,7 +57,7 @@ public class StateSelectAttack implements InteractiveGameState {
    }
 
    @Override
-   public InteractiveGameState handleExecuteDown() {
+   public GameState handleExecuteDown() {
       LogicalUnit defendingUnit = getTargetUnit();
       _warGameMoves.executeAttackMove(_logicalUnit, _movementArrow.getPath(), defendingUnit);
       _interactiveWarGame.stopIndicatingPositions();
@@ -66,18 +68,18 @@ public class StateSelectAttack implements InteractiveGameState {
    }
 
    @Override
-   public InteractiveGameState handleExecuteUp() {
+   public GameState handleExecuteUp() {
       return this;
    }
 
    @Override
-   public InteractiveGameState handleCancel() {
+   public GameState handleCancel() {
       _interactiveWarGame.hideAttackCursor();
       return _previousState;
    }
 
    @Override
-   public InteractiveGameState handleDirection(Direction direction) {
+   public GameState handleDirection(Direction direction) {
       int indexStep;
       switch (direction) {
          case LEFT:
@@ -101,10 +103,19 @@ public class StateSelectAttack implements InteractiveGameState {
    }
 
    @Override
-   public void setSprites(Sprites sprites) {
+   public GameState update() {
+      return this;
+   }
+
+   @Override
+   public void init(Sprites sprites) {
       if (_fireOrNothingMenu == null) {
          _fireOrNothingMenu = new GraphicalMenu(sprites.getMenuCursor());
          _fireOrNothingMenu.addItem(ActionMenuItem.FIRE.getName());
+      }
+      if (_damageCounter == null) {
+         _damageCounter = new DamageCounter();
+         _damageCounter.init(sprites);
       }
    }
 
@@ -117,5 +128,9 @@ public class StateSelectAttack implements InteractiveGameState {
    public void draw(GameContainer gc, Font font, int x, int y) {
       _interactiveWarGame.draw(gc, 0, 0);
       _fireOrNothingMenu.draw(gc.getGraphics(), font);
+      // Possible optimization to do here.
+      Position position = _warGameQueries.getPositionOfUnit(getTargetUnit());
+      int damage = _warGameQueries.calculateDamageInPercent(_logicalUnit, getTargetUnit());
+      _damageCounter.draw(position.getX(), position.getY(), _interactiveWarGame.getTileView(), damage);
    }
 }

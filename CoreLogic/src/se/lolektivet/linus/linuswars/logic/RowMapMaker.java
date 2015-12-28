@@ -8,7 +8,7 @@ import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
  * Created by Linus on 2015-11-23.
  */
 public class RowMapMaker {
-   private final MapMaker _mapMaker;
+   private MapMaker _mapMaker;
 
    private int _currentPlaceInRow;
    private int _currentRow;
@@ -17,24 +17,31 @@ public class RowMapMaker {
    private boolean _buildingAdded;
    private int _expectedNumberOfRows;
 
-   protected RowMapMaker(MapMaker mapMaker, int totalNumberOfRows) {
-      _mapMaker = mapMaker;
+   public RowMapMaker() {
       _currentPlaceInRow = 0;
       _currentRow = 0;
       _widthDetermined = false;
       _buildingAdded = false;
+   }
+
+   public void init(MapMaker mapMaker, int totalNumberOfRows) {
+      _mapMaker = mapMaker;
       _expectedNumberOfRows = totalNumberOfRows;
    }
 
-   protected void addTerrain(TerrainTile terrainTile) {
+   public void addTerrain(TerrainTile terrainTile) {
+      addTerrain(terrainTile.getTerrainType());
+   }
+
+   public void addTerrain(TerrainType terrainType) {
       if (_buildingAdded) {
          throw new InitializationException("You must add all terrain before you start adding buildings!");
       }
-      _mapMaker.addTerrain(terrainTile, _currentPlaceInRow, _currentRow);
+      _mapMaker.addTerrain(terrainType, _currentPlaceInRow, _currentRow);
       _currentPlaceInRow++;
    }
 
-   protected void addBuilding(TerrainType buildingType, Faction faction, int x, int y) {
+   public void addBuilding(TerrainType buildingType, Faction faction, int x, int y) {
       if (!isValid()) {
          throw new InitializationException("You must complete the map (all rows the same length, end with nextRow) before you start adding buildings!");
       }
@@ -45,11 +52,11 @@ public class RowMapMaker {
       _buildingAdded = true;
    }
 
-   protected void validate() {
+   public void finish() {
       if (!isValid()) {
          throw new InitializationException("Map is invalid! All rows must be the same length, end with nextRow.");
       }
-      _mapMaker.validate();
+      _mapMaker.finish();
    }
 
    private boolean isValid() {
@@ -57,7 +64,7 @@ public class RowMapMaker {
             && _currentRow == _expectedNumberOfRows;
    }
 
-   protected void nextRow() {
+   public void nextRow() {
       if (_widthDetermined) {
          if (_mapWidth != _currentPlaceInRow) {
             throw new InitializationException("All rows in map must be the same length!");

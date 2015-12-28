@@ -11,6 +11,11 @@ import java.util.Map;
  */
 class ResourceLoader {
 
+   private static final String RES_PATH = "res/";
+   private static final String HUD_PATH = RES_PATH + "hud/";
+   private static final String UNIT_PATH = RES_PATH + "units/";
+   private static final String MAP_PATH = RES_PATH + "map/";
+
    private final Map<String, Image> _imageCache;
 
    static class ResourceNotLoadedException extends RuntimeException {
@@ -24,47 +29,55 @@ class ResourceLoader {
    }
 
    Image getCursorImage() {
-      return getImage("res/Cursor.png");
+      return getImage(HUD_PATH + "cursor.png");
    }
 
    Image getMenuCursorImage() {
-      return getImage("res/menucursor.png");
+      return getImage(HUD_PATH + "menucursor.png");
    }
 
    Image getAttackCursorSheet() {
-      return getImage("res/attackcursor.png");
+      return getImage(HUD_PATH + "attackcursor.png");
    }
 
    Image getUnitSpriteSheet(String unitName, String factionName) {
-      return getImage("res/" + unitName + "-" + factionName + ".png");
+      return getImage(UNIT_PATH + unitName + "-" + factionName + ".png");
    }
 
    Image getFontSpriteSheet() {
-      return getImage("res/spritefont.png");
+      return getImage(HUD_PATH + "spritefont.png");
    }
 
    Image getHpNumbersSpriteSheet() {
-      return getImage("res/hpnumbers.png");
+      return getImage(HUD_PATH + "hpnumbers.png");
    }
 
    Image getMovementArrowSpriteSheet() {
-      return getImage("res/movearrow.png");
+      return getImage(HUD_PATH + "movearrow.png");
    }
 
    Image getBuildingsSpriteSheet() {
-      return getImage("res/buildings.png");
+      return getImage(MAP_PATH + "buildings.png");
    }
 
    Image getTerrainSpriteSheet() {
-      return getImage("res/Landscape.png");
+      return getImage(MAP_PATH + "landscape.png");
    }
 
    Image getMoneyCounterImage() {
-      return getImage("res/moneypane.png");
+      return getImage(HUD_PATH + "moneypane.png");
    }
 
    Image getMoneyNumbersSpriteSheet() {
-      return getImage("res/goldnumbers.png");
+      return getImage(HUD_PATH + "goldnumbers.png");
+   }
+
+   Image getDamageCounter() {
+      return getImage(HUD_PATH + "damagecounter.png");
+   }
+
+   Image getDamageNumbersSpriteSheet() {
+      return getImage(HUD_PATH + "damagenrs.png");
    }
 
    private Image getImage(String path) {

@@ -1,27 +1,39 @@
 package se.lolektivet.linus.linuswars.maps;
 
-import se.lolektivet.linus.linuswars.logic.LogicalGamePredeployer;
+import se.lolektivet.linus.linuswars.logic.GamePredeployer;
 import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.UnitType;
 
+import java.util.List;
+
 /**
  * Created by Linus on 2014-09-22.
  */
-public class GameSetup1 {
+public class GameSetup1 extends GameSetupAdapter {
 
-   public void preDeploy(LogicalGamePredeployer predeployer) {
-      predeployer.addNewUnit(UnitType.MD_TANK, new Position(3, 1), Faction.ORANGE_STAR);
-      predeployer.addNewUnit(UnitType.APC, new Position(4, 2), Faction.ORANGE_STAR);
-      predeployer.addNewUnit(UnitType.ARTILLERY, new Position(5, 3), Faction.ORANGE_STAR);
-      predeployer.addNewUnit(UnitType.INFANTRY, new Position(6, 4), Faction.ORANGE_STAR);
-      predeployer.addNewUnit(UnitType.MECH, new Position(7, 3), Faction.ORANGE_STAR, 50);
-      predeployer.addNewUnit(UnitType.MECH, new Position(7, 4), Faction.ORANGE_STAR, 30);
+   @Override
+   public int getNrOfFactions() {
+      return 2;
+   }
 
-      predeployer.addNewUnit(UnitType.MD_TANK, new Position(8, 1), Faction.BLUE_MOON);
-      predeployer.addNewUnit(UnitType.APC, new Position(9, 2), Faction.BLUE_MOON);
-      predeployer.addNewUnit(UnitType.ARTILLERY, new Position(10, 3), Faction.BLUE_MOON);
-      predeployer.addNewUnit(UnitType.INFANTRY, new Position(11, 4), Faction.BLUE_MOON);
-      predeployer.addNewUnit(UnitType.MECH, new Position(12, 3), Faction.BLUE_MOON);
+   @Override
+   public void preDeploy(GamePredeployer predeployer, List<Faction> factions) {
+      Faction factionOne = factions.get(0);
+
+      predeployer.addNewUnit(UnitType.MD_TANK, factionOne, 3, 1);
+      predeployer.addNewUnit(UnitType.APC, factionOne, 4, 2);
+      predeployer.addNewUnit(UnitType.ARTILLERY, factionOne, 5, 3);
+      predeployer.addNewUnit(UnitType.INFANTRY, factionOne, 6, 4);
+      predeployer.addNewUnit(UnitType.MECH, factionOne, 7, 3, 50);
+      predeployer.addNewUnit(UnitType.MECH, factionOne, 7, 4, 30);
+
+      Faction factionTwo = factions.get(1);
+
+      predeployer.addNewUnit(UnitType.MD_TANK, factionTwo, 8, 1);
+      predeployer.addNewUnit(UnitType.APC, factionTwo, 9, 2);
+      predeployer.addNewUnit(UnitType.ARTILLERY, factionTwo, 10, 3);
+      predeployer.addNewUnit(UnitType.INFANTRY, factionTwo, 11, 4);
+      predeployer.addNewUnit(UnitType.MECH, factionTwo, 12, 3);
    }
 }
