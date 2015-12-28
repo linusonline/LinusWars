@@ -48,6 +48,12 @@ public class StateSelectMove implements GameState {
 
    @Override
    public GameState handleExecuteDown() {
+      Position cursorPosition = _context.interactiveWarGame.getCursorPosition();
+      if (!_reachablePositions.contains(cursorPosition)) {
+         // TODO: Play "blocked" sound.
+         return this;
+      }
+
       MoveAnalyzer moveAnalyzer = new MoveAnalyzer(_context.warGameQueries, _logicalUnit, _movementArrow.getPath());
       moveAnalyzer.analyze();
       if (moveAnalyzer.canDoSomeMove()) {
