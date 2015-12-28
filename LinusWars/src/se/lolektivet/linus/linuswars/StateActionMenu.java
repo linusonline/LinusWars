@@ -15,9 +15,9 @@ public class StateActionMenu implements GameState {
 
    private final GameStateContext _context;
 
-   private LogicalUnit _logicalUnit;
-   private MovementArrow _movementArrow;
-   private MoveAnalyzer _moveAnalyzer;
+   private final LogicalUnit _logicalUnit;
+   private final MovementArrow _movementArrow;
+   private final MoveAnalyzer _moveAnalyzer;
    private GraphicalMenu _theActionMenu;
 
    public StateActionMenu(GameStateContext context,
