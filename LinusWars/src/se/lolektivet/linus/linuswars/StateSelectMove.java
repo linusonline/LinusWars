@@ -16,49 +16,45 @@ import java.util.Collection;
  * Created by Linus on 2014-09-20.
  */
 public class StateSelectMove implements GameState {
-   private final InteractiveWarGame _interactiveWarGame;
-   private final WarGameQueries _warGameQueries;
-   private final WarGameMoves _warGameMoves;
+
+   private final GameStateContext _context;
+
    private final LogicalUnit _logicalUnit;
    private Collection<Position> _reachablePositions;
    private MovementArrow _movementArrow;
    private final MovementArrowController _movementArrowController;
 
    public StateSelectMove(
-         InteractiveWarGame interactiveWarGame,
-         WarGameQueries warGameQueries, WarGameMoves warGameMoves,
+         GameStateContext context,
          LogicalUnit logicalUnit,
          MovementArrow movementArrow) {
-      _interactiveWarGame = interactiveWarGame;
-      _warGameQueries = warGameQueries;
-      _warGameMoves = warGameMoves;
+      _context = context;
       _logicalUnit = logicalUnit;
       _movementArrow = movementArrow;
-      _movementArrowController = new MovementArrowControllerImpl(_movementArrow, _logicalUnit, _warGameQueries, _interactiveWarGame);
-      _interactiveWarGame.setMovementArrowController(_movementArrowController);
+      _movementArrowController = new MovementArrowControllerImpl(_movementArrow, _logicalUnit, _context.warGameQueries, _context.interactiveWarGame);
+      _context.interactiveWarGame.setMovementArrowController(_movementArrowController);
       resetGraphicalUnit();
    }
 
    public StateSelectMove(
-         InteractiveWarGame interactiveWarGame,
-         WarGameQueries warGameQueries, WarGameMoves warGameMoves,
+         GameStateContext context,
          LogicalUnit logicalUnit) {
-      this(interactiveWarGame, warGameQueries, warGameMoves, logicalUnit, new MovementArrow(warGameQueries.getPositionOfUnit(logicalUnit)));
+      this(context, logicalUnit, new MovementArrow(context.warGameQueries.getPositionOfUnit(logicalUnit)));
    }
 
    private void resetGraphicalUnit() {
-      _interactiveWarGame.resetUnitGraphicToUnitPosition(_logicalUnit);
+      _context.interactiveWarGame.resetUnitGraphicToUnitPosition(_logicalUnit);
    }
 
    @Override
    public GameState handleExecuteDown() {
-      MoveAnalyzer moveAnalyzer = new MoveAnalyzer(_warGameQueries, _logicalUnit, _movementArrow.getPath());
+      MoveAnalyzer moveAnalyzer = new MoveAnalyzer(_context.warGameQueries, _logicalUnit, _movementArrow.getPath());
       moveAnalyzer.analyze();
       if (moveAnalyzer.canDoSomeMove()) {
          // TODO: Animate travel.
-         _interactiveWarGame.setPositionOfGraphicForUnit(_logicalUnit, _movementArrow.getFinalPosition());
-         _interactiveWarGame.hideMovementArrow();
-         return new StateActionMenu(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow, moveAnalyzer);
+         _context.interactiveWarGame.setPositionOfGraphicForUnit(_logicalUnit, _movementArrow.getFinalPosition());
+         _context.interactiveWarGame.hideMovementArrow();
+         return new StateActionMenu(_context, _logicalUnit, _movementArrow, moveAnalyzer);
       } else {
          return this;
       }
@@ -71,16 +67,16 @@ public class StateSelectMove implements GameState {
 
    @Override
    public GameState handleCancel() {
-      _interactiveWarGame.stopIndicatingPositions();
-      _interactiveWarGame.hideMovementArrow();
-      return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
+      _context.interactiveWarGame.stopIndicatingPositions();
+      _context.interactiveWarGame.hideMovementArrow();
+      return new StateStarting(_context);
    }
 
    @Override
    public GameState handleDirection(Direction direction) {
       try {
-         _interactiveWarGame.moveCursor(direction);
-         Position newCursorPosition = _interactiveWarGame.getCursorPosition();
+         _context.interactiveWarGame.moveCursor(direction);
+         Position newCursorPosition = _context.interactiveWarGame.getCursorPosition();
          if (_movementArrow.getFinalPosition().equals(newCursorPosition)) {
             return this;
          }
@@ -90,7 +86,7 @@ public class StateSelectMove implements GameState {
          if (_movementArrowController.canExtendMovementArrowToCursorPosition()) {
             _movementArrow.addPoint(newCursorPosition);
          } else {
-            Path optimalPath = _warGameQueries.getOptimalPathForUnitToDestination(_logicalUnit, newCursorPosition);
+            Path optimalPath = _context.warGameQueries.getOptimalPathForUnitToDestination(_logicalUnit, newCursorPosition);
             _movementArrow = new MovementArrow(optimalPath);
             _movementArrow.build();
             _movementArrowController.setMovementArrow(_movementArrow);
@@ -107,8 +103,8 @@ public class StateSelectMove implements GameState {
 
    @Override
    public void init(Sprites sprites) {
-      _reachablePositions = _warGameQueries.getAllReachablePoints(_logicalUnit);
-      _interactiveWarGame.indicateSelectedPositions(_reachablePositions);
+      _reachablePositions = _context.warGameQueries.getAllReachablePoints(_logicalUnit);
+      _context.interactiveWarGame.indicateSelectedPositions(_reachablePositions);
       _movementArrowController.init(sprites);
    }
 
@@ -119,6 +115,6 @@ public class StateSelectMove implements GameState {
 
    @Override
    public void draw(GameContainer gc, Font font, int x, int y) {
-      _interactiveWarGame.draw(gc, 0, 0);
+      _context.interactiveWarGame.draw(gc, 0, 0);
    }
 }

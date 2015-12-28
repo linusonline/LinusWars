@@ -12,25 +12,22 @@ import se.lolektivet.linus.linuswars.logic.enums.Direction;
  * Created by Linus on 2014-09-19.
  */
 public class StateStarting implements GameState {
-   private final InteractiveWarGame _interactiveWarGame;
-   private final WarGameQueries _warGameQueries;
-   private final WarGameMoves _warGameMoves;
+
+   private final GameStateContext _context;
    private boolean _executeHasBeenPressed = false;
 
-   public StateStarting(InteractiveWarGame interactiveWarGame, WarGameQueries warGameQueries, WarGameMoves warGameMoves) {
-      _interactiveWarGame = interactiveWarGame;
-      _warGameMoves = warGameMoves;
-      _warGameQueries = warGameQueries;
+   public StateStarting(GameStateContext context) {
+      _context = context;
    }
 
    @Override
    public GameState handleExecuteDown() {
       _executeHasBeenPressed = true;
-      if (_warGameQueries.hasActiveUnitAtPosition(_interactiveWarGame.getCursorPosition())) {
-         LogicalUnit logicalUnit = _warGameQueries.getUnitAtPosition(_interactiveWarGame.getCursorPosition());
-         return new StateSelectMove(_interactiveWarGame, _warGameQueries, _warGameMoves, logicalUnit);
+      if (_context.warGameQueries.hasActiveUnitAtPosition(_context.interactiveWarGame.getCursorPosition())) {
+         LogicalUnit logicalUnit = _context.warGameQueries.getUnitAtPosition(_context.interactiveWarGame.getCursorPosition());
+         return new StateSelectMove(_context, logicalUnit);
       } else {
-         return new StateQuickMenu(this, _interactiveWarGame, _warGameQueries, _warGameMoves);
+         return new StateQuickMenu(_context, this);
       }
    }
 
@@ -51,7 +48,7 @@ public class StateStarting implements GameState {
    @Override
    public GameState handleDirection(Direction direction) {
       try {
-         _interactiveWarGame.moveCursor(direction);
+         _context.interactiveWarGame.moveCursor(direction);
       } catch (InteractiveWarGame.CursorOutsideMapException ignored) {
       }
       return this;
@@ -74,6 +71,6 @@ public class StateStarting implements GameState {
 
    @Override
    public void draw(GameContainer gc, Font font, int x, int y) {
-      _interactiveWarGame.draw(gc, 0, 0);
+      _context.interactiveWarGame.draw(gc, 0, 0);
    }
 }

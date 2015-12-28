@@ -12,24 +12,19 @@ import se.lolektivet.linus.linuswars.logic.game.WarGameQueries;
  * Created by Linus on 2014-09-20.
  */
 public class StateActionMenu implements GameState {
-   private final InteractiveWarGame _interactiveWarGame;
-   private final WarGameQueries _warGameQueries;
-   private final WarGameMoves _warGameMoves;
-   private final LogicalUnit _logicalUnit;
-   private final MovementArrow _movementArrow;
-   private final MoveAnalyzer _moveAnalyzer;
+
+   private final GameStateContext _context;
+
+   private LogicalUnit _logicalUnit;
+   private MovementArrow _movementArrow;
+   private MoveAnalyzer _moveAnalyzer;
    private GraphicalMenu _theActionMenu;
 
-   public StateActionMenu(
-         InteractiveWarGame interactiveWarGame,
-         WarGameQueries warGameQueries,
-         WarGameMoves warGameMoves,
-         LogicalUnit logicalUnit,
-         MovementArrow movementArrow,
-         MoveAnalyzer moveAnalyzer) {
-      _interactiveWarGame = interactiveWarGame;
-      _warGameQueries = warGameQueries;
-      _warGameMoves = warGameMoves;
+   public StateActionMenu(GameStateContext context,
+                          LogicalUnit logicalUnit,
+                          MovementArrow movementArrow,
+                          MoveAnalyzer moveAnalyzer) {
+      _context = context;
       _logicalUnit = logicalUnit;
       _movementArrow = movementArrow;
       _moveAnalyzer = moveAnalyzer;
@@ -42,30 +37,30 @@ public class StateActionMenu implements GameState {
       switch (selectedItem) {
          case FIRE:
             // TODO: Animate travel.
-            return new StateSelectAttack(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow, _moveAnalyzer.getAttackableUnits(), this);
+            return new StateSelectAttack(_context, _logicalUnit, _movementArrow, _moveAnalyzer.getAttackableUnits(), this);
          case SUPPLY:
             // TODO: Animate supply
-            _warGameMoves.executeSupplyMove(_logicalUnit, _movementArrow.getPath());
+            _context.warGameMoves.executeSupplyMove(_logicalUnit, _movementArrow.getPath());
             return endMoveAndGoToStartingState();
          case CAPTURE:
-            _warGameMoves.executeCaptureMove(_logicalUnit, _movementArrow.getPath());
+            _context.warGameMoves.executeCaptureMove(_logicalUnit, _movementArrow.getPath());
             return endMoveAndGoToStartingState();
          case LOAD:
-            _warGameMoves.executeLoadMove(_logicalUnit, _movementArrow.getPath());
-            _interactiveWarGame.hideGraphicForUnit(_logicalUnit);
+            _context.warGameMoves.executeLoadMove(_logicalUnit, _movementArrow.getPath());
+            _context.interactiveWarGame.hideGraphicForUnit(_logicalUnit);
             return endMoveAndGoToStartingState();
          case UNLOAD:
             // TODO: Extra state for selecting which unit to unload (for lander and cruiser)
-            return new StateSelectUnloadPosition(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow, _moveAnalyzer.getAdjacentVacantPositions(), this);
+            return new StateSelectUnloadPosition(_context, _logicalUnit, _movementArrow, _moveAnalyzer.getAdjacentVacantPositions(), this);
          case JOIN:
-            _warGameMoves.executeJoinMove(_logicalUnit, _movementArrow.getPath());
+            _context.warGameMoves.executeJoinMove(_logicalUnit, _movementArrow.getPath());
             return endMoveAndGoToStartingState();
          case DIVE:
             break;
          case SURFACE:
             break;
          case WAIT:
-            _warGameMoves.executeMove(_logicalUnit, _movementArrow.getPath());
+            _context.warGameMoves.executeMove(_logicalUnit, _movementArrow.getPath());
             return endMoveAndGoToStartingState();
          default:
       }
@@ -73,9 +68,9 @@ public class StateActionMenu implements GameState {
    }
 
    private GameState endMoveAndGoToStartingState() {
-      _interactiveWarGame.stopIndicatingPositions();
-      _interactiveWarGame.hideMovementArrow();
-      return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
+      _context.interactiveWarGame.stopIndicatingPositions();
+      _context.interactiveWarGame.hideMovementArrow();
+      return new StateStarting(_context);
    }
 
    @Override
@@ -85,7 +80,7 @@ public class StateActionMenu implements GameState {
 
    @Override
    public GameState handleCancel() {
-      return new StateSelectMove(_interactiveWarGame, _warGameQueries, _warGameMoves, _logicalUnit, _movementArrow);
+      return new StateSelectMove(_context, _logicalUnit, _movementArrow);
    }
 
    @Override
@@ -129,7 +124,7 @@ public class StateActionMenu implements GameState {
 
    @Override
    public void draw(GameContainer gc, Font font, int x, int y) {
-      _interactiveWarGame.draw(gc, 0, 0);
+      _context.interactiveWarGame.draw(gc, 0, 0);
       _theActionMenu.draw(gc.getGraphics(), font);
    }
 
