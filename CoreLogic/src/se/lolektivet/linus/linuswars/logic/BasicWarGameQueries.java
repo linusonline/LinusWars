@@ -1,6 +1,7 @@
 package se.lolektivet.linus.linuswars.logic;
 
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
+import se.lolektivet.linus.linuswars.logic.game.Base;
 import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.game.WarGameListener;
 import se.lolektivet.linus.linuswars.logic.pathfinding.InfiniteInteger;
@@ -61,4 +62,7 @@ public interface BasicWarGameQueries {
    Set<LogicalUnit> getAdjacentUnits(Position position);
    Collection<Position> getAdjacentPositions(Position position);
    Set<LogicalUnit> getUnitsSuppliableFromPosition(LogicalUnit supplier, Position supplyingPosition);
+
+   boolean hasBaseAtPosition(Position position);
+   Base getBaseAtPosition(Position position);
 }

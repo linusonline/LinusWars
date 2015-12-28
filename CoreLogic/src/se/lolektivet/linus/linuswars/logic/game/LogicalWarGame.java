@@ -34,7 +34,8 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    private final ModuleMoney _moneyModule;
    private final ModuleTurnOrder _turnOrderModule;
    private final ModuleUnits _unitModule;
-   private ModuleBases _basesModule;
+   private final ModuleBases _basesModule;
+   private final DeployLogic _deployLogic;
 
    private boolean _gameStarted;
 
@@ -50,6 +51,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       _fuelLogic = new FuelLogic();
       _attackLogic = new AttackLogic();
       _transportLogic = new TransportLogic();
+      _deployLogic = new DeployLogic();
 
       _unitModule = new ModuleUnits(factionsInTurnOrder);
       _turnOrderModule = new ModuleTurnOrder(factionsInTurnOrder);
@@ -132,9 +134,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
 
    @Override
    public void callGameStart() {
-      if (_basesModule == null) {
-         throw new InitializationException("No BasesModule was set!");
-      } else if (_basesModule.getFactions().size() != _turnOrderModule.numberOfFactions()) {
+      if (_basesModule.getFactions().size() != _turnOrderModule.numberOfFactions()) {
          throw new InitializationException("BaseModule had wrong number of factions! (" + _basesModule.getFactions().size() + " instead of " + _turnOrderModule.numberOfFactions() + ")");
       }
       _gameStarted = true;
@@ -180,6 +180,16 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    public Set<LogicalUnit> getUnitsSuppliableFromPosition(LogicalUnit supplier, Position supplyingPosition) {
       Set<LogicalUnit> adjacentUnits = getAdjacentUnits(supplyingPosition);
       return getUnitsSuppliableByUnit(adjacentUnits, supplier);
+   }
+
+   @Override
+   public boolean hasBaseAtPosition(Position position) {
+      return _basesModule.hasBaseAtPosition(position);
+   }
+
+   @Override
+   public Base getBaseAtPosition(Position position) {
+      return _basesModule.getBaseAtPosition(position);
    }
 
    // Fuel query
@@ -444,6 +454,35 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       internalExecuteMove(movingUnit, movementPath);
       _unitModule.expendUnitsTurn(movingUnit);
       internalExecuteCapture(movingUnit, movementPath);
+   }
+
+   @Override
+   public void executeDeployMove(Position position, UnitType unitType) {
+      if (!hasBaseAtPosition(position)) {
+         throw new LogicException();
+      }
+      if (hasUnitAtPosition(position)) {
+         throw new LogicException();
+      }
+      Base base = getBaseAtPosition(position);
+      if (!_deployLogic.isTypeDeployableFromBuilding(base.getBaseType(), unitType)) {
+         throw new LogicException();
+      }
+      if (base.getFaction() != getCurrentlyActiveFaction()) {
+         throw new LogicException();
+      }
+      int money = _moneyModule.getMoneyForFaction(getCurrentlyActiveFaction());
+      int cost = _deployLogic.getCostForUnitType(unitType);
+      if (money - cost < 0) {
+         throw new LogicException();
+      }
+      internalDeployUnit(position, unitType, getCurrentlyActiveFaction());
+   }
+
+   private void internalDeployUnit(Position position, UnitType unitType, Faction faction) {
+      LogicalUnit newUnit = _deployLogic.createUnit(unitType);
+      _moneyModule.subtractMoneyForFaction(faction, _deployLogic.getCostForUnitType(unitType));
+      _unitModule.addUnit(newUnit, position, faction);
    }
 
    private void internalExecuteCapture(LogicalUnit movingUnit, Path movementPath) {

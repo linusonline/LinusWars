@@ -53,6 +53,10 @@ public class LogicalUnit {
       _hp = 100;
    }
 
+   public int getCost() {
+      return _cost;
+   }
+
    int getHp1To100() {
       return _hp;
    }
