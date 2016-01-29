@@ -198,6 +198,16 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       return _buildingsModule.getBuildingAtPosition(position);
    }
 
+   @Override
+   public List<UnitType> getTypesDeployableFromBuilding(TerrainType buildingType) {
+      return _deployLogic.getTypesDeployableFromBuilding(buildingType);
+   }
+
+   @Override
+   public int getCostForNewUnit(UnitType unitType) {
+      return _deployLogic.getCostForUnitType(unitType);
+   }
+
    // Fuel query
    private Set<LogicalUnit> getUnitsSuppliableByUnit(Set<LogicalUnit> targetUnits, LogicalUnit supplier) {
       Set<LogicalUnit> suppliableUnits = new HashSet<>(0);
@@ -735,6 +745,18 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       } else {
          return false;
       }
+   }
+
+   @Override
+   public boolean hasFriendlyUnoccupiedBaseAtPosition(Faction faction, Position position) {
+      if (hasUnitAtPosition(position)) {
+         return false;
+      }
+      if (_buildingsModule.hasBuildingAtPosition(position)) {
+         Building building = _buildingsModule.getBuildingAtPosition(position);
+         return building.getBuildingType().isBase() && building.getFaction() == faction;
+      }
+      return false;
    }
 
    private Map<Position, PathWithCost> getAndCacheOptimalPathsToAllReachablePoints(LogicalUnit travellingUnit) {

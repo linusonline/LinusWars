@@ -3,6 +3,8 @@ package se.lolektivet.linus.linuswars;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
+import se.lolektivet.linus.linuswars.logic.Position;
+import se.lolektivet.linus.linuswars.logic.game.Building;
 import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.game.WarGameMoves;
 import se.lolektivet.linus.linuswars.logic.game.WarGameQueries;
@@ -23,9 +25,13 @@ public class StateStarting implements GameState {
    @Override
    public GameState handleExecuteDown() {
       _executeHasBeenPressed = true;
-      if (_context.warGameQueries.hasActiveUnitAtPosition(_context.interactiveWarGame.getCursorPosition())) {
-         LogicalUnit logicalUnit = _context.warGameQueries.getUnitAtPosition(_context.interactiveWarGame.getCursorPosition());
+      Position cursorPos = _context.interactiveWarGame.getCursorPosition();
+      if (_context.warGameQueries.hasActiveUnitAtPosition(cursorPos)) {
+         LogicalUnit logicalUnit = _context.warGameQueries.getUnitAtPosition(cursorPos);
          return new StateSelectMove(_context, logicalUnit);
+      } else if (_context.warGameQueries.hasFriendlyUnoccupiedBaseAtPosition(_context.warGameQueries.getCurrentlyActiveFaction(), cursorPos)) {
+         Building base = _context.warGameQueries.getBuildingAtPosition(cursorPos);
+         return new StateDeployMenu(_context, this, base);
       } else {
          return new StateQuickMenu(_context, this);
       }

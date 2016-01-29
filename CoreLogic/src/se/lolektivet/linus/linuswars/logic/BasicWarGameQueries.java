@@ -1,6 +1,8 @@
 package se.lolektivet.linus.linuswars.logic;
 
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
+import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
+import se.lolektivet.linus.linuswars.logic.enums.UnitType;
 import se.lolektivet.linus.linuswars.logic.game.Building;
 import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.game.WarGameListener;
@@ -65,4 +67,6 @@ public interface BasicWarGameQueries {
 
    boolean hasBuildingAtPosition(Position position);
    Building getBuildingAtPosition(Position position);
+   List<UnitType> getTypesDeployableFromBuilding(TerrainType buildingType);
+   int getCostForNewUnit(UnitType unitType);
 }

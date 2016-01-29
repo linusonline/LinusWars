@@ -16,33 +16,35 @@ public class DeployLogic {
    private final LogicalUnitFactory _unitFactory;
 
    DeployLogic() {
+      // TODO: Create sprite sheets for commented-out types.
       _unitFactory = new LogicalUnitFactory();
       _deployableTypes = new HashMap<>();
+
       List<UnitType> typesDeployableFromBase = new ArrayList<>();
-      typesDeployableFromBase.add(UnitType.ANTI_AIR);
+//      typesDeployableFromBase.add(UnitType.ANTI_AIR);
       typesDeployableFromBase.add(UnitType.APC);
       typesDeployableFromBase.add(UnitType.ARTILLERY);
       typesDeployableFromBase.add(UnitType.INFANTRY);
       typesDeployableFromBase.add(UnitType.MD_TANK);
       typesDeployableFromBase.add(UnitType.MECH);
-      typesDeployableFromBase.add(UnitType.MISSILES);
-      typesDeployableFromBase.add(UnitType.RECON);
-      typesDeployableFromBase.add(UnitType.ROCKETS);
-      typesDeployableFromBase.add(UnitType.TANK);
+//      typesDeployableFromBase.add(UnitType.MISSILES);
+//      typesDeployableFromBase.add(UnitType.RECON);
+//      typesDeployableFromBase.add(UnitType.ROCKETS);
+//      typesDeployableFromBase.add(UnitType.TANK);
       _deployableTypes.put(TerrainType.BASE, typesDeployableFromBase);
 
       List<UnitType> typesDeployableFromAirport = new ArrayList<>();
-      typesDeployableFromAirport.add(UnitType.B_COPTER);
-      typesDeployableFromAirport.add(UnitType.BOMBER);
-      typesDeployableFromAirport.add(UnitType.FIGHTER);
-      typesDeployableFromAirport.add(UnitType.T_COPTER);
+//      typesDeployableFromAirport.add(UnitType.B_COPTER);
+//      typesDeployableFromAirport.add(UnitType.BOMBER);
+//      typesDeployableFromAirport.add(UnitType.FIGHTER);
+//      typesDeployableFromAirport.add(UnitType.T_COPTER);
       _deployableTypes.put(TerrainType.AIRPORT, typesDeployableFromAirport);
 
       List<UnitType> typesDeployableFromPort = new ArrayList<>();
-      typesDeployableFromPort.add(UnitType.B_SHIP);
-      typesDeployableFromPort.add(UnitType.CRUISER);
-      typesDeployableFromPort.add(UnitType.LANDER);
-      typesDeployableFromPort.add(UnitType.SUB);
+//      typesDeployableFromPort.add(UnitType.B_SHIP);
+//      typesDeployableFromPort.add(UnitType.CRUISER);
+//      typesDeployableFromPort.add(UnitType.LANDER);
+//      typesDeployableFromPort.add(UnitType.SUB);
       _deployableTypes.put(TerrainType.PORT, typesDeployableFromPort);
    }
 
@@ -61,6 +63,7 @@ public class DeployLogic {
    }
 
    int getCostForUnitType(UnitType unitType) {
+      // TODO: Cost may vary for different COs.
       LogicalUnit unit = createUnit(unitType);
       return unit.getCost();
    }
