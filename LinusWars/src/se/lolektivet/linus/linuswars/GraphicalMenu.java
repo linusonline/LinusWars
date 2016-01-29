@@ -47,11 +47,11 @@ public class GraphicalMenu<T> {
    }
 
    void addItem(String text) {
-      addItem(text, null);
+      addItem(text, null, null);
    }
 
-   void addItem(String text, Image icon) {
-      addItem(text, icon, null);
+   void addItem(String text, T object) {
+      addItem(text, null, object);
    }
 
    void addItem(String text, Image icon, T object) {

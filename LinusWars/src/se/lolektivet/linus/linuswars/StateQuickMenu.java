@@ -15,7 +15,7 @@ public class StateQuickMenu implements GameState {
    private final GameStateContext _context;
 
    private final GameState _previousState;
-   private GraphicalMenu _theMenu;
+   private GraphicalMenu<QuickMenuItem> _theMenu;
    private Sprites _sprites;
 
    public StateQuickMenu(GameStateContext context, GameState previousState) {
@@ -25,8 +25,7 @@ public class StateQuickMenu implements GameState {
 
    @Override
    public GameState handleExecuteDown() {
-      String menuItemText = _theMenu.getTextForSelectedItem();
-      QuickMenuItem menuItem = QuickMenuItem.fromName(menuItemText);
+      QuickMenuItem menuItem = _theMenu.getObjectForSelectedItem();
       switch (menuItem) {
          case END_TURN:
             _context.warGameMoves.endTurn();
@@ -65,9 +64,10 @@ public class StateQuickMenu implements GameState {
    public void init(Sprites sprites) {
       if (_sprites == null) {
          _sprites = sprites;
-         _theMenu = new GraphicalMenu(_sprites.getMenuCursor());
-         _theMenu.addItem(QuickMenuItem.END_TURN.getName());
-         _theMenu.addItem(QuickMenuItem.NOTHING.getName());
+         _theMenu = new GraphicalMenu<>(_sprites.getMenuCursor());
+         for (QuickMenuItem menuItem : QuickMenuItem.values()) {
+            _theMenu.addItem(menuItem.getName(), menuItem);
+         }
       }
    }
 

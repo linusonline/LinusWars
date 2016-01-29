@@ -18,7 +18,7 @@ public class StateActionMenu implements GameState {
    private final LogicalUnit _logicalUnit;
    private final MovementArrow _movementArrow;
    private final MoveAnalyzer _moveAnalyzer;
-   private GraphicalMenu _theActionMenu;
+   private GraphicalMenu<ActionMenuItem> _theActionMenu;
 
    public StateActionMenu(GameStateContext context,
                           LogicalUnit logicalUnit,
@@ -32,8 +32,7 @@ public class StateActionMenu implements GameState {
 
    @Override
    public GameState handleExecuteDown() {
-      String selectedItemText = _theActionMenu.getTextForSelectedItem();
-      ActionMenuItem selectedItem = ActionMenuItem.fromName(selectedItemText);
+      ActionMenuItem selectedItem = _theActionMenu.getObjectForSelectedItem();
       switch (selectedItem) {
          case FIRE:
             // TODO: Animate travel.
@@ -97,29 +96,33 @@ public class StateActionMenu implements GameState {
    @Override
    public void init(Sprites sprites) {
       if (_theActionMenu == null) {
-         _theActionMenu = new GraphicalMenu(sprites.getMenuCursor());
+         _theActionMenu = new GraphicalMenu<>(sprites.getMenuCursor());
          // Note: The first three moves are logically mutually exclusive.
          if (_moveAnalyzer.canDoCapture()) {
-            _theActionMenu.addItem(ActionMenuItem.CAPTURE.getName());
+            addMenuItem(ActionMenuItem.CAPTURE);
          } else if (_moveAnalyzer.canDoJoin()) {
-            _theActionMenu.addItem(ActionMenuItem.JOIN.getName());
+            addMenuItem(ActionMenuItem.JOIN);
          } else if (_moveAnalyzer.canDoLoad()) {
-            _theActionMenu.addItem(ActionMenuItem.LOAD.getName());
+            addMenuItem(ActionMenuItem.LOAD);
          }
          if (_moveAnalyzer.canDoUnload()) {
-            _theActionMenu.addItem(ActionMenuItem.UNLOAD.getName());
+            addMenuItem(ActionMenuItem.UNLOAD);
          }
          if (_moveAnalyzer.canDoSupply()) {
-            _theActionMenu.addItem(ActionMenuItem.SUPPLY.getName());
+            addMenuItem(ActionMenuItem.SUPPLY);
          }
          if (_moveAnalyzer.canDoAttack()) {
-            _theActionMenu.addItem(ActionMenuItem.FIRE.getName());
+            addMenuItem(ActionMenuItem.FIRE);
          }
          if (_moveAnalyzer.canDoWait()) {
-            _theActionMenu.addItem(ActionMenuItem.WAIT.getName());
+            addMenuItem(ActionMenuItem.WAIT);
          }
          // TODO: "if Sub" -> add "Dive" or "Surface"
       }
+   }
+
+   private void addMenuItem(ActionMenuItem menuItem) {
+      _theActionMenu.addItem(menuItem.getName(), menuItem);
    }
 
    @Override
