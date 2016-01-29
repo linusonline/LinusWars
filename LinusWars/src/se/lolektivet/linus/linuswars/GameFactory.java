@@ -52,7 +52,7 @@ class GameFactory {
    }
 
    GraphicalWarGame createGraphicalWarGame(LogicalWarGame logicalWarGame, GraphicalWarMap graphicalWarMap) {
-      GraphicalWarGame graphicalWarGame = new GraphicalWarGame(logicalWarGame);
+      GraphicalWarGame graphicalWarGame = new GraphicalWarGame(logicalWarGame, new GraphicalUnitFactory());
       graphicalWarGame.init(_sprites);
       graphicalWarGame.setMap(graphicalWarMap);
       return graphicalWarGame;

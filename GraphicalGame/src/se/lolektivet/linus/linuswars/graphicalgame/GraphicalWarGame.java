@@ -22,22 +22,25 @@ public class GraphicalWarGame implements WarGameListener {
    private final Map<LogicalUnit, GraphicalUnit> _graphicsForUnits;
    private final Set<LogicalUnit> _hiddenUnits;
    private final WarGameQueries _warGameQueries;
+   private final GraphicalUnitFactory _unitFactory;
    private GraphicalWarMap _theMap;
    private Sprites _sprites;
    private static final int HUD_OFFSET_HORIZONTAL = 8;
    private static final int HUD_OFFSET_VERTICAL = 8;
    private boolean _hudIsOnTheLeft = false;
 
-   public GraphicalWarGame(WarGameQueries warGameQueries) {
+   public GraphicalWarGame(WarGameQueries warGameQueries, GraphicalUnitFactory unitFactory) {
       _warGameQueries = warGameQueries;
       _graphicsForUnits = new HashMap<>();
       _hiddenUnits = new HashSet<>(0);
+      _unitFactory = unitFactory;
 
       _warGameQueries.addListener(this);
    }
 
    public void init(Sprites sprites) {
       _sprites = sprites;
+      _unitFactory.init(sprites);
    }
 
    public void setMap(GraphicalWarMap map) {
@@ -71,6 +74,11 @@ public class GraphicalWarGame implements WarGameListener {
       int posX = base.getPosition().getX();
       int posY = base.getPosition().getY();
       _theMap.addBuilding(_sprites.getBuildingSprite(base.getBaseType(), base.getFaction()), posX, posY);
+   }
+
+   @Override
+   public void unitDeployed(LogicalUnit logicalUnit, Position position) {
+      addUnit(_unitFactory.getGraphicalUnit(_warGameQueries.getFactionForUnit(logicalUnit), logicalUnit.getType()), position);
    }
 
    public void setHudOnLeft(boolean left) {

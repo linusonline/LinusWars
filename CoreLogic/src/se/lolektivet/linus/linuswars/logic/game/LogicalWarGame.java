@@ -109,6 +109,12 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       }
    }
 
+   private void fireUnitDeployed(LogicalUnit logicalUnit, Position position) {
+      for (WarGameListener listener : _listeners) {
+         listener.unitDeployed(logicalUnit, position);
+      }
+   }
+
    // Setup
 
    @Override
@@ -483,6 +489,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       LogicalUnit newUnit = _deployLogic.createUnit(unitType);
       _moneyModule.subtractMoneyForFaction(faction, _deployLogic.getCostForUnitType(unitType));
       _unitModule.addUnit(newUnit, position, faction);
+      fireUnitDeployed(newUnit, position);
    }
 
    private void internalExecuteCapture(LogicalUnit movingUnit, Path movementPath) {
