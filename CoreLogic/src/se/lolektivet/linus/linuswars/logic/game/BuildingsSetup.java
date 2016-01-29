@@ -9,8 +9,8 @@ import java.util.Collection;
 /**
  * Created by Linus on 2015-12-27.
  */
-public interface BasesSetup {
-   void addBase(Position position, TerrainType buildingType, Faction faction);
-   Collection<Base> getAllBases();
+public interface BuildingsSetup {
+   void addBuilding(Position position, TerrainType buildingType, Faction faction);
+   Collection<Building> getAllBuildings();
    void validateSetup();
 }

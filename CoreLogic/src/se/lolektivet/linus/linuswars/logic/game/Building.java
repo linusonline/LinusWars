@@ -8,25 +8,25 @@ import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
 /**
  * Created by Linus on 2015-11-27.
  */
-public class Base {
+public class Building {
    private static final int STARTING_CAPTURE_STATUS = 20;
 
    private final Position _mapPosition;
-   private final TerrainType _baseType;
+   private final TerrainType _buildingType;
    private Faction _owningFaction;
    private Faction _capturingFaction;
    private int _captureStatus;
 
-   public static Base create(Position mapPosition, TerrainType baseType, Faction owningFaction) {
-      if (!baseType.isBuilding()) {
-         throw new LogicException("Tried to create Base with non-base terrain type!");
+   public static Building create(Position mapPosition, TerrainType buildingType, Faction owningFaction) {
+      if (!buildingType.isBuilding()) {
+         throw new LogicException("Tried to create Building with non-building terrain type!");
       }
-      return new Base(mapPosition, baseType, owningFaction);
+      return new Building(mapPosition, buildingType, owningFaction);
    }
 
-   private Base(Position mapPosition, TerrainType baseType, Faction owningFaction) {
+   private Building(Position mapPosition, TerrainType buildingType, Faction owningFaction) {
       _mapPosition = mapPosition;
-      _baseType = baseType;
+      _buildingType = buildingType;
       _captureStatus = STARTING_CAPTURE_STATUS;
       _owningFaction = owningFaction;
       _capturingFaction = Faction.NEUTRAL;
@@ -43,8 +43,8 @@ public class Base {
       _owningFaction = faction;
    }
 
-   public TerrainType getBaseType() {
-      return _baseType;
+   public TerrainType getBuildingType() {
+      return _buildingType;
    }
 
    public Position getPosition() {
@@ -53,11 +53,11 @@ public class Base {
 
    void doCapture(int captureValue, Faction faction) {
       if (isCapturing() && _capturingFaction != faction) {
-         throw new LogicException("Base at " + _mapPosition + " is already being captured by " +
+         throw new LogicException("Building at " + _mapPosition + " is already being captured by " +
                _capturingFaction + ", faction " + faction + " cannot start capturing.");
       }
       if (_owningFaction == faction) {
-         throw new LogicException("Base at " + _mapPosition + " is already owned by " + faction + ", cannot capture.");
+         throw new LogicException("Building at " + _mapPosition + " is already owned by " + faction + ", cannot capture.");
       }
       internalDoCapture(captureValue, faction);
    }
@@ -86,17 +86,17 @@ public class Base {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
 
-      Base base = (Base) o;
+      Building building = (Building) o;
 
-      return _baseType == base._baseType &&
-            _mapPosition.equals(base._mapPosition);
+      return _buildingType == building._buildingType &&
+            _mapPosition.equals(building._mapPosition);
 
    }
 
    @Override
    public int hashCode() {
       int result = _mapPosition.hashCode();
-      result = 31 * result + _baseType.hashCode();
+      result = 31 * result + _buildingType.hashCode();
       return result;
    }
 }

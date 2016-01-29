@@ -34,7 +34,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    private final ModuleMoney _moneyModule;
    private final ModuleTurnOrder _turnOrderModule;
    private final ModuleUnits _unitModule;
-   private final ModuleBases _basesModule;
+   private final ModuleBuildings _buildingsModule;
    private final DeployLogic _deployLogic;
 
    private boolean _gameStarted;
@@ -55,7 +55,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
 
       _unitModule = new ModuleUnits(factionsInTurnOrder);
       _turnOrderModule = new ModuleTurnOrder(factionsInTurnOrder);
-      _basesModule = new ModuleBases();
+      _buildingsModule = new ModuleBuildings();
       _moneyModule = new ModuleMoney();
       _moneyModule.init(factionsInTurnOrder);
 
@@ -103,9 +103,9 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       }
    }
 
-   private void fireBaseCaptured(Base base) {
+   private void fireBuildingCaptured(Building building) {
       for (WarGameListener listener : _listeners) {
-         listener.baseWasCaptured(base);
+         listener.buildingWasCaptured(building);
       }
    }
 
@@ -118,8 +118,8 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    // Setup
 
    @Override
-   public void addBase(Position position, TerrainType terrainType, Faction faction) {
-      _basesModule.addBase(position, terrainType, faction);
+   public void addBuilding(Position position, TerrainType terrainType, Faction faction) {
+      _buildingsModule.addBuilding(position, terrainType, faction);
    }
 
    @Override
@@ -140,8 +140,8 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
 
    @Override
    public void callGameStart() {
-      if (_basesModule.getFactions().size() != _turnOrderModule.numberOfFactions()) {
-         throw new InitializationException("BaseModule had wrong number of factions! (" + _basesModule.getFactions().size() + " instead of " + _turnOrderModule.numberOfFactions() + ")");
+      if (_buildingsModule.getFactions().size() != _turnOrderModule.numberOfFactions()) {
+         throw new InitializationException("BuildingsModule had wrong number of factions! (" + _buildingsModule.getFactions().size() + " instead of " + _turnOrderModule.numberOfFactions() + ")");
       }
       _gameStarted = true;
       doBeginningOfTurn();
@@ -189,13 +189,13 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    }
 
    @Override
-   public boolean hasBaseAtPosition(Position position) {
-      return _basesModule.hasBaseAtPosition(position);
+   public boolean hasBuildingAtPosition(Position position) {
+      return _buildingsModule.hasBuildingAtPosition(position);
    }
 
    @Override
-   public Base getBaseAtPosition(Position position) {
-      return _basesModule.getBaseAtPosition(position);
+   public Building getBuildingAtPosition(Position position) {
+      return _buildingsModule.getBuildingAtPosition(position);
    }
 
    // Fuel query
@@ -464,17 +464,17 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
 
    @Override
    public void executeDeployMove(Position position, UnitType unitType) {
-      if (!hasBaseAtPosition(position)) {
+      if (!hasBuildingAtPosition(position)) {
          throw new LogicException();
       }
       if (hasUnitAtPosition(position)) {
          throw new LogicException();
       }
-      Base base = getBaseAtPosition(position);
-      if (!_deployLogic.isTypeDeployableFromBuilding(base.getBaseType(), unitType)) {
+      Building building = getBuildingAtPosition(position);
+      if (!_deployLogic.isTypeDeployableFromBuilding(building.getBuildingType(), unitType)) {
          throw new LogicException();
       }
-      if (base.getFaction() != getCurrentlyActiveFaction()) {
+      if (building.getFaction() != getCurrentlyActiveFaction()) {
          throw new LogicException();
       }
       int money = _moneyModule.getMoneyForFaction(getCurrentlyActiveFaction());
@@ -493,11 +493,11 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    }
 
    private void internalExecuteCapture(LogicalUnit movingUnit, Path movementPath) {
-      Base base = _basesModule.getBaseAtPosition(movementPath.getFinalPosition());
-      base.doCapture(movingUnit.getHp1To10(), _unitModule.getFactionForUnit(movingUnit));
-      boolean completedCapture = !base.isCapturing();
+      Building building = _buildingsModule.getBuildingAtPosition(movementPath.getFinalPosition());
+      building.doCapture(movingUnit.getHp1To10(), _unitModule.getFactionForUnit(movingUnit));
+      boolean completedCapture = !building.isCapturing();
       if (completedCapture) {
-         fireBaseCaptured(base);
+         fireBuildingCaptured(building);
       }
    }
 
@@ -505,8 +505,8 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       if (!movingUnit.canCapture()) {
          throw new LogicException("Unit type " + movingUnit.getType() + " cannot capture property!");
       }
-      if (!_basesModule.hasBaseAtPosition(movementPath.getFinalPosition())) {
-         throw new LogicException("No base at position " + movementPath.getFinalPosition() + "! Cannot do capture move.");
+      if (!_buildingsModule.hasBuildingAtPosition(movementPath.getFinalPosition())) {
+         throw new LogicException("No building at position " + movementPath.getFinalPosition() + "! Cannot do capture move.");
       }
    }
 
@@ -546,16 +546,16 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       invalidateOptimalPathsCache();
       resupplyFromAllAtcs(_turnOrderModule.currentlyActiveFaction());
       addIncomeFromProperties(_turnOrderModule.currentlyActiveFaction());
-      // Repair units on friendly bases
+      // Repair units on friendly buildings
       // Subtract per-day fuel consumptions
-      // Resupply all units on appropriate bases or adjacent to resupply units
+      // Resupply all units on appropriate buildings or adjacent to resupply units
       // Check for crashing aircraft or ships
 
       // Question: Should resupply or healing be prioritized when not enough funds for both?
    }
 
    private void addIncomeFromProperties(Faction faction) {
-      _moneyModule.addMoneyForFaction(faction, INCOME_PER_PROPERTY * _basesModule.getBasesForFaction(faction).size());
+      _moneyModule.addMoneyForFaction(faction, INCOME_PER_PROPERTY * _buildingsModule.getBuildingsForFaction(faction).size());
    }
 
    public LogicalWarMap getLogicalWarMap() {
@@ -569,7 +569,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
 
    @Override
    public Position getHqPosition(Faction faction) {
-      return _basesModule.getHqPosition(faction);
+      return _buildingsModule.getHqPosition(faction);
    }
 
    @Override
@@ -728,10 +728,10 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    }
 
    @Override
-   public boolean hasEnemyBaseAtPosition(LogicalUnit movingUnit, Position position) {
-      if (_basesModule.hasBaseAtPosition(position)) {
-         Base base = _basesModule.getBaseAtPosition(position);
-         return _unitModule.areEnemies(movingUnit, base.getFaction());
+   public boolean hasEnemyBuildingAtPosition(LogicalUnit movingUnit, Position position) {
+      if (_buildingsModule.hasBuildingAtPosition(position)) {
+         Building building = _buildingsModule.getBuildingAtPosition(position);
+         return _unitModule.areEnemies(movingUnit, building.getFaction());
       } else {
          return false;
       }

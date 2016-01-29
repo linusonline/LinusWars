@@ -1,7 +1,6 @@
 package se.lolektivet.linus.linuswars.logic.game;
 
 import se.lolektivet.linus.linuswars.logic.InitializationException;
-import se.lolektivet.linus.linuswars.logic.LogicException;
 import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
@@ -11,21 +10,21 @@ import java.util.*;
 /**
  * Created by Linus on 2015-11-27.
  */
-public class ModuleBases implements BasesSetup {
-   private final Map<Faction, Collection<Base>> _basesForFaction;
-   private final Map<Position, Base> _baseAtPosition;
+public class ModuleBuildings implements BuildingsSetup {
+   private final Map<Faction, Collection<Building>> _buildingsForFaction;
+   private final Map<Position, Building> _buildingAtPosition;
    private final Map<Faction, Position> _hqsOfFactions;
 
    private List<Faction> _listOfFactions;
 
-   public ModuleBases() {
-      _basesForFaction = new HashMap<>(2);
-      _baseAtPosition = new HashMap<>(2);
+   public ModuleBuildings() {
+      _buildingsForFaction = new HashMap<>(2);
+      _buildingAtPosition = new HashMap<>(2);
       _hqsOfFactions = new HashMap<>(2);
    }
 
    @Override
-   public void addBase(Position position, TerrainType buildingType, Faction faction) {
+   public void addBuilding(Position position, TerrainType buildingType, Faction faction) {
       if (buildingType == TerrainType.HQ) {
          if (faction == Faction.NEUTRAL) {
             throw new InitializationException("HQs cannot be neutral!");
@@ -35,39 +34,39 @@ public class ModuleBases implements BasesSetup {
          }
          _hqsOfFactions.put(faction, position);
       }
-      Base newBase = Base.create(position, buildingType, faction);
-      getBaseListForFaction(faction).add(newBase);
-      _baseAtPosition.put(position, newBase);
+      Building newBuilding = Building.create(position, buildingType, faction);
+      getBuildingListForFaction(faction).add(newBuilding);
+      _buildingAtPosition.put(position, newBuilding);
    }
 
-   private Collection<Base> getBaseListForFaction(Faction faction) {
-      Collection<Base> list = _basesForFaction.get(faction);
+   private Collection<Building> getBuildingListForFaction(Faction faction) {
+      Collection<Building> list = _buildingsForFaction.get(faction);
       if (list == null) {
          list = new ArrayList<>();
-         _basesForFaction.put(faction, list);
+         _buildingsForFaction.put(faction, list);
       }
       return list;
    }
 
-   public Collection<Base> getBasesForFaction(Faction faction) {
-      return new ArrayList<>(getBaseListForFaction(faction));
+   public Collection<Building> getBuildingsForFaction(Faction faction) {
+      return new ArrayList<>(getBuildingListForFaction(faction));
    }
 
    @Override
-   public Collection<Base> getAllBases() {
-      Collection<Base> allBases = new HashSet<>();
-      for (Collection<Base> factionBases : _basesForFaction.values()) {
-         allBases.addAll(factionBases);
+   public Collection<Building> getAllBuildings() {
+      Collection<Building> allBuildings = new HashSet<>();
+      for (Collection<Building> factionBuildings : _buildingsForFaction.values()) {
+         allBuildings.addAll(factionBuildings);
       }
-      return allBases;
+      return allBuildings;
    }
 
-   public Base getBaseAtPosition(Position position) {
-      return _baseAtPosition.get(position);
+   public Building getBuildingAtPosition(Position position) {
+      return _buildingAtPosition.get(position);
    }
 
-   public boolean hasBaseAtPosition(Position position) {
-      return _baseAtPosition.containsKey(position);
+   public boolean hasBuildingAtPosition(Position position) {
+      return _buildingAtPosition.containsKey(position);
    }
 
    public Position getHqPosition(Faction faction) {
@@ -76,7 +75,7 @@ public class ModuleBases implements BasesSetup {
 
    public List<Faction> getFactions() {
       if (_listOfFactions == null) {
-         _listOfFactions = new ArrayList<>(_basesForFaction.keySet());
+         _listOfFactions = new ArrayList<>(_buildingsForFaction.keySet());
          _listOfFactions.remove(Faction.NEUTRAL);
       }
       return new ArrayList<>(_listOfFactions);

@@ -2,7 +2,7 @@ package se.lolektivet.linus.linuswars.graphicalgame;
 
 import org.newdawn.slick.*;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.logic.game.Base;
+import se.lolektivet.linus.linuswars.logic.game.Building;
 import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.game.WarGameListener;
@@ -70,10 +70,10 @@ public class GraphicalWarGame implements WarGameListener {
    }
 
    @Override
-   public void baseWasCaptured(Base base) {
-      int posX = base.getPosition().getX();
-      int posY = base.getPosition().getY();
-      _theMap.addBuilding(_sprites.getBuildingSprite(base.getBaseType(), base.getFaction()), posX, posY);
+   public void buildingWasCaptured(Building building) {
+      int posX = building.getPosition().getX();
+      int posY = building.getPosition().getY();
+      _theMap.addBuilding(_sprites.getBuildingSprite(building.getBuildingType(), building.getFaction()), posX, posY);
    }
 
    @Override

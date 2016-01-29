@@ -27,8 +27,8 @@ public class TerrainMapCreator {
       _defaults.put(TerrainType.BRIDGE, TerrainTile.BRIDGE_HORIZONTAL);
       _defaults.put(TerrainType.MOUNTAINS, TerrainTile.MOUNTAIN_SMALL);
 
-      // There are no terrain tiles for bases, since they look different according to faction.
-      // Expected to be replaced by actual bases later.
+      // There are no terrain tiles for buildings, since they look different according to faction.
+      // Expected to be replaced by actual buildings later.
       _defaults.put(TerrainType.CITY, TerrainTile.PLAIN);
       _defaults.put(TerrainType.BASE, TerrainTile.PLAIN);
       _defaults.put(TerrainType.AIRPORT, TerrainTile.PLAIN);

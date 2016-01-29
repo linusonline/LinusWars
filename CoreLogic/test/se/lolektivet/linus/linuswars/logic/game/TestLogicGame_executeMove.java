@@ -29,7 +29,7 @@ public class TestLogicGame_executeMove {
 
    @Before
    public void setup() {
-      LogicalWarMapImpl theMap = new LogicalWarMapImpl(new ModuleBases());
+      LogicalWarMapImpl theMap = new LogicalWarMapImpl(new ModuleBuildings());
       LogicalMapMaker mapMaker = new LogicalMapMaker(theMap);
       WarMap map = new TestMap1();
       map.create(mapMaker);

@@ -29,6 +29,6 @@ public interface WarGameQueries extends BasicWarGameQueries {
    boolean areEnemies(LogicalUnit oneUnit, LogicalUnit anotherUnit);
    boolean areEnemies(LogicalUnit unit, Faction faction);
    Set<LogicalUnit> getSuppliableUnitsAfterMove(LogicalUnit supplier, Path path);
-   boolean hasEnemyBaseAtPosition(LogicalUnit movingUnit, Position position);
+   boolean hasEnemyBuildingAtPosition(LogicalUnit movingUnit, Position position);
 
 }
