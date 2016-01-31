@@ -429,7 +429,7 @@ class AttackLogic {
    int calculateDamageInPercent(LogicalUnit attacker, LogicalUnit defender, TerrainType defenderTerrain, float attackerModifiers, float defenderModifiers) {
       float baseDamageInPercent = getBaseDamageForTypes(attacker.getType(), defender.getType());
       float attackerHpModifer = attacker.getHp1To10() / 10f;
-      float terrainModifier = 1 + getDefenseRatingForTerrainType(defenderTerrain) * defender.getHp1To10() / 100f;
+      float terrainModifier = 1 - getDefenseRatingForTerrainType(defenderTerrain) * defender.getHp1To10() / 100f;
       float totalDamageInPercent = baseDamageInPercent * attackerHpModifer * terrainModifier * attackerModifiers * defenderModifiers;
       return (int)totalDamageInPercent;
    }
