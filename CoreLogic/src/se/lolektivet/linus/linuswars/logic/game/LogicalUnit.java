@@ -8,6 +8,9 @@ import se.lolektivet.linus.linuswars.logic.enums.UnitType;
  * Created by Linus on 2014-09-18.
  */
 public class LogicalUnit {
+
+   private static final int MAX_HP = 100;
+
    private final UnitType _type;
    private final MovementType _movement;
    private final int _cost;
@@ -50,7 +53,7 @@ public class LogicalUnit {
 
       _fuel = _maxFuel;
       _ammo = _maxAmmo;
-      _hp = 100;
+      _hp = MAX_HP;
    }
 
    public int getCost() {
@@ -151,5 +154,9 @@ public class LogicalUnit {
    public String toString() {
       return _type + ":\n" +
             "Fuel: " + _fuel + "/" + _maxFuel;
+   }
+
+   public void healHpPercent(int hpPercent) {
+      _hp = Math.min(hpPercent + _hp, MAX_HP);
    }
 }

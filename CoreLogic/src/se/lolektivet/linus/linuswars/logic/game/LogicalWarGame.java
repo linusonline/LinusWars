@@ -556,12 +556,26 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       invalidateOptimalPathsCache();
       resupplyFromAllAtcs(_turnOrderModule.currentlyActiveFaction());
       addIncomeFromProperties(_turnOrderModule.currentlyActiveFaction());
+
       // Repair units on friendly buildings
+      repairUnitsOnFriendlyBuildings();
+
       // Subtract per-day fuel consumptions
       // Resupply all units on appropriate buildings or adjacent to resupply units
       // Check for crashing aircraft or ships
 
       // Question: Should resupply or healing be prioritized when not enough funds for both?
+   }
+
+   private void repairUnitsOnFriendlyBuildings() {
+      Set<LogicalUnit> units = _unitModule.getAllUnitsFromFaction(_turnOrderModule.currentlyActiveFaction());
+      for (LogicalUnit unit : units) {
+         if (_buildingsModule.hasBuildingAtPosition(getPositionOfUnit(unit))) {
+            if (_buildingsModule.getBuildingAtPosition(getPositionOfUnit(unit)).getFaction() == _turnOrderModule.currentlyActiveFaction()) {
+               unit.healHpPercent(20);
+            }
+         }
+      }
    }
 
    private void addIncomeFromProperties(Faction faction) {
