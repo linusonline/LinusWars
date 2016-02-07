@@ -74,7 +74,8 @@ public class LinusWarsGame extends BasicGame {
       logicalWarGame.callGameStart();
       graphicalWarGame.callGameStart();
 
-      _gameState = new StateTurnTransition(interactiveWarGame, logicalWarGame, logicalWarGame);
+      GameStateContext context = new GameStateContext(interactiveWarGame, logicalWarGame, logicalWarGame);
+      _gameState = new StateTurnTransition(context);
    }
 
    @Override

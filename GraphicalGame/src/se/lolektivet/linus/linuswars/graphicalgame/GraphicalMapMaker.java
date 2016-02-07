@@ -10,7 +10,7 @@ import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainTile;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
 import se.lolektivet.linus.linuswars.logic.game.LogicalWarMapImpl;
-import se.lolektivet.linus.linuswars.logic.game.ModuleBases;
+import se.lolektivet.linus.linuswars.logic.game.ModuleBuildings;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +31,7 @@ public class GraphicalMapMaker implements MapMaker {
    public GraphicalMapMaker(Sprites sprites, GraphicalWarMap graphicalWarMap) {
       _graphicalWarMap = graphicalWarMap;
       _sprites = sprites;
-      _logicalWarMap = new LogicalWarMapImpl(new ModuleBases());
+      _logicalWarMap = new LogicalWarMapImpl(new ModuleBuildings());
       _logicalMapMaker = new LogicalMapMaker(_logicalWarMap);
    }
 

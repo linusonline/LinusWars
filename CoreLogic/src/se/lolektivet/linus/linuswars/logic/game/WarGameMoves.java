@@ -1,6 +1,7 @@
 package se.lolektivet.linus.linuswars.logic.game;
 
 import se.lolektivet.linus.linuswars.logic.Position;
+import se.lolektivet.linus.linuswars.logic.enums.UnitType;
 import se.lolektivet.linus.linuswars.logic.pathfinding.Path;
 
 /**
@@ -16,5 +17,6 @@ public interface WarGameMoves {
    void executeUnloadMove(LogicalUnit transport, LogicalUnit unloadingUnit, Path movementPath, Position unloadPosition);
    void executeJoinMove(LogicalUnit movingUnit, Path movementPath);
    void executeCaptureMove(LogicalUnit movingUnit, Path movementPath);
+   void executeDeployMove(Position position, UnitType unitType);
    void endTurn();
 }

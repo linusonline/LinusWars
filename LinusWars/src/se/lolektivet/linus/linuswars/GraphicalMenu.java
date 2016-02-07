@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by Linus on 2014-09-20.
  */
-public class GraphicalMenu {
+public class GraphicalMenu<T> {
    private static final int MARGIN = 6;
    private static final int ICON_SIZE = 16;
 
@@ -21,6 +21,7 @@ public class GraphicalMenu {
 
    private final List<String> _textForItems;
    private final List<Image> _iconsForItems;
+   private final List<T> _objectsForItems;
    private int _selectedItemIndex;
 
    private int _longestText;
@@ -30,8 +31,9 @@ public class GraphicalMenu {
    private Image _menuCursor;
 
    public GraphicalMenu(Image menuCursor) {
-      _textForItems = new ArrayList<String>();
-      _iconsForItems = new ArrayList<Image>();
+      _textForItems = new ArrayList<>();
+      _iconsForItems = new ArrayList<>();
+      _objectsForItems = new ArrayList<>();
       _position = new Position(0, 0);
       _longestText = 0;
       _fillColor = new Color(255, 204, 122);
@@ -45,12 +47,17 @@ public class GraphicalMenu {
    }
 
    void addItem(String text) {
-      addItem(text, null);
+      addItem(text, null, null);
    }
 
-   void addItem(String text, Image icon) {
+   void addItem(String text, T object) {
+      addItem(text, null, object);
+   }
+
+   void addItem(String text, Image icon, T object) {
       _textForItems.add(text);
       _iconsForItems.add(icon);
+      _objectsForItems.add(object);
       if (text.length() > _longestText) {
          _longestText = text.length();
       }
@@ -70,6 +77,14 @@ public class GraphicalMenu {
 
    String getTextForSelectedItem() {
       return _textForItems.get(_selectedItemIndex);
+   }
+
+   boolean hasObjectForSelectedItem() {
+      return _objectsForItems.get(_selectedItemIndex) != null;
+   }
+
+   T getObjectForSelectedItem() {
+      return _objectsForItems.get(_selectedItemIndex);
    }
 
    private int calculateHeight() {

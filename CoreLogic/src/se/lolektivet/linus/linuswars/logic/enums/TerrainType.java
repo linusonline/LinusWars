@@ -21,11 +21,15 @@ public enum TerrainType {
    SEA,
    REEF;
 
+   public boolean isBase() {
+      return this == BASE ||
+            this == AIRPORT ||
+            this == PORT;
+   }
+
    public boolean isBuilding() {
       return this == CITY ||
-            this == BASE ||
-            this == AIRPORT ||
-            this == PORT ||
-            this == HQ;
+            this == HQ ||
+            isBase();
    }
 }

@@ -11,14 +11,11 @@ import se.lolektivet.linus.linuswars.logic.game.WarGameQueries;
  * Created by Linus on 2015-12-23.
  */
 public class StateTurnTransition implements GameState {
-   private final InteractiveWarGame _interactiveWarGame;
-   private final WarGameQueries _warGameQueries;
-   private final WarGameMoves _warGameMoves;
 
-   public StateTurnTransition(InteractiveWarGame interactiveWarGame, WarGameQueries warGameQueries, WarGameMoves warGameMoves) {
-      _interactiveWarGame = interactiveWarGame;
-      _warGameQueries = warGameQueries;
-      _warGameMoves = warGameMoves;
+   private final GameStateContext _context;
+
+   public StateTurnTransition(GameStateContext context) {
+      _context = context;
    }
 
    @Override
@@ -45,7 +42,7 @@ public class StateTurnTransition implements GameState {
    public GameState update() {
       // TODO: This should probably be based on real time, and ignore the number of calls.
       if (++steps > 2000) {
-         return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
+         return new StateStarting(_context);
       } else {
          return this;
       }
@@ -59,8 +56,8 @@ public class StateTurnTransition implements GameState {
    private int steps = 0;
    @Override
    public void draw(GameContainer gc, Font font, int x, int y) {
-      int i = _warGameQueries.getDayNumber();
-      _interactiveWarGame.draw(gc, 0, 0);
+      int i = _context.warGameQueries.getDayNumber();
+      _context.interactiveWarGame.draw(gc, 0, 0);
       font.drawString(100, 100, "Day " + i);
 //      gc.getGraphics().drawString("Day " + i, 100, 100);
    }

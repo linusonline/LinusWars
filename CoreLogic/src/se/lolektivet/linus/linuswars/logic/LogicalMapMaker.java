@@ -40,7 +40,7 @@ public class LogicalMapMaker implements MapMaker {
       Position tilePosition = new Position(x, y);
       TerrainType previousType = _logicalWarMap.getTerrainForTile(tilePosition);
       if (previousType.isBuilding()) {
-         throw new InitializationException("Tried to set two bases at same position!");
+         throw new InitializationException("Tried to set two buildings at same position!");
       }
       _logicalWarMap.setBuilding(x, y, buildingType, faction);
    }

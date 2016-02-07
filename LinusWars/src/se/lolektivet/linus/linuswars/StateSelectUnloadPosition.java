@@ -17,31 +17,27 @@ import java.util.Set;
  * Created by Linus on 2014-09-29.
  */
 public class StateSelectUnloadPosition implements GameState {
-   private final InteractiveWarGame _interactiveWarGame;
-   private final WarGameQueries _warGameQueries;
-   private final WarGameMoves _warGameMoves;
+
+   private final GameStateContext _context;
+
    private final LogicalUnit _logicalUnit;
    private final MovementArrow _movementArrow;
    private final List<Position> _candidatePositions;
    private final GameState _previousState;
    private int _currentlySelectedPositionIndex;
 
-   public StateSelectUnloadPosition(InteractiveWarGame interactiveWarGame,
-                                    WarGameQueries warGameQueries,
-                                    WarGameMoves warGameMoves,
+   public StateSelectUnloadPosition(GameStateContext context,
                                     LogicalUnit logicalUnit,
                                     MovementArrow movementArrow,
                                     Set<Position> vacantPositions,
                                     GameState previousState) {
-      _interactiveWarGame = interactiveWarGame;
-      _warGameQueries = warGameQueries;
-      _warGameMoves = warGameMoves;
+      _context = context;
       _logicalUnit = logicalUnit;
       _movementArrow = movementArrow;
       _candidatePositions = new ArrayList<>(vacantPositions);
       _previousState = previousState;
       _currentlySelectedPositionIndex = 0;
-      _interactiveWarGame.showAttackCursorOnPosition(getSelectedPosition());
+      _context.interactiveWarGame.showAttackCursorOnPosition(getSelectedPosition());
    }
 
    private Position getSelectedPosition() {
@@ -50,19 +46,19 @@ public class StateSelectUnloadPosition implements GameState {
 
    private LogicalUnit getUnloadingUnit() {
       // TODO: Proper unit selection state
-      return _warGameQueries.getTransportedUnits(_logicalUnit).get(0);
+      return _context.warGameQueries.getTransportedUnits(_logicalUnit).get(0);
    }
 
    @Override
    public GameState handleExecuteDown() {
       LogicalUnit unloadingUnit = getUnloadingUnit();
       Position unloadingPosition = _candidatePositions.get(_currentlySelectedPositionIndex);
-      _warGameMoves.executeUnloadMove(_logicalUnit, unloadingUnit, _movementArrow.getPath(), unloadingPosition);
-      _interactiveWarGame.stopIndicatingPositions();
-      _interactiveWarGame.hideAttackCursor();
-      _interactiveWarGame.showGraphicForUnit(unloadingUnit);
-      _interactiveWarGame.setPositionOfGraphicForUnit(unloadingUnit, unloadingPosition);
-      return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
+      _context.warGameMoves.executeUnloadMove(_logicalUnit, unloadingUnit, _movementArrow.getPath(), unloadingPosition);
+      _context.interactiveWarGame.stopIndicatingPositions();
+      _context.interactiveWarGame.hideAttackCursor();
+      _context.interactiveWarGame.showGraphicForUnit(unloadingUnit);
+      _context.interactiveWarGame.setPositionOfGraphicForUnit(unloadingUnit, unloadingPosition);
+      return new StateStarting(_context);
    }
 
    @Override
@@ -72,7 +68,7 @@ public class StateSelectUnloadPosition implements GameState {
 
    @Override
    public GameState handleCancel() {
-      _interactiveWarGame.hideAttackCursor();
+      _context.interactiveWarGame.hideAttackCursor();
       return _previousState;
    }
 
@@ -95,7 +91,7 @@ public class StateSelectUnloadPosition implements GameState {
       } else if (_currentlySelectedPositionIndex >= _candidatePositions.size()) {
          _currentlySelectedPositionIndex -= _candidatePositions.size();
       }
-      _interactiveWarGame.showAttackCursorOnPosition(getSelectedPosition());
+      _context.interactiveWarGame.showAttackCursorOnPosition(getSelectedPosition());
       return this;
    }
 
@@ -111,6 +107,6 @@ public class StateSelectUnloadPosition implements GameState {
 
    @Override
    public void draw(GameContainer gc, Font font, int x, int y) {
-      _interactiveWarGame.draw(gc, 0, 0);
+      _context.interactiveWarGame.draw(gc, 0, 0);
    }
 }

@@ -31,7 +31,7 @@ class GameFactory {
          throw new RuntimeException("This setup needs " + gameSetup.getNrOfFactions() + " factions, but you supplied " + factions.size());
       }
 
-      LogicalWarMapImpl logicalWarMap = new LogicalWarMapImpl(new ModuleBases());
+      LogicalWarMapImpl logicalWarMap = new LogicalWarMapImpl(new ModuleBuildings());
       MapMaker mapMaker = new LogicalMapMaker(logicalWarMap);
       warMap.create(mapMaker, factions);
       return logicalWarMap;
@@ -52,7 +52,7 @@ class GameFactory {
    }
 
    GraphicalWarGame createGraphicalWarGame(LogicalWarGame logicalWarGame, GraphicalWarMap graphicalWarMap) {
-      GraphicalWarGame graphicalWarGame = new GraphicalWarGame(logicalWarGame);
+      GraphicalWarGame graphicalWarGame = new GraphicalWarGame(logicalWarGame, new GraphicalUnitFactory());
       graphicalWarGame.init(_sprites);
       graphicalWarGame.setMap(graphicalWarMap);
       return graphicalWarGame;

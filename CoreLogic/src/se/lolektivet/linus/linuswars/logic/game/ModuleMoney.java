@@ -26,6 +26,10 @@ class ModuleMoney {
       _moneyForFactions.put(faction, _moneyForFactions.get(faction) + money);
    }
 
+   void subtractMoneyForFaction(Faction faction, int money) {
+      _moneyForFactions.put(faction, _moneyForFactions.get(faction) - money);
+   }
+
    int getMoneyForFaction(Faction faction) {
       return _moneyForFactions.get(faction);
    }

@@ -17,9 +17,9 @@ import java.util.Set;
  * Created by Linus on 2014-09-20.
  */
 public class StateSelectAttack implements GameState {
-   private final InteractiveWarGame _interactiveWarGame;
-   private WarGameQueries _warGameQueries;
-   private WarGameMoves _warGameMoves;
+
+   private final GameStateContext _context;
+
    private final LogicalUnit _logicalUnit;
    private final MovementArrow _movementArrow;
    private final List<LogicalUnit> _attackableUnits;
@@ -28,27 +28,23 @@ public class StateSelectAttack implements GameState {
    private GraphicalMenu _fireOrNothingMenu;
    private DamageCounter _damageCounter;
 
-   public StateSelectAttack(InteractiveWarGame interactiveWarGame,
-                            WarGameQueries warGameQueries,
-                            WarGameMoves warGameMoves,
+   public StateSelectAttack(GameStateContext context,
                             LogicalUnit logicalUnit,
                             MovementArrow movementArrow,
                             Set<LogicalUnit> attackableUnits,
                             GameState previousState) {
-      _interactiveWarGame = interactiveWarGame;
-      _warGameQueries = warGameQueries;
-      _warGameMoves = warGameMoves;
+      _context = context;
       _logicalUnit = logicalUnit;
       _movementArrow = movementArrow;
       _attackableUnits = new ArrayList<>(attackableUnits);
       _previousState = previousState;
       _currentlySelectedTargetIndex = 0;
-      _interactiveWarGame.showAttackCursorOnUnit(getTargetUnit());
+      _context.interactiveWarGame.showAttackCursorOnUnit(getTargetUnit());
       printAttackInfo();
    }
 
    private void printAttackInfo() {
-      int damage = _warGameQueries.calculateDamageInPercent(_logicalUnit, getTargetUnit());
+      int damage = _context.warGameQueries.calculateDamageInPercent(_logicalUnit, getTargetUnit());
       System.out.println("Damage: " + damage + "%");
    }
 
@@ -59,12 +55,12 @@ public class StateSelectAttack implements GameState {
    @Override
    public GameState handleExecuteDown() {
       LogicalUnit defendingUnit = getTargetUnit();
-      _warGameMoves.executeAttackMove(_logicalUnit, _movementArrow.getPath(), defendingUnit);
-      _interactiveWarGame.stopIndicatingPositions();
-      _interactiveWarGame.hideAttackCursor();
-      _interactiveWarGame.hideMovementArrow();
+      _context.warGameMoves.executeAttackMove(_logicalUnit, _movementArrow.getPath(), defendingUnit);
+      _context.interactiveWarGame.stopIndicatingPositions();
+      _context.interactiveWarGame.hideAttackCursor();
+      _context.interactiveWarGame.hideMovementArrow();
       // TODO: Check if game was won!
-      return new StateStarting(_interactiveWarGame, _warGameQueries, _warGameMoves);
+      return new StateStarting(_context);
    }
 
    @Override
@@ -74,7 +70,7 @@ public class StateSelectAttack implements GameState {
 
    @Override
    public GameState handleCancel() {
-      _interactiveWarGame.hideAttackCursor();
+      _context.interactiveWarGame.hideAttackCursor();
       return _previousState;
    }
 
@@ -97,7 +93,7 @@ public class StateSelectAttack implements GameState {
       } else if (_currentlySelectedTargetIndex >= _attackableUnits.size()) {
          _currentlySelectedTargetIndex -= _attackableUnits.size();
       }
-      _interactiveWarGame.showAttackCursorOnUnit(getTargetUnit());
+      _context.interactiveWarGame.showAttackCursorOnUnit(getTargetUnit());
       printAttackInfo();
       return this;
    }
@@ -126,11 +122,11 @@ public class StateSelectAttack implements GameState {
 
    @Override
    public void draw(GameContainer gc, Font font, int x, int y) {
-      _interactiveWarGame.draw(gc, 0, 0);
+      _context.interactiveWarGame.draw(gc, 0, 0);
       _fireOrNothingMenu.draw(gc.getGraphics(), font);
       // Possible optimization to do here.
-      Position position = _warGameQueries.getPositionOfUnit(getTargetUnit());
-      int damage = _warGameQueries.calculateDamageInPercent(_logicalUnit, getTargetUnit());
-      _damageCounter.draw(position.getX(), position.getY(), _interactiveWarGame.getTileView(), damage);
+      Position position = _context.warGameQueries.getPositionOfUnit(getTargetUnit());
+      int damage = _context.warGameQueries.calculateDamageInPercent(_logicalUnit, getTargetUnit());
+      _damageCounter.draw(position.getX(), position.getY(), _context.interactiveWarGame.getTileView(), damage);
    }
 }

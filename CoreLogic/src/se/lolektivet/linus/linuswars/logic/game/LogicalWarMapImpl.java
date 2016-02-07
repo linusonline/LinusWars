@@ -17,13 +17,13 @@ public class LogicalWarMapImpl implements LogicalWarMap {
    private int _mapSizeX;
    private int _mapSizeY;
 
-   private final BasesSetup _basesModule;
+   private final BuildingsSetup _buildingsModule;
 
-   public LogicalWarMapImpl(BasesSetup basesSetup) {
+   public LogicalWarMapImpl(BuildingsSetup buildingsSetup) {
       _terrainTiles = new HashMap<>();
       _mapSizeX = 0;
       _mapSizeY = 0;
-      _basesModule = basesSetup;
+      _buildingsModule = buildingsSetup;
    }
 
    @Override
@@ -41,7 +41,7 @@ public class LogicalWarMapImpl implements LogicalWarMap {
    }
 
    public void setBuilding(int x, int y, TerrainType terrainType, Faction faction) {
-      _basesModule.addBase(new Position(x, y), terrainType, faction);
+      _buildingsModule.addBuilding(new Position(x, y), terrainType, faction);
       internalSetTerrainType(x, y, terrainType);
    }
 
@@ -63,15 +63,15 @@ public class LogicalWarMapImpl implements LogicalWarMap {
       if (_mapSizeX * _mapSizeY != _terrainTiles.size()) {
          throw new MapUninitializedException("Some tiles of the map were not set!");
       }
-      _basesModule.validateSetup();
+      _buildingsModule.validateSetup();
    }
 
-   BasesSetup getBasesModule() {
-      return _basesModule;
+   BuildingsSetup getBuildingsModule() {
+      return _buildingsModule;
    }
 
-   public Collection<Base> getAllBases() {
-      return _basesModule.getAllBases();
+   public Collection<Building> getAllBuildings() {
+      return _buildingsModule.getAllBuildings();
    }
 
    @Override
