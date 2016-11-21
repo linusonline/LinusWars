@@ -1,7 +1,6 @@
-package se.lolektivet.linus.linuswars.maps;
+package se.lolektivet.linus.linuswars.logic.maps;
 
 import se.lolektivet.linus.linuswars.logic.GamePredeployer;
-import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.UnitType;
 

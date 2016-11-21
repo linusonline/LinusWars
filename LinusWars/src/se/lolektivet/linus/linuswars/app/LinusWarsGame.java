@@ -10,9 +10,9 @@ import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.game.LogicalWarGame;
 import se.lolektivet.linus.linuswars.logic.game.LogicalWarMap;
-import se.lolektivet.linus.linuswars.maps.GameSetup;
-import se.lolektivet.linus.linuswars.maps.GameSetup1;
-import se.lolektivet.linus.linuswars.maps.Map3;
+import se.lolektivet.linus.linuswars.logic.maps.GameSetup;
+import se.lolektivet.linus.linuswars.logic.maps.GameSetup1;
+import se.lolektivet.linus.linuswars.logic.maps.Map3;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +60,7 @@ public class LinusWarsGame extends BasicGame {
    private void startGame(WarMap warMap, GameSetup gameSetup, List<Faction> factions) {
       GameFactory gameFactory = new GameFactory(_allSprites);
 
-      LogicalWarMap logicalWarMap = gameFactory.createLogicalMap(warMap, gameSetup, factions);
+      LogicalWarMap logicalWarMap = gameFactory.createLogicalMap(warMap, factions);
 
       LogicalWarGame logicalWarGame = gameFactory.createLogicalWarGame(warMap, logicalWarMap, factions);
 

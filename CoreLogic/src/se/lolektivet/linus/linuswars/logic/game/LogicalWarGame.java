@@ -570,8 +570,15 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       // Question: Should resupply or healing be prioritized when not enough funds for both?
    }
 
+   private void subtractPerDayFuelConsumption() {
+      Set<LogicalUnit> units = getAllUnitsInActiveFaction();
+      for (LogicalUnit unit : units) {
+
+      }
+   }
+
    private void repairUnitsOnFriendlyBuildings() {
-      Set<LogicalUnit> units = _unitModule.getAllUnitsFromFaction(_turnOrderModule.currentlyActiveFaction());
+      Set<LogicalUnit> units = getAllUnitsInActiveFaction();
       for (LogicalUnit unit : units) {
          if (_buildingsModule.hasBuildingAtPosition(getPositionOfUnit(unit))) {
             if (_buildingsModule.getBuildingAtPosition(getPositionOfUnit(unit)).getFaction() == _turnOrderModule.currentlyActiveFaction()) {

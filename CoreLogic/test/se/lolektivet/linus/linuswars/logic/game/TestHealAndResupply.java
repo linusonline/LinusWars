@@ -3,10 +3,7 @@ package se.lolektivet.linus.linuswars.logic.game;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import se.lolektivet.linus.linuswars.logic.LogicalGamePredeployer;
-import se.lolektivet.linus.linuswars.logic.LogicalMapMaker;
-import se.lolektivet.linus.linuswars.logic.Position;
-import se.lolektivet.linus.linuswars.logic.WarMap;
+import se.lolektivet.linus.linuswars.logic.*;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 
 import java.util.ArrayList;
@@ -17,31 +14,17 @@ import java.util.List;
  */
 public class TestHealAndResupply {
 
-   private LogicalWarGame _theGame;
    private WarGameMoves _gameMoves;
    private WarGameQueries _gameQueries;
 
    @Before
    public void setup() {
-      LogicalWarMapImpl theMap = new LogicalWarMapImpl(new ModuleBuildings());
-      LogicalMapMaker mapMaker = new LogicalMapMaker(theMap);
-      WarMap map = new TestMap1();
-      map.create(mapMaker);
+      LogicalWarGame theGame = new LogicalGameFactory().createLogicalWarGame(new TestMap1(), new TestGameSetup3(), Faction.ORANGE_STAR, Faction.BLUE_MOON);
 
-      List<Faction> factions = new ArrayList<>(2);
-      factions.add(Faction.ORANGE_STAR);
-      factions.add(Faction.BLUE_MOON);
+      _gameMoves = theGame;
+      _gameQueries = theGame;
 
-      _theGame = new LogicalWarGame(theMap, factions);
-      LogicalWarGameCreator gameCreator = new LogicalWarGameCreator(_theGame);
-      map.create(gameCreator, factions);
-
-      new TestGameSetup3().preDeploy(new LogicalGamePredeployer(_theGame, new LogicalUnitFactory()));
-
-      _gameMoves = _theGame;
-      _gameQueries = _theGame;
-
-      _theGame.callGameStart();
+      theGame.callGameStart();
    }
 
    @Test

@@ -1,4 +1,4 @@
-package se.lolektivet.linus.linuswars.maps;
+package se.lolektivet.linus.linuswars.logic.maps;
 
 import se.lolektivet.linus.linuswars.logic.DefaultFactions;
 import se.lolektivet.linus.linuswars.logic.GamePredeployer;

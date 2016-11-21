@@ -1,4 +1,4 @@
-package se.lolektivet.linus.linuswars.maps;
+package se.lolektivet.linus.linuswars.logic.maps;
 
 import se.lolektivet.linus.linuswars.logic.MapMaker;
 import se.lolektivet.linus.linuswars.logic.RowMapMaker;

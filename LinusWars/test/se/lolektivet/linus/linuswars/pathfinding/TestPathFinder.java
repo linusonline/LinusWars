@@ -6,7 +6,7 @@ import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.game.LogicalWarGame;
 import se.lolektivet.linus.linuswars.logic.game.LogicalWarMapImpl;
 import se.lolektivet.linus.linuswars.logic.game.ModuleBuildings;
-import se.lolektivet.linus.linuswars.maps.Map1;
+import se.lolektivet.linus.linuswars.logic.maps.Map1;
 
 import java.util.ArrayList;
 import java.util.Collection;
