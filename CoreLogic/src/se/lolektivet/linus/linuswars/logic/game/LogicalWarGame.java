@@ -10,11 +10,14 @@ import se.lolektivet.linus.linuswars.logic.enums.UnitType;
 import se.lolektivet.linus.linuswars.logic.pathfinding.*;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Created by Linus on 2014-09-19.
  */
 public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQueries {
+
+   private static final Logger _logger = Logger.getLogger(LogicalWarGame.class.getName());
 
    // TODO: Big one! Have GraphicalWarGame and InteractiveWarGame implement at least WarGameSetup. Maybe the other two as well!
 
@@ -59,7 +62,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       _moneyModule = new ModuleMoney();
       _moneyModule.init(factionsInTurnOrder);
 
-      System.out.println("Current Faction is " + factionsInTurnOrder.get(0).toString());
+      _logger.info("Current Faction is " + factionsInTurnOrder.get(0).toString());
       _gameStarted = false;
       _listeners = new HashSet<>(0);
    }
@@ -551,7 +554,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
 
    private void doBeginningOfTurn() {
       // TODO: Do beginning-of-turn stuff for next faction.
-      System.out.println("Current Faction is " + _turnOrderModule.currentlyActiveFaction());
+      _logger.info("Current Faction is " + _turnOrderModule.currentlyActiveFaction());
       _unitModule.refreshUnitsInFaction(_turnOrderModule.currentlyActiveFaction());
       invalidateOptimalPathsCache();
       resupplyFromAllAtcs(_turnOrderModule.currentlyActiveFaction());

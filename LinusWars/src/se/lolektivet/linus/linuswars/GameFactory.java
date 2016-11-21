@@ -15,14 +15,14 @@ import java.util.List;
 /**
  * Created by Linus on 2015-12-27.
  */
-class GameFactory {
+public class GameFactory {
    private Sprites _sprites;
 
-   GameFactory(Sprites sprites) {
+   public GameFactory(Sprites sprites) {
       _sprites = sprites;
    }
 
-   LogicalWarMap createLogicalMap(WarMap warMap, GameSetup gameSetup, List<Faction> factions) {
+   public LogicalWarMap createLogicalMap(WarMap warMap, GameSetup gameSetup, List<Faction> factions) {
       if (warMap.getNrOfFactions() != factions.size()) {
          throw new RuntimeException("This map needs " + warMap.getNrOfFactions() + " factions, but you supplied " + factions.size());
       }
@@ -37,28 +37,28 @@ class GameFactory {
       return logicalWarMap;
    }
 
-   LogicalWarGame createLogicalWarGame(WarMap warMap, LogicalWarMap logicalWarMap, List<Faction> factions) {
+   public LogicalWarGame createLogicalWarGame(WarMap warMap, LogicalWarMap logicalWarMap, List<Faction> factions) {
       LogicalWarGame logicalWarGame = new LogicalWarGame(logicalWarMap, factions);
       MapMaker warGameCreator = new LogicalWarGameCreator(logicalWarGame);
       warMap.create(warGameCreator, factions);
       return logicalWarGame;
    }
 
-   GraphicalWarMap createGraphicalWarMap(WarMap warMap, LogicalWarMap logicalWarMap, List<Faction> factions) {
+   public GraphicalWarMap createGraphicalWarMap(WarMap warMap, LogicalWarMap logicalWarMap, List<Faction> factions) {
       GraphicalWarMap newWarMap = new GraphicalWarMap(logicalWarMap);
       GraphicalMapMaker mapMaker = new GraphicalMapMaker(_sprites, newWarMap);
       warMap.create(mapMaker, factions);
       return newWarMap;
    }
 
-   GraphicalWarGame createGraphicalWarGame(LogicalWarGame logicalWarGame, GraphicalWarMap graphicalWarMap) {
+   public GraphicalWarGame createGraphicalWarGame(LogicalWarGame logicalWarGame, GraphicalWarMap graphicalWarMap) {
       GraphicalWarGame graphicalWarGame = new GraphicalWarGame(logicalWarGame, new GraphicalUnitFactory());
       graphicalWarGame.init(_sprites);
       graphicalWarGame.setMap(graphicalWarMap);
       return graphicalWarGame;
    }
 
-   InteractiveWarGame createInteractiveWarGame(LogicalWarGame logicalWarGame, GraphicalWarGame graphicalWarGame) {
+   public InteractiveWarGame createInteractiveWarGame(LogicalWarGame logicalWarGame, GraphicalWarGame graphicalWarGame) {
       ScrollingTileViewImpl scrollingTileView = new ScrollingTileViewImpl();
       scrollingTileView.setVisibleRectSize(15, 10);
       InteractiveWarGame interactiveWarGame = new InteractiveWarGame(graphicalWarGame, logicalWarGame, scrollingTileView);
@@ -66,11 +66,11 @@ class GameFactory {
       return interactiveWarGame;
    }
 
-   void deployToLogicalGame(LogicalWarGame logicalWarGame, GameSetup gameSetup, List<Faction> factions) {
+   public void deployToLogicalGame(LogicalWarGame logicalWarGame, GameSetup gameSetup, List<Faction> factions) {
       gameSetup.preDeploy(new LogicalGamePredeployer(logicalWarGame, new LogicalUnitFactory()), factions);
    }
 
-   void deployToGraphicalGame(GraphicalWarGame graphicalWarGame, GameSetup gameSetup, List<Faction> factions) {
+   public void deployToGraphicalGame(GraphicalWarGame graphicalWarGame, GameSetup gameSetup, List<Faction> factions) {
       GraphicalGamePreDeployer graphicalGamePreDeployer = new GraphicalGamePreDeployer(graphicalWarGame);
       graphicalGamePreDeployer.init(_sprites);
       gameSetup.preDeploy(graphicalGamePreDeployer, factions);

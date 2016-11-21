@@ -12,11 +12,14 @@ import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * Created by Linus on 2014-09-20.
  */
 public class StateSelectAttack implements GameState {
+
+   private static final Logger _logger = Logger.getLogger(StateSelectAttack.class.getName());
 
    private final GameStateContext _context;
 
@@ -45,7 +48,7 @@ public class StateSelectAttack implements GameState {
 
    private void printAttackInfo() {
       int damage = _context.warGameQueries.calculateDamageInPercent(_logicalUnit, getTargetUnit());
-      System.out.println("Damage: " + damage + "%");
+      _logger.info("Damage: " + damage + "%");
    }
 
    private LogicalUnit getTargetUnit() {

@@ -7,10 +7,14 @@ import se.lolektivet.linus.linuswars.logic.game.WarGameMoves;
 import se.lolektivet.linus.linuswars.logic.game.WarGameQueries;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 
+import java.util.logging.Logger;
+
 /**
  * Created by Linus on 2014-09-20.
  */
 public class StateQuickMenu implements GameState {
+
+   private static final Logger _logger = Logger.getLogger(StateQuickMenu.class.getName());
 
    private final GameStateContext _context;
 
@@ -30,7 +34,7 @@ public class StateQuickMenu implements GameState {
          case END_TURN:
             _context.warGameMoves.endTurn();
             // TODO: Play end-of-turn animations, change some graphics and bg sound.
-            System.out.println("Turn ended!");
+            _logger.info("Turn ended!");
             return new StateTurnTransition(_context);
          case NOTHING:
             return _previousState;

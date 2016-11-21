@@ -1,6 +1,7 @@
-package se.lolektivet.linus.linuswars;
+package se.lolektivet.linus.linuswars.app;
 
 import org.newdawn.slick.*;
+import se.lolektivet.linus.linuswars.*;
 import se.lolektivet.linus.linuswars.graphicalgame.GraphicalWarGame;
 import se.lolektivet.linus.linuswars.graphicalgame.GraphicalWarMap;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
@@ -22,6 +23,8 @@ import java.util.logging.Logger;
  * Created by Linus on 2014-09-18.
  */
 public class LinusWarsGame extends BasicGame {
+   private static final Logger _logger = Logger.getLogger(LinusWarsGame.class.getName());
+
    private static final float VERTICAL_SCALE = 2.0f;
    private static final float HORIZONTAL_SCALE = 2.0f;
    private static final int BASE_HORIZONTAL_RESOLUTION = 240;
@@ -32,14 +35,14 @@ public class LinusWarsGame extends BasicGame {
    private Sprites _allSprites;
    private Font _mainFont;
 
-   public LinusWarsGame(String gamename) {
+   private LinusWarsGame(String gamename) {
       super(gamename);
       _gameStateLock = new Object();
    }
 
    @Override
    public void init(GameContainer gc) throws SlickException {
-      // System.out.println("Container: [ " + gc.getWidth() + "," + gc.getHeight() + "], Screen: [" + gc.getScreenWidth() + "," + gc.getScreenHeight() + "]");
+      // _logger.config("Container: [ " + gc.getWidth() + "," + gc.getHeight() + "], Screen: [" + gc.getScreenWidth() + "," + gc.getScreenHeight() + "]");
 
       _allSprites = Sprites.createSprites();
       _mainFont = _allSprites.getMainFont();
@@ -107,7 +110,7 @@ public class LinusWarsGame extends BasicGame {
          _gameState = newGameState;
          _gameState.init(_allSprites);
       }
-      System.out.println(_gameState);
+      _logger.fine(_gameState.toString());
    }
 
    @Override
@@ -139,6 +142,7 @@ public class LinusWarsGame extends BasicGame {
    }
 
    public static void main(String[] args) {
+      _logger.log(Level.INFO, "Starting Linus Wars");
       try {
          AppGameContainer appgc;
          appgc = new AppGameContainer(new LinusWarsGame("Linus Wars"));
