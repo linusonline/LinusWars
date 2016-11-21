@@ -26,6 +26,8 @@ public class LogicalUnit {
    private int _ammo;
    private int _hp;
 
+   private boolean _subIsSubmerged = false;
+
    static LogicalUnit createTransportUnit(UnitType type, MovementType movement, int cost, int maxFuel, int baseVision, int baseMovementRange) {
       return new LogicalUnit(type, movement, cost, maxFuel, baseVision, baseMovementRange, 0, 0, 0, true, false);
    }
@@ -91,7 +93,7 @@ public class LogicalUnit {
    }
 
    boolean isSea() {
-      return _movement == MovementType.SEA;
+      return _movement == MovementType.SEA || _movement == MovementType.SEA_TRANSPORT;
    }
 
    boolean isAir() {
@@ -158,5 +160,21 @@ public class LogicalUnit {
 
    public void healHpPercent(int hpPercent) {
       _hp = Math.min(hpPercent + _hp, MAX_HP);
+   }
+
+   public boolean subIsSubmerged() {
+      throwIfNotSub();
+      return _subIsSubmerged;
+   }
+
+   public void setSubSubmerged(boolean submerged) {
+      throwIfNotSub();
+      _subIsSubmerged = submerged;
+   }
+
+   private void throwIfNotSub() {
+      if (_type != UnitType.SUB) {
+         throw new LogicException("Operation only supported for sub!");
+      }
    }
 }
