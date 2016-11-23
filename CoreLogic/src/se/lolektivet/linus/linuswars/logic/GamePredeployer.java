@@ -11,4 +11,6 @@ public interface GamePredeployer {
    void addNewUnit(UnitType type, Faction faction, int x, int y);
 
    void addNewUnit(UnitType type, Faction faction, int x, int y, int hpPercent);
+
+   void addNewUnit(UnitType type, Faction faction, int x, int y, int hpPercent, int fuel);
 }

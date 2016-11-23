@@ -43,7 +43,7 @@ public class TestLogicGame_executeAttackMove {
       LogicalWarGameCreator gameCreator = new LogicalWarGameCreator(_theGame);
       map.create(gameCreator, factions);
 
-      new TestGameSetup2().preDeploy(new LogicalGamePredeployer(_theGame, new LogicalUnitFactory()));
+      new TestGameSetup2().preDeploy(new LogicalGamePredeployer(_theGame, new LogicalUnitFactory(new FuelLogic())));
 
       _gameMoves = _theGame;
       _gameQueries = _theGame;

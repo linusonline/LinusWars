@@ -54,7 +54,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       _fuelLogic = new FuelLogic();
       _attackLogic = new AttackLogic();
       _transportLogic = new TransportLogic();
-      _deployLogic = new DeployLogic();
+      _deployLogic = new DeployLogic(_fuelLogic);
 
       _unitModule = new ModuleUnits(factionsInTurnOrder);
       _turnOrderModule = new ModuleTurnOrder(factionsInTurnOrder);
@@ -62,7 +62,6 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       _moneyModule = new ModuleMoney();
       _moneyModule.init(factionsInTurnOrder);
 
-      _logger.info("Current Faction is " + factionsInTurnOrder.get(0).toString());
       _gameStarted = false;
       _listeners = new HashSet<>(0);
    }
@@ -499,7 +498,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    }
 
    private void internalDeployUnit(Position position, UnitType unitType, Faction faction) {
-      LogicalUnit newUnit = _deployLogic.createUnit(unitType);
+      LogicalUnit newUnit = _deployLogic.createLogicalUnit(unitType);
       _moneyModule.subtractMoneyForFaction(faction, _deployLogic.getCostForUnitType(unitType));
       _unitModule.addUnit(newUnit, position, faction);
       fireUnitDeployed(newUnit, position);
@@ -561,9 +560,10 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       addIncomeFromProperties(_turnOrderModule.currentlyActiveFaction());
 
       // Repair units on friendly buildings
-      repairUnitsOnFriendlyBuildings();
+      repairAndResupplyUnitsOnFriendlyBuildings();
 
       // Subtract per-day fuel consumptions
+      subtractPerDayFuelConsumption();
       // Resupply all units on appropriate buildings or adjacent to resupply units
       // Check for crashing aircraft or ships
 
@@ -571,18 +571,23 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    }
 
    private void subtractPerDayFuelConsumption() {
+      // TODO: This will not work. This consumption needs to be weighed in with resupplying, to get the right final amount, *before* checking for destroyed naval/air units.
       Set<LogicalUnit> units = getAllUnitsInActiveFaction();
       for (LogicalUnit unit : units) {
-
+         int costPerTurn = _fuelLogic.getFuelCostPerTurn(unit);
+         unit.subtractFuel(costPerTurn);
+         _logger.fine("Unit " + unit + " consumed " + costPerTurn + " fuel at start of turn.");
       }
    }
 
-   private void repairUnitsOnFriendlyBuildings() {
+   private void repairAndResupplyUnitsOnFriendlyBuildings() {
       Set<LogicalUnit> units = getAllUnitsInActiveFaction();
       for (LogicalUnit unit : units) {
          if (_buildingsModule.hasBuildingAtPosition(getPositionOfUnit(unit))) {
             if (_buildingsModule.getBuildingAtPosition(getPositionOfUnit(unit)).getFaction() == _turnOrderModule.currentlyActiveFaction()) {
+               // TODO: All unit types are not resupplied/healed on all building types.
                unit.healHpPercent(20);
+               unit.resupply();
             }
          }
       }

@@ -12,7 +12,29 @@ import java.util.Map;
 /**
  * Created by Linus on 2014-09-20.
  */
-class FuelLogic {
+public class FuelLogic {
+   private Map<UnitType, Integer> _maxFuelByUnitType = new HashMap<>(UnitType.values().length);
+
+   public FuelLogic() {
+      _maxFuelByUnitType.put(UnitType.INFANTRY, 99);
+      _maxFuelByUnitType.put(UnitType.MECH, 70);
+      _maxFuelByUnitType.put(UnitType.APC, 70);
+      _maxFuelByUnitType.put(UnitType.TANK, 70);
+      _maxFuelByUnitType.put(UnitType.MD_TANK, 50);
+      _maxFuelByUnitType.put(UnitType.ANTI_AIR, 60);
+      _maxFuelByUnitType.put(UnitType.ARTILLERY, 99);
+      _maxFuelByUnitType.put(UnitType.RECON, 80);
+      _maxFuelByUnitType.put(UnitType.ROCKETS, 50);
+      _maxFuelByUnitType.put(UnitType.MISSILES, 50);
+      _maxFuelByUnitType.put(UnitType.LANDER, 99);
+      _maxFuelByUnitType.put(UnitType.CRUISER, 99);
+      _maxFuelByUnitType.put(UnitType.B_SHIP, 99);
+      _maxFuelByUnitType.put(UnitType.SUB, 60);
+      _maxFuelByUnitType.put(UnitType.B_COPTER, 99);
+      _maxFuelByUnitType.put(UnitType.T_COPTER, 99);
+      _maxFuelByUnitType.put(UnitType.FIGHTER, 99);
+      _maxFuelByUnitType.put(UnitType.BOMBER, 99);
+   }
 
    int getFuelCostPerTurn(LogicalUnit unit) {
       if (unit.isLand()) {
@@ -37,8 +59,13 @@ class FuelLogic {
    }
 
    // NOTE: Not sure this is actually needed. Need some experimenting.
+   // NOTE: So far, true for air units and infantry on plain and woods.
    InfiniteInteger getFuelCostForMovementTypeOnTerrainType(MovementType movement, TerrainType terrain) {
       return InfiniteInteger.create(1);
+   }
+
+   public int getMaxFuelForUnitType(UnitType type) {
+      return _maxFuelByUnitType.get(type);
    }
 
    void resupplyUnit(LogicalUnit logicalUnit) {

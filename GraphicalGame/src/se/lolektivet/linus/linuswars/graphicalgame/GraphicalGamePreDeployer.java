@@ -32,4 +32,8 @@ public class GraphicalGamePreDeployer implements GamePredeployer {
    public void addNewUnit(UnitType type, Faction faction, int x, int y, int hpPercent) {
       addNewUnit(type, faction, x, y);
    }
+
+   public void addNewUnit(UnitType type, Faction faction, int x, int y, int hpPercent, int fuel) {
+      addNewUnit(type, faction, x, y);
+   }
 }

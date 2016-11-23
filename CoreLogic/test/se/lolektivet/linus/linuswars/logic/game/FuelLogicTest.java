@@ -12,8 +12,13 @@ import static org.junit.Assert.*;
  */
 public class FuelLogicTest {
 
-   private LogicalUnitFactory _unitFactory = new LogicalUnitFactory();
-   private FuelLogic _fuelLogic = new FuelLogic();
+   private final LogicalUnitFactory _unitFactory;
+   private final FuelLogic _fuelLogic;
+
+   public FuelLogicTest() {
+      _fuelLogic = new FuelLogic();
+      _unitFactory = new LogicalUnitFactory(_fuelLogic);
+   }
 
    @Before
    public void setUp() throws Exception {

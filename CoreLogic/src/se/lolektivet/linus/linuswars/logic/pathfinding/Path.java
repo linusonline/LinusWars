@@ -13,12 +13,10 @@ public class Path {
    private final Position _origin;
    private final List<Position> _pointsOnPath;
    private final boolean _isAutoBackTrack;
-   private int _length;
 
    private Path(Position origin, List<Position> pointsOnPath, boolean isAutoBackTrack) {
       _origin = origin;
       _pointsOnPath = new ArrayList<>(pointsOnPath);
-      _length = _pointsOnPath.size();
       _isAutoBackTrack = isAutoBackTrack;
    }
 
@@ -51,36 +49,15 @@ public class Path {
    }
 
    public int getLength() {
-      return _length;
+      return _pointsOnPath.size();
    }
 
    public boolean isEmpty() {
       return getLength() == 0;
    }
 
-   private void backUpOneStep() {
-      if (_length > 0) {
-         _pointsOnPath.remove(_pointsOnPath.size() - 1);
-         _length--;
-      }
-   }
-
-   private Position getLastPoint() {
-      if (_length == 0) {
-         return _origin;
-      } else {
-         return _pointsOnPath.get(_length - 1);
-      }
-   }
-
-   private Position getPointBeforeLast() {
-      if (_length == 0) {
-         return null;
-      } else if (_length == 1) {
-         return _origin;
-      } else {
-         return _pointsOnPath.get(_length - 2);
-      }
+   public Position getBacktrackPosition() {
+      return getPointBeforeLast();
    }
 
    public void addPoint(Position newPoint) {
@@ -88,7 +65,7 @@ public class Path {
          throw new IllegalPathException();
       }
       if (_isAutoBackTrack) {
-         if (_length > 0) {
+         if (!isEmpty()) {
             //noinspection ConstantConditions
             if (getPointBeforeLast().equals(newPoint)) {
                backUpOneStep();
@@ -97,16 +74,29 @@ public class Path {
          }
       }
       _pointsOnPath.add(new Position(newPoint));
-      _length++;
    }
 
-   public Position getBacktrackPosition() {
-      if (isEmpty()){
+   private Position getLastPoint() {
+      if (isEmpty()) {
+         return _origin;
+      } else {
+         return _pointsOnPath.get(getLength() - 1);
+      }
+   }
+
+   private Position getPointBeforeLast() {
+      if (isEmpty()) {
          throw new IllegalStateException();
       } else if (getLength() == 1) {
          return _origin;
       } else {
-         return _pointsOnPath.get(_pointsOnPath.size() - 2);
+         return _pointsOnPath.get(getLength() - 2);
+      }
+   }
+
+   private void backUpOneStep() {
+      if (!isEmpty()) {
+         _pointsOnPath.remove(_pointsOnPath.size() - 1);
       }
    }
 

@@ -24,45 +24,15 @@ public class PathFactory {
       return new Path(otherPath, isAutoBackTrack);
    }
 
-
-   public static Path create(Position origin, Direction direction) {
+   public static Path create(Position origin, Direction... dirs) {
       Path thePath = create(origin, false);
-      addStepToPath(thePath, direction);
-      return thePath;
-   }
-
-   public static Path create(Position origin, Direction dir1, Direction dir2) {
-      Path thePath = create(origin, dir1);
-      addStepToPath(thePath, dir2);
-      return thePath;
-   }
-
-   public static Path create(Position origin, Direction dir1, Direction dir2, Direction dir3) {
-      Path thePath = create(origin, dir1, dir2);
-      addStepToPath(thePath, dir3);
-      return thePath;
-   }
-
-   public static Path create(Position origin, Direction dir1, Direction dir2, Direction dir3, Direction dir4) {
-      Path thePath = create(origin, dir1, dir2, dir3);
-      addStepToPath(thePath, dir4);
-      return thePath;
-   }
-
-   public static Path create(Position origin, Direction dir1, Direction dir2, Direction dir3, Direction dir4, Direction dir5) {
-      Path thePath = create(origin, dir1, dir2, dir3, dir4);
-      addStepToPath(thePath, dir5);
-      return thePath;
-   }
-
-   public static Path create(Position origin, Direction dir1, Direction dir2, Direction dir3, Direction dir4, Direction dir5, Direction dir6) {
-      Path thePath = create(origin, dir1, dir2, dir3, dir4, dir5);
-      addStepToPath(thePath, dir6);
+      for (Direction direction : dirs) {
+         addStepToPath(thePath, direction);
+      }
       return thePath;
    }
 
    private static void addStepToPath(Path path, Direction direction) {
       path.addPoint(path.getFinalPosition().getPositionAfterStep(direction));
    }
-
 }

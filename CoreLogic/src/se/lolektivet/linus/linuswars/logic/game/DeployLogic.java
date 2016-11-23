@@ -15,9 +15,9 @@ public class DeployLogic {
    private final Map<TerrainType, List<UnitType>> _deployableTypes;
    private final LogicalUnitFactory _unitFactory;
 
-   DeployLogic() {
+   DeployLogic(FuelLogic fuelLogic) {
       // TODO: Create sprite sheets for commented-out types.
-      _unitFactory = new LogicalUnitFactory();
+      _unitFactory = new LogicalUnitFactory(fuelLogic);
       _deployableTypes = new HashMap<>();
 
       List<UnitType> typesDeployableFromBase = new ArrayList<>();
@@ -64,50 +64,12 @@ public class DeployLogic {
 
    int getCostForUnitType(UnitType unitType) {
       // TODO: Cost may vary for different COs.
-      LogicalUnit unit = createUnit(unitType);
+      // TODO: Factor unit cost into own logic module.
+      LogicalUnit unit = createLogicalUnit(unitType);
       return unit.getCost();
    }
 
-   public LogicalUnit createUnit(UnitType unitType) {
-      switch (unitType) {
-         case ANTI_AIR:
-            return _unitFactory.createAntiAir();
-         case APC:
-            return _unitFactory.createAPC();
-         case ARTILLERY:
-            return _unitFactory.createArtillery();
-         case B_COPTER:
-            return _unitFactory.createBattleHelicopter();
-         case BOMBER:
-            return _unitFactory.createBomber();
-         case B_SHIP:
-            return _unitFactory.createBattleShip();
-         case CRUISER:
-            return _unitFactory.createCruiser();
-         case FIGHTER:
-            return _unitFactory.createFighter();
-         case INFANTRY:
-            return _unitFactory.createInfantry();
-         case LANDER:
-            return _unitFactory.createLander();
-         case MD_TANK:
-            return _unitFactory.createMdTank();
-         case MECH:
-            return _unitFactory.createMech();
-         case MISSILES:
-            return _unitFactory.createMissiles();
-         case RECON:
-            return _unitFactory.createRecon();
-         case ROCKETS:
-            return _unitFactory.createRocket();
-         case SUB:
-            return _unitFactory.createSub();
-         case T_COPTER:
-            return _unitFactory.createTransportHelicopter();
-         case TANK:
-            return _unitFactory.createTank();
-         default:
-            throw new RuntimeException();
-      }
+   LogicalUnit createLogicalUnit(UnitType unitType) {
+      return _unitFactory.createLogicalUnit(unitType);
    }
 }

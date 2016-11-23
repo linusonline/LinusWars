@@ -62,30 +62,20 @@ public class LogicalUnit {
       return _cost;
    }
 
-   int getHp1To100() {
-      return _hp;
-   }
-
-   public int getHp1To10() {
-      // TODO: Find out about actual math here!
-      return _hp / 10;
-   }
-
-   // Core method
-   public void setHp1To100(int hp) {
-      _hp = hp;
-   }
-
-   boolean isDamaged() {
-      return getHp1To10() < 10;
+   public UnitType getType() {
+      return _type;
    }
 
    MovementType getMovementType() {
       return _movement;
    }
 
-   public UnitType getType() {
-      return _type;
+   public int getMaxFuel() {
+      return _maxFuel;
+   }
+
+   public int getMaxAmmo() {
+      return _maxAmmo;
    }
 
    boolean isLand() {
@@ -121,16 +111,36 @@ public class LogicalUnit {
       return _baseMovementRange;
    }
 
-   public int getFuel() {
-      return _fuel;
-   }
-
    public int getBaseMinAttackRange() {
       return _baseMinAttackRange;
    }
 
    public int getBaseMaxAttackRange() {
       return _baseMaxAttackRange;
+   }
+
+
+
+   int getHp1To100() {
+      return _hp;
+   }
+
+   public int getHp1To10() {
+      // TODO: Find out about actual math here!
+      return _hp / 10;
+   }
+
+   // Core method
+   public void setHp1To100(int hp) {
+      _hp = hp;
+   }
+
+   boolean isDamaged() {
+      return getHp1To10() < 10;
+   }
+
+   public int getFuel() {
+      return _fuel;
    }
 
    // Core method
