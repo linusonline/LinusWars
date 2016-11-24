@@ -1,25 +1,37 @@
 package se.lolektivet.linus.linuswars.logic.game;
 
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import se.lolektivet.linus.linuswars.logic.*;
+import se.lolektivet.linus.linuswars.logic.GamePredeployer;
+import se.lolektivet.linus.linuswars.logic.LogicalGameFactory;
+import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
+import se.lolektivet.linus.linuswars.logic.enums.UnitType;
+import se.lolektivet.linus.linuswars.logic.game.maps.TestMap4x4Plains;
 
-import java.util.ArrayList;
-import java.util.List;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Linus on 2016-02-07.
  */
-public class TestHealAndResupply {
+public class TestAutoHeal {
+
+   private static class TestGameSetup extends GameSetupAdapterForTest {
+      @Override
+      public void preDeploy(GamePredeployer predeployer) {
+         predeployer.addNewUnit(UnitType.INFANTRY, Faction.ORANGE_STAR, 0, 0, 70);
+         predeployer.addNewUnit(UnitType.INFANTRY, Faction.ORANGE_STAR, 0, 1);
+         predeployer.addNewUnit(UnitType.INFANTRY, Faction.ORANGE_STAR, 0, 2, 70);
+         predeployer.addNewUnit(UnitType.INFANTRY, Faction.ORANGE_STAR, 0, 3, 70);
+      }
+   }
 
    private WarGameMoves _gameMoves;
    private WarGameQueries _gameQueries;
 
    @Before
    public void setup() {
-      LogicalWarGame theGame = new LogicalGameFactory().createLogicalWarGame(new TestMap1(), new TestGameSetup3(), Faction.ORANGE_STAR, Faction.BLUE_MOON);
+      LogicalWarGame theGame = new LogicalGameFactory().createLogicalWarGame(new TestMap4x4Plains(), new TestGameSetup(), Faction.ORANGE_STAR, Faction.BLUE_MOON);
 
       _gameMoves = theGame;
       _gameQueries = theGame;

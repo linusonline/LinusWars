@@ -1,28 +1,37 @@
 package se.lolektivet.linus.linuswars.logic.game;
 
-import static org.junit.Assert.*;
-import org.junit.matchers.JUnitMatchers.*;
 import org.junit.Before;
 import org.junit.Test;
-import static org.hamcrest.CoreMatchers.*;
-import org.hamcrest.core.CombinableMatcher;
-import se.lolektivet.linus.linuswars.logic.LogicalGamePredeployer;
-import se.lolektivet.linus.linuswars.logic.LogicalMapMaker;
+import se.lolektivet.linus.linuswars.logic.GamePredeployer;
+import se.lolektivet.linus.linuswars.logic.LogicalGameFactory;
 import se.lolektivet.linus.linuswars.logic.Position;
-import se.lolektivet.linus.linuswars.logic.WarMap;
 import se.lolektivet.linus.linuswars.logic.enums.Direction;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.UnitType;
+import se.lolektivet.linus.linuswars.logic.game.maps.TestMap4x4Plains;
 import se.lolektivet.linus.linuswars.logic.pathfinding.Path;
 import se.lolektivet.linus.linuswars.logic.pathfinding.PathFactory;
 
-import java.util.ArrayList;
-import java.util.List;
+import static org.hamcrest.CoreMatchers.either;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.*;
 
 /**
  * Created by Linus on 2015-12-04.
  */
 public class TestLogicGame_executeAttackMove {
+
+   private static class TestGameSetup extends GameSetupAdapterForTest {
+      @Override
+      public void preDeploy(GamePredeployer predeployer) {
+         predeployer.addNewUnit(UnitType.INFANTRY, Faction.ORANGE_STAR, 0, 0);
+
+         predeployer.addNewUnit(UnitType.INFANTRY, Faction.BLUE_MOON, 0, 3);
+         predeployer.addNewUnit(UnitType.INFANTRY, Faction.BLUE_MOON, 1, 3);
+         predeployer.addNewUnit(UnitType.MD_TANK, Faction.BLUE_MOON, 2, 2);
+         predeployer.addNewUnit(UnitType.FIGHTER, Faction.BLUE_MOON, 3, 1);
+      }
+   }
 
    private LogicalWarGame _theGame;
    private WarGameMoves _gameMoves;
@@ -30,20 +39,7 @@ public class TestLogicGame_executeAttackMove {
 
    @Before
    public void setup() {
-      LogicalWarMapImpl theMap = new LogicalWarMapImpl(new ModuleBuildings());
-      LogicalMapMaker mapMaker = new LogicalMapMaker(theMap);
-      WarMap map = new TestMap1();
-      map.create(mapMaker);
-
-      List<Faction> factions = new ArrayList<>(2);
-      factions.add(Faction.ORANGE_STAR);
-      factions.add(Faction.BLUE_MOON);
-
-      _theGame = new LogicalWarGame(theMap, factions);
-      LogicalWarGameCreator gameCreator = new LogicalWarGameCreator(_theGame);
-      map.create(gameCreator, factions);
-
-      new TestGameSetup2().preDeploy(new LogicalGamePredeployer(_theGame, new LogicalUnitFactory(new FuelLogic())));
+      _theGame = new LogicalGameFactory().createLogicalWarGame(new TestMap4x4Plains(), new TestGameSetup(), Faction.ORANGE_STAR, Faction.BLUE_MOON);
 
       _gameMoves = _theGame;
       _gameQueries = _theGame;

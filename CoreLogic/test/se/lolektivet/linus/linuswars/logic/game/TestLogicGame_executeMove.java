@@ -4,21 +4,24 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import se.lolektivet.linus.linuswars.logic.*;
-import se.lolektivet.linus.linuswars.logic.enums.Direction;
-import se.lolektivet.linus.linuswars.logic.enums.Faction;
-import se.lolektivet.linus.linuswars.logic.enums.MovementType;
-import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
+import se.lolektivet.linus.linuswars.logic.enums.*;
+import se.lolektivet.linus.linuswars.logic.game.maps.TestMap4x4Plains;
 import se.lolektivet.linus.linuswars.logic.pathfinding.InfiniteInteger;
 import se.lolektivet.linus.linuswars.logic.pathfinding.Path;
 import se.lolektivet.linus.linuswars.logic.pathfinding.PathFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Linus on 2015-12-04.
  */
 public class TestLogicGame_executeMove {
+
+   private static class TestGameSetup extends GameSetupAdapterForTest {
+      @Override
+      public void preDeploy(GamePredeployer predeployer) {
+         predeployer.addNewUnit(UnitType.INFANTRY, Faction.ORANGE_STAR, 0, 0);
+         predeployer.addNewUnit(UnitType.INFANTRY, Faction.BLUE_MOON, 0, 3);
+      }
+   }
 
    private LogicalWarGame _theGame;
    private WarGameMoves _gameMoves;
@@ -26,7 +29,7 @@ public class TestLogicGame_executeMove {
 
    @Before
    public void setup() {
-      _theGame = new LogicalGameFactory().createLogicalWarGame(new TestMap1(), new TestGameSetup1(), Faction.ORANGE_STAR, Faction.BLUE_MOON);
+      _theGame = new LogicalGameFactory().createLogicalWarGame(new TestMap4x4Plains(), new TestGameSetup(), Faction.ORANGE_STAR, Faction.BLUE_MOON);
 
       _gameMoves = _theGame;
       _gameQueries = _theGame;

@@ -36,6 +36,75 @@ public enum TerrainTile {
    ROAD_T_EAST(TerrainType.ROAD),
    ROAD_X(TerrainType.ROAD),
 
+   // TODO: Make sprites for Sea, Shoal and Reef tiles.
+
+   SEA(TerrainType.SEA),
+   SEA_EDGE_N(TerrainType.SEA),
+   SEA_EDGE_S(TerrainType.SEA),
+   SEA_EDGE_W(TerrainType.SEA),
+   SEA_EDGE_E(TerrainType.SEA),
+   SEA_EDGE_NW(TerrainType.SEA),
+   SEA_EDGE_NE(TerrainType.SEA),
+   SEA_EDGE_SW(TerrainType.SEA),
+   SEA_EDGE_SE(TerrainType.SEA),
+
+   SEA_BEND_NW(TerrainType.SEA),
+   SEA_BEND_NE(TerrainType.SEA),
+   SEA_BEND_SW(TerrainType.SEA),
+   SEA_BEND_SE(TerrainType.SEA),
+   SEA_T_N(TerrainType.SEA),
+   SEA_T_S(TerrainType.SEA),
+   SEA_T_W(TerrainType.SEA),
+   SEA_T_E(TerrainType.SEA),
+   SEA_X(TerrainType.SEA),
+
+   SEA_HORIZONTAL(TerrainType.SEA),
+   SEA_VERTICAL(TerrainType.SEA),
+   SEA_END_N(TerrainType.SEA),
+   SEA_END_S(TerrainType.SEA),
+   SEA_END_W(TerrainType.SEA),
+   SEA_END_E(TerrainType.SEA),
+   SEA_SINGLE(TerrainType.SEA),
+
+   SEA_CORNER_NW(TerrainType.SEA),
+   SEA_CORNER_NE(TerrainType.SEA),
+   SEA_CORNER_SW(TerrainType.SEA),
+   SEA_CORNER_SE(TerrainType.SEA),
+
+   // Names are analogous to sea tiles
+   // Corners use same tiles as sea
+   SHOAL_EDGE_N(TerrainType.SHOAL),
+   SHOAL_EDGE_N_END_W(TerrainType.SHOAL),
+   SHOAL_EDGE_N_END_E(TerrainType.SHOAL),
+   SHOAL_EDGE_N_END_WE(TerrainType.SHOAL),
+
+   SHOAL_EDGE_S(TerrainType.SHOAL),
+   SHOAL_EDGE_S_END_W(TerrainType.SHOAL),
+   SHOAL_EDGE_S_END_E(TerrainType.SHOAL),
+   SHOAL_EDGE_S_END_WE(TerrainType.SHOAL),
+
+   SHOAL_EDGE_W(TerrainType.SHOAL),
+   SHOAL_EDGE_W_END_N(TerrainType.SHOAL),
+   SHOAL_EDGE_W_END_S(TerrainType.SHOAL),
+   SHOAL_EDGE_W_END_NS(TerrainType.SHOAL),
+
+   SHOAL_EDGE_E(TerrainType.SHOAL),
+   SHOAL_EDGE_E_END_N(TerrainType.SHOAL),
+   SHOAL_EDGE_E_END_S(TerrainType.SHOAL),
+   SHOAL_EDGE_E_END_NS(TerrainType.SHOAL),
+
+   SHOAL_EDGE_NW(TerrainType.SHOAL),
+   SHOAL_EDGE_NE(TerrainType.SHOAL),
+   SHOAL_EDGE_SW(TerrainType.SHOAL),
+   SHOAL_EDGE_SE(TerrainType.SHOAL),
+
+   SHOAL_END_N(TerrainType.SHOAL),
+   SHOAL_END_S(TerrainType.SHOAL),
+   SHOAL_END_W(TerrainType.SHOAL),
+   SHOAL_END_E(TerrainType.SHOAL),
+
+   REEF(TerrainType.REEF),
+
    BRIDGE_HORIZONTAL(TerrainType.BRIDGE),
 
    BRIDGE_VERTICAL(TerrainType.BRIDGE);

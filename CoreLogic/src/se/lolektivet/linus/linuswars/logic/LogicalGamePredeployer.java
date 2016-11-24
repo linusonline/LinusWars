@@ -5,6 +5,7 @@ import se.lolektivet.linus.linuswars.logic.enums.UnitType;
 import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
 import se.lolektivet.linus.linuswars.logic.game.LogicalUnitFactory;
 import se.lolektivet.linus.linuswars.logic.game.WarGameSetup;
+import sun.rmi.runtime.Log;
 
 /**
  * Created by Linus on 2014-09-22.
@@ -25,26 +26,47 @@ public class LogicalGamePredeployer implements GamePredeployer {
 
    @Override
    public void addNewUnit(UnitType type, Faction faction, int x, int y, int hpPercent) {
-      LogicalUnit logicalUnit = createNewUnit(type, hpPercent);
-      _logicalWarGame.addUnit(logicalUnit, new Position(x, y), faction);
+      LogicalUnit unit = createNewUnit(type);
+      setHp(unit, hpPercent);
+      addUnit(unit, faction, x, y);
    }
 
    @Override
    public void addNewUnit(UnitType type, Faction faction, int x, int y, int hpPercent, int fuel) {
-      LogicalUnit logicalUnit = createNewUnit(type, hpPercent);
-      if (fuel > logicalUnit.getMaxFuel() || fuel < 0) {
-         throw new InternalError("Unit must have 0 to " + logicalUnit.getMaxFuel() + " fuel!");
-      }
-      logicalUnit.subtractFuel(logicalUnit.getMaxFuel() - fuel);
-      _logicalWarGame.addUnit(logicalUnit, new Position(x, y), faction);
+      LogicalUnit unit = createNewUnit(type);
+      setHp(unit, hpPercent);
+      setFuelLevel(unit, fuel);
+      addUnit(unit, faction, x, y);
    }
 
-   private LogicalUnit createNewUnit(UnitType type, int hpPercent) {
+   @Override
+   public void addNewSubmergedSub(Faction faction, int x, int y, int hpPercent, int fuel) {
+      LogicalUnit unit = createNewUnit(UnitType.SUB);
+      setHp(unit, hpPercent);
+      setFuelLevel(unit, fuel);
+      unit.setSubSubmerged(true);
+      addUnit(unit, faction, x, y);
+   }
+
+   private void addUnit(LogicalUnit unit, Faction faction, int x, int y) {
+      _logicalWarGame.addUnit(unit, new Position(x, y), faction);
+   }
+
+   private void setFuelLevel(LogicalUnit unit, int fuel) {
+      if (fuel > unit.getMaxFuel() || fuel < 0) {
+         throw new InternalError("Unit must have 0 to " + unit.getMaxFuel() + " fuel!");
+      }
+      unit.subtractFuel(unit.getMaxFuel() - fuel);
+   }
+
+   private void setHp(LogicalUnit unit, int hpPercent) {
       if (hpPercent < 1 || hpPercent > 100) {
          throw new InternalError("Unit must have 1 to 100 HP%!");
       }
-      LogicalUnit logicalUnit = _unitFactory.createLogicalUnit(type);
-      logicalUnit.setHp1To100(hpPercent);
-      return logicalUnit;
+      unit.setHp1To100(hpPercent);
+   }
+
+   private LogicalUnit createNewUnit(UnitType type) {
+      return _unitFactory.createLogicalUnit(type);
    }
 }

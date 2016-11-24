@@ -1,7 +1,8 @@
-package se.lolektivet.linus.linuswars.logic.game;
+package se.lolektivet.linus.linuswars.logic.game.maps;
 
 import se.lolektivet.linus.linuswars.logic.MapMaker;
 import se.lolektivet.linus.linuswars.logic.RowMapMaker;
+import se.lolektivet.linus.linuswars.logic.WarMap;
 import se.lolektivet.linus.linuswars.logic.WarMapAdapter;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainTile;
@@ -12,7 +13,7 @@ import java.util.List;
 /**
  * Created by Linus on 2014-09-21.
  */
-public class TestMap2 extends WarMapAdapter {
+public class TestMap4x4Plains extends WarMapAdapter {
 
    @Override
    public int getNrOfFactions() {
@@ -38,10 +39,10 @@ public class TestMap2 extends WarMapAdapter {
 
       mm.nextRow();
 
-      mm.addTerrain(TerrainTile.RIVER_HORIZONTAL);
-      mm.addTerrain(TerrainTile.RIVER_HORIZONTAL);
-      mm.addTerrain(TerrainTile.RIVER_HORIZONTAL);
-      mm.addTerrain(TerrainTile.RIVER_HORIZONTAL);
+      mm.addTerrain(TerrainTile.PLAIN);
+      mm.addTerrain(TerrainTile.PLAIN);
+      mm.addTerrain(TerrainTile.PLAIN);
+      mm.addTerrain(TerrainTile.PLAIN);
 
       mm.nextRow();
 
@@ -54,6 +55,8 @@ public class TestMap2 extends WarMapAdapter {
 
 
       mm.addBuilding(TerrainType.HQ, Faction.BLUE_MOON, 0, 0);
+      mm.addBuilding(TerrainType.BASE, Faction.BLUE_MOON, 0, 1);
+
       mm.addBuilding(TerrainType.HQ, Faction.ORANGE_STAR, 0, 3);
    }
 }

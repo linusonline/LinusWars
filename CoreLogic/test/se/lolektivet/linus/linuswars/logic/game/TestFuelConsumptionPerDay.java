@@ -7,23 +7,39 @@ import se.lolektivet.linus.linuswars.logic.LogicalGameFactory;
 import se.lolektivet.linus.linuswars.logic.Position;
 import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.UnitType;
+import se.lolektivet.linus.linuswars.logic.game.maps.TestMap2;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 /**
  * Created by Linus on 2016-11-21.
  */
 public class TestFuelConsumptionPerDay {
 
-   private class TestGameSetup extends GameSetupAdapterForTest {
+   private static class TestGameSetup extends GameSetupAdapterForTest {
       @Override
       public void preDeploy(GamePredeployer predeployer) {
-         predeployer.addNewUnit(UnitType.INFANTRY, Faction.BLUE_MOON, 0, 0, 100, 0);
-         predeployer.addNewUnit(UnitType.INFANTRY, Faction.BLUE_MOON, 0, 1);
-         predeployer.addNewUnit(UnitType.LANDER, Faction.BLUE_MOON, 0, 2);
-         predeployer.addNewUnit(UnitType.INFANTRY, Faction.BLUE_MOON, 0, 3, 100, 0);
-         predeployer.addNewUnit(UnitType.FIGHTER, Faction.BLUE_MOON, 1, 3);
+         predeployer.addNewUnit(UnitType.INFANTRY, Faction.BLUE_MOON, 1, 1);
+         predeployer.addNewUnit(UnitType.MECH, Faction.BLUE_MOON, 2, 1);
+         predeployer.addNewUnit(UnitType.RECON, Faction.BLUE_MOON, 3, 1);
+         predeployer.addNewUnit(UnitType.TANK, Faction.BLUE_MOON, 4, 1);
+         predeployer.addNewUnit(UnitType.MD_TANK, Faction.BLUE_MOON, 5, 1);
+         predeployer.addNewUnit(UnitType.APC, Faction.BLUE_MOON, 6, 1);
+         predeployer.addNewUnit(UnitType.ARTILLERY, Faction.BLUE_MOON, 7, 1);
+         predeployer.addNewUnit(UnitType.ROCKETS, Faction.BLUE_MOON, 8, 1);
+         predeployer.addNewUnit(UnitType.ANTI_AIR, Faction.BLUE_MOON, 9, 1);
+         predeployer.addNewUnit(UnitType.MISSILES, Faction.BLUE_MOON, 10, 1);
+
+         predeployer.addNewUnit(UnitType.LANDER, Faction.BLUE_MOON, 1, 2);
+         predeployer.addNewUnit(UnitType.CRUISER, Faction.BLUE_MOON, 2, 2);
+         predeployer.addNewUnit(UnitType.SUB, Faction.BLUE_MOON, 3, 2);
+         predeployer.addNewUnit(UnitType.B_SHIP, Faction.BLUE_MOON, 4, 2);
+         predeployer.addNewSubmergedSub(Faction.BLUE_MOON, 5, 2, 100, 60);
+
+         predeployer.addNewUnit(UnitType.B_COPTER, Faction.BLUE_MOON, 1, 3);
+         predeployer.addNewUnit(UnitType.T_COPTER, Faction.BLUE_MOON, 2, 3);
+         predeployer.addNewUnit(UnitType.FIGHTER, Faction.BLUE_MOON, 3, 3);
+         predeployer.addNewUnit(UnitType.BOMBER, Faction.BLUE_MOON, 4, 3);
       }
    }
 
@@ -42,53 +58,135 @@ public class TestFuelConsumptionPerDay {
    }
 
    @Test
-   public void testLandUnitConsumesNoFuelPerDay() {
-      LogicalUnit infantry = _gameQueries.getUnitAtPosition(new Position(0, 1));
-      assertNotEquals(_gameQueries.getFactionForUnit(infantry), _gameQueries.getCurrentlyActiveFaction());
-      int fuel = infantry.getFuel();
-      _gameMoves.endTurn();
-      assertEquals(_gameQueries.getFactionForUnit(infantry), _gameQueries.getCurrentlyActiveFaction());
-      assertEquals(fuel, infantry.getFuel());
+   public void testInfantryConsumesNoFuelPerDay() {
+      Position unitPosition = new Position(1, 1);
+      testUnitConsumesXFuelOnTurnStart(unitPosition, 0);
    }
 
    @Test
-   public void testNavalUnitConsumesOneFuelPerDay() {
-      LogicalUnit lander = _gameQueries.getUnitAtPosition(new Position(0, 2));
-      assertNotEquals(_gameQueries.getFactionForUnit(lander), _gameQueries.getCurrentlyActiveFaction());
-      int fuel = lander.getFuel();
-      _gameMoves.endTurn();
-      assertEquals(_gameQueries.getFactionForUnit(lander), _gameQueries.getCurrentlyActiveFaction());
-      assertEquals(fuel - 1, lander.getFuel());
+   public void testMechConsumesNoFuelPerDay() {
+      Position unitPosition = new Position(2, 1);
+      testUnitConsumesXFuelOnTurnStart(unitPosition, 0);
+   }
+
+   @Test
+   public void testReconConsumesNoFuelPerDay() {
+      Position unitPosition = new Position(3, 1);
+      testUnitConsumesXFuelOnTurnStart(unitPosition, 0);
+   }
+
+   @Test
+   public void testTankConsumesNoFuelPerDay() {
+      Position unitPosition = new Position(4, 1);
+      testUnitConsumesXFuelOnTurnStart(unitPosition, 0);
+   }
+
+   @Test
+   public void testMdTankConsumesNoFuelPerDay() {
+      Position unitPosition = new Position(5, 1);
+      testUnitConsumesXFuelOnTurnStart(unitPosition, 0);
+   }
+
+   @Test
+   public void testApcConsumesNoFuelPerDay() {
+      Position unitPosition = new Position(6, 1);
+      testUnitConsumesXFuelOnTurnStart(unitPosition, 0);
+   }
+
+   @Test
+   public void testArtilleryConsumesNoFuelPerDay() {
+      Position unitPosition = new Position(7, 1);
+      testUnitConsumesXFuelOnTurnStart(unitPosition, 0);
+   }
+
+   @Test
+   public void testRocketsConsumesNoFuelPerDay() {
+      Position unitPosition = new Position(8, 1);
+      testUnitConsumesXFuelOnTurnStart(unitPosition, 0);
+   }
+
+   @Test
+   public void testAntiAirConsumesNoFuelPerDay() {
+      Position unitPosition = new Position(9, 1);
+      testUnitConsumesXFuelOnTurnStart(unitPosition, 0);
+   }
+
+   @Test
+   public void testMissilesConsumesNoFuelPerDay() {
+      Position unitPosition = new Position(10, 1);
+      testUnitConsumesXFuelOnTurnStart(unitPosition, 0);
+   }
+
+
+   @Test
+   public void testLanderConsumesOneFuelPerDay() {
+      Position unitPosition = (new Position(1, 2));
+      testUnitConsumesXFuelOnTurnStart(unitPosition, 1);
+   }
+
+   @Test
+   public void testCruiserConsumesOneFuelPerDay() {
+      Position unitPosition = (new Position(2, 2));
+      testUnitConsumesXFuelOnTurnStart(unitPosition, 1);
+   }
+
+   @Test
+   public void testSubConsumesOneFuelPerDay() {
+      Position unitPosition = (new Position(3, 2));
+      testUnitConsumesXFuelOnTurnStart(unitPosition, 1);
+   }
+
+   @Test
+   public void testBattleShipConsumesOneFuelPerDay() {
+      Position unitPosition = (new Position(4, 2));
+      testUnitConsumesXFuelOnTurnStart(unitPosition, 1);
+   }
+
+   @Test
+   public void testSubmergedSubConsumesFiveFuelPerDay() {
+      Position unitPosition = (new Position(5, 2));
+      testUnitConsumesXFuelOnTurnStart(unitPosition, 5);
+   }
+
+
+   @Test
+   public void testBattleCopterConsumesOneFuelPerDay() {
+      Position unitPosition = new Position(1, 3);
+      testUnitConsumesXFuelOnTurnStart(unitPosition, 1);
+   }
+
+   @Test
+   public void testTransportCopterConsumesTwoFuelPerDay() {
+      Position unitPosition = new Position(2, 3);
+      testUnitConsumesXFuelOnTurnStart(unitPosition, 2);
    }
 
    @Test
    public void testFighterConsumesFiveFuelPerDay() {
-      LogicalUnit fighter = _gameQueries.getUnitAtPosition(new Position(1, 3));
-      assertNotEquals(_gameQueries.getFactionForUnit(fighter), _gameQueries.getCurrentlyActiveFaction());
-      int fuel = fighter.getFuel();
-      _gameMoves.endTurn();
-      assertEquals(_gameQueries.getFactionForUnit(fighter), _gameQueries.getCurrentlyActiveFaction());
-      assertEquals(fuel - 5, fighter.getFuel());
+      Position unitPosition = new Position(3, 3);
+      testUnitConsumesXFuelOnTurnStart(unitPosition, 5);
    }
 
    @Test
-   public void testInfantryIsResuppliedOnOwnHQ() {
-      LogicalUnit infantry = _gameQueries.getUnitAtPosition(new Position(0, 0));
-      assertNotEquals(_gameQueries.getFactionForUnit(infantry), _gameQueries.getCurrentlyActiveFaction());
-      assertNotEquals(infantry.getMaxFuel(), infantry.getFuel());
-      _gameMoves.endTurn();
-      assertEquals(_gameQueries.getFactionForUnit(infantry), _gameQueries.getCurrentlyActiveFaction());
-      assertEquals(infantry.getMaxFuel(), infantry.getFuel());
+   public void testBomberConsumesFiveFuelPerDay() {
+      Position unitPosition = new Position(4, 3);
+      testUnitConsumesXFuelOnTurnStart(unitPosition, 5);
    }
 
-   @Test
-   public void testInfantryIsNotResuppliedOnOtherHQ() {
-      LogicalUnit infantry = _gameQueries.getUnitAtPosition(new Position(0, 3));
-      assertNotEquals(_gameQueries.getFactionForUnit(infantry), _gameQueries.getCurrentlyActiveFaction());
-      int fuelBefore = infantry.getFuel();
-      assertNotEquals(infantry.getMaxFuel(), fuelBefore);
+   private void testUnitConsumesXFuelOnTurnStart(Position unitPosition, int fuelConsumed) {
+      int fuelBefore = getFuelOfUnit(unitPosition);
       _gameMoves.endTurn();
-      assertEquals(_gameQueries.getFactionForUnit(infantry), _gameQueries.getCurrentlyActiveFaction());
-      assertEquals(fuelBefore, infantry.getFuel());
+      assertUnitIsInActiveFaction(unitPosition);
+      assertEquals(fuelBefore - fuelConsumed, getFuelOfUnit(unitPosition));
+   }
+
+   private void assertUnitIsInActiveFaction(Position position) {
+      LogicalUnit unit = _gameQueries.getUnitAtPosition(position);
+      assertEquals(_gameQueries.getFactionForUnit(unit), _gameQueries.getCurrentlyActiveFaction());
+   }
+
+   private int getFuelOfUnit(Position position) {
+      LogicalUnit unit = _gameQueries.getUnitAtPosition(position);
+      return unit.getFuel();
    }
 }

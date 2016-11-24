@@ -10,12 +10,12 @@ import static org.junit.Assert.*;
 /**
  * Created by Linus on 2016-11-21.
  */
-public class FuelLogicTest {
+public class TestFuelLogic {
 
    private final LogicalUnitFactory _unitFactory;
    private final FuelLogic _fuelLogic;
 
-   public FuelLogicTest() {
+   public TestFuelLogic() {
       _fuelLogic = new FuelLogic();
       _unitFactory = new LogicalUnitFactory(_fuelLogic);
    }

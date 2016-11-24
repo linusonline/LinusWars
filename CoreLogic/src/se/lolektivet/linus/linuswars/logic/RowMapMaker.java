@@ -41,6 +41,18 @@ public class RowMapMaker {
       _currentPlaceInRow++;
    }
 
+   public void nextRow() {
+      if (_widthDetermined) {
+         if (_mapWidth != _currentPlaceInRow) {
+            throw new InitializationException("All rows in map must be the same length!");
+         }
+      } else {
+         _mapWidth = _currentPlaceInRow;
+      }
+      _currentRow++;
+      _currentPlaceInRow = 0;
+   }
+
    public void addBuilding(TerrainType buildingType, Faction faction, int x, int y) {
       if (!isValid()) {
          throw new InitializationException("You must complete the map (all rows the same length, end with nextRow) before you start adding buildings!");
@@ -62,17 +74,5 @@ public class RowMapMaker {
    private boolean isValid() {
       return (!_widthDetermined || _mapWidth == _currentPlaceInRow)
             && _currentRow == _expectedNumberOfRows;
-   }
-
-   public void nextRow() {
-      if (_widthDetermined) {
-         if (_mapWidth != _currentPlaceInRow) {
-            throw new InitializationException("All rows in map must be the same length!");
-         }
-      } else {
-         _mapWidth = _currentPlaceInRow;
-      }
-      _currentRow++;
-      _currentPlaceInRow = 0;
    }
 }
