@@ -40,12 +40,16 @@ Start of Day
 		Fuel does not cost money
 		Are air units only healed on air bases? HQ? Resupplied?
 		Same for naval units and ports. Same for land units and bases.
+		City, Base, Airport, Port, HQ
 		Land units
-			Refuelled on city, base, HQ (not on airport)
-			Healed on:
+			Refuelled on: city, base, HQ (not on airport, port)
+			Healed on: city, base, HQ (not on airport, port)
 		Air units
-			Refuelled on airport (not on city, base, HQ)
-			Healed on: airport (not on city, HQ)
+			Refuelled on airport (not on city, base, HQ, port)
+			Healed on: airport (not on city, base, HQ, port)
+		Sea units
+			Refuelled on: port
+			Healed on: port
 
 
 Unit sprites

@@ -559,12 +559,12 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       resupplyFromAllAtcs(_turnOrderModule.currentlyActiveFaction());
       addIncomeFromProperties(_turnOrderModule.currentlyActiveFaction());
 
-      // Repair units on friendly buildings
-      repairAndResupplyUnitsOnFriendlyBuildings();
-
       // Subtract per-day fuel consumptions
       subtractPerDayFuelConsumption();
+      // Repair units on friendly buildings
       // Resupply all units on appropriate buildings or adjacent to resupply units
+      repairAndResupplyUnitsOnFriendlyBuildings();
+
       // Check for crashing aircraft or ships
 
       // Question: Should resupply or healing be prioritized when not enough funds for both?

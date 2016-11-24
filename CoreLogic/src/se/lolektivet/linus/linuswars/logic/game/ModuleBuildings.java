@@ -6,11 +6,15 @@ import se.lolektivet.linus.linuswars.logic.enums.Faction;
 import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by Linus on 2015-11-27.
  */
 public class ModuleBuildings implements BuildingsSetup {
+   private static final Logger _logger = Logger.getLogger(ModuleBuildings.class.getName());
+
    private final Map<Faction, Collection<Building>> _buildingsForFaction;
    private final Map<Position, Building> _buildingAtPosition;
    private final Map<Faction, Position> _hqsOfFactions;
@@ -25,6 +29,7 @@ public class ModuleBuildings implements BuildingsSetup {
 
    @Override
    public void addBuilding(Position position, TerrainType buildingType, Faction faction) {
+      _logger.info("Adding " + buildingType + " for " + faction + " at " + position);
       if (buildingType == TerrainType.HQ) {
          if (faction == Faction.NEUTRAL) {
             throw new InitializationException("HQs cannot be neutral!");
