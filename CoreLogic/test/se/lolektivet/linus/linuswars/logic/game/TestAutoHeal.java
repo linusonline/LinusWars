@@ -19,10 +19,10 @@ public class TestAutoHeal {
    private static class TestGameSetup extends GameSetupAdapterForTest {
       @Override
       public void preDeploy(GamePredeployer predeployer) {
-         predeployer.addNewUnit(UnitType.INFANTRY, Faction.ORANGE_STAR, 0, 0, 70);
-         predeployer.addNewUnit(UnitType.INFANTRY, Faction.ORANGE_STAR, 0, 1);
-         predeployer.addNewUnit(UnitType.INFANTRY, Faction.ORANGE_STAR, 0, 2, 70);
-         predeployer.addNewUnit(UnitType.INFANTRY, Faction.ORANGE_STAR, 0, 3, 70);
+         predeployer.addNewUnit(UnitType.INFANTRY, Faction.BLUE_MOON, 0, 0, 70);
+         predeployer.addNewUnit(UnitType.INFANTRY, Faction.BLUE_MOON, 0, 1);
+         predeployer.addNewUnit(UnitType.INFANTRY, Faction.BLUE_MOON, 0, 2, 70);
+         predeployer.addNewUnit(UnitType.INFANTRY, Faction.BLUE_MOON, 0, 3, 70);
       }
    }
 
