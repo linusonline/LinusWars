@@ -486,20 +486,21 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       if (!_deployLogic.isTypeDeployableFromBuilding(building.getBuildingType(), unitType)) {
          throw new LogicException();
       }
-      if (building.getFaction() != getCurrentlyActiveFaction()) {
+      Faction faction = getCurrentlyActiveFaction();
+      if (building.getFaction() != faction) {
          throw new LogicException();
       }
-      int money = _moneyModule.getMoneyForFaction(getCurrentlyActiveFaction());
       int cost = _deployLogic.getCostForUnitType(unitType);
-      if (money - cost < 0) {
-         throw new LogicException();
+      int money = _moneyModule.getMoneyForFaction(faction);
+      if (cost > money) {
+         throw new LogicException("Tried to subtract " + money + " G from " + faction + ", but they only have " + _moneyModule.getMoneyForFaction(faction) + " G");
       }
-      internalDeployUnit(position, unitType, getCurrentlyActiveFaction());
+      internalDeployUnit(position, unitType, faction);
    }
 
    private void internalDeployUnit(Position position, UnitType unitType, Faction faction) {
-      LogicalUnit newUnit = _deployLogic.createLogicalUnit(unitType);
       _moneyModule.subtractMoneyForFaction(faction, _deployLogic.getCostForUnitType(unitType));
+      LogicalUnit newUnit = _deployLogic.createLogicalUnit(unitType);
       _unitModule.addUnit(newUnit, position, faction);
       fireUnitDeployed(newUnit, position);
    }
@@ -556,8 +557,8 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       _logger.info("Current Faction is " + _turnOrderModule.currentlyActiveFaction());
       _unitModule.refreshUnitsInFaction(_turnOrderModule.currentlyActiveFaction());
       invalidateOptimalPathsCache();
-      resupplyFromAllAtcs(_turnOrderModule.currentlyActiveFaction());
       addIncomeFromProperties(_turnOrderModule.currentlyActiveFaction());
+      resupplyFromAllAtcs(_turnOrderModule.currentlyActiveFaction());
 
       // Subtract per-day fuel consumptions
       subtractPerDayFuelConsumption();
@@ -583,14 +584,24 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    private void repairAndResupplyUnitsOnFriendlyBuildings() {
       Set<LogicalUnit> units = getAllUnitsInActiveFaction();
       for (LogicalUnit unit : units) {
-         if (_buildingsModule.hasBuildingAtPosition(getPositionOfUnit(unit))) {
-            if (_buildingsModule.getBuildingAtPosition(getPositionOfUnit(unit)).getFaction() == _unitModule.getFactionForUnit(unit)) {
-               // TODO: All unit types are not resupplied/healed on all building types.
+         if (unitWillBeResuppliedOnTurnStart(unit)) {
+            if (_moneyModule.factionCanAfford(getCurrentlyActiveFaction(), 200)) {
                unit.healHpPercent(20);
-               unit.resupply();
+               _moneyModule.subtractMoneyForFaction(getCurrentlyActiveFaction(), 200);
             }
+            unit.resupply();
          }
       }
+   }
+
+   private boolean unitWillBeResuppliedOnTurnStart(LogicalUnit unit) {
+      Position unitPosition = getPositionOfUnit(unit);
+      if (!_buildingsModule.hasBuildingAtPosition(unitPosition)) {
+         return false;
+      }
+      Building building = _buildingsModule.getBuildingAtPosition(unitPosition);
+      return building.getFaction() == _unitModule.getFactionForUnit(unit) &&
+            _fuelLogic.buildingCanResupplyUnit(building.getBuildingType(), unit.getType());
    }
 
    private void addIncomeFromProperties(Faction faction) {

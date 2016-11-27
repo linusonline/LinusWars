@@ -6,7 +6,9 @@ import se.lolektivet.linus.linuswars.core.enums.TerrainType;
 import se.lolektivet.linus.linuswars.core.enums.UnitType;
 import se.lolektivet.linus.linuswars.core.pathfinding.InfiniteInteger;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,8 +16,14 @@ import java.util.Map;
  */
 public class FuelLogic {
    private Map<UnitType, Integer> _maxFuelByUnitType = new HashMap<>(UnitType.values().length);
+   private final Map<TerrainType, List<UnitType>> _unitsResuppliableFromBuildingType = new HashMap<>(5);
 
    public FuelLogic() {
+      initUnitsresuppliableFromBuildings();
+      initMaxFuel();
+   }
+
+   private void initMaxFuel() {
       _maxFuelByUnitType.put(UnitType.INFANTRY, 99);
       _maxFuelByUnitType.put(UnitType.MECH, 70);
       _maxFuelByUnitType.put(UnitType.APC, 70);
@@ -34,6 +42,38 @@ public class FuelLogic {
       _maxFuelByUnitType.put(UnitType.T_COPTER, 99);
       _maxFuelByUnitType.put(UnitType.FIGHTER, 99);
       _maxFuelByUnitType.put(UnitType.BOMBER, 99);
+   }
+
+   private void initUnitsresuppliableFromBuildings() {
+      List<UnitType> cityTypes = new ArrayList<>(10);
+      cityTypes.add(UnitType.INFANTRY);
+      cityTypes.add(UnitType.MECH);
+      cityTypes.add(UnitType.RECON);
+      cityTypes.add(UnitType.TANK);
+      cityTypes.add(UnitType.MD_TANK);
+      cityTypes.add(UnitType.APC);
+      cityTypes.add(UnitType.ARTILLERY);
+      cityTypes.add(UnitType.ROCKETS);
+      cityTypes.add(UnitType.ANTI_AIR);
+      cityTypes.add(UnitType.MISSILES);
+
+      List<UnitType> airportTypes = new ArrayList<>(4);
+      airportTypes.add(UnitType.B_COPTER);
+      airportTypes.add(UnitType.T_COPTER);
+      airportTypes.add(UnitType.BOMBER);
+      airportTypes.add(UnitType.FIGHTER);
+
+      List<UnitType> portTypes = new ArrayList<>(4);
+      portTypes.add(UnitType.LANDER);
+      portTypes.add(UnitType.CRUISER);
+      portTypes.add(UnitType.SUB);
+      portTypes.add(UnitType.B_SHIP);
+
+      _unitsResuppliableFromBuildingType.put(TerrainType.CITY, cityTypes);
+      _unitsResuppliableFromBuildingType.put(TerrainType.BASE, new ArrayList<>(cityTypes));
+      _unitsResuppliableFromBuildingType.put(TerrainType.HQ, new ArrayList<>(cityTypes));
+      _unitsResuppliableFromBuildingType.put(TerrainType.AIRPORT, airportTypes);
+      _unitsResuppliableFromBuildingType.put(TerrainType.PORT, portTypes);
    }
 
    int getFuelCostPerTurn(LogicalUnit unit) {
@@ -78,5 +118,9 @@ public class FuelLogic {
 
    boolean canResupplyUnit(UnitType supplier, UnitType supplied) {
       return supplier == UnitType.APC;
+   }
+
+   boolean buildingCanResupplyUnit(TerrainType building, UnitType unitType) {
+      return _unitsResuppliableFromBuildingType.get(building).contains(unitType);
    }
 }
