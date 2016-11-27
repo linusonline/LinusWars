@@ -1,7 +1,7 @@
 package se.lolektivet.linus.linuswars.graphicalgame;
 
 
-import se.lolektivet.linus.linuswars.logic.Position;
+import se.lolektivet.linus.linuswars.core.Position;
 
 /**
  * Created by Linus on 2015-11-24.

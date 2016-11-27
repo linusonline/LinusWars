@@ -1,10 +1,10 @@
 package se.lolektivet.linus.linuswars;
 
 import se.lolektivet.linus.linuswars.graphics.MovementArrowSection;
-import se.lolektivet.linus.linuswars.logic.enums.Direction;
-import se.lolektivet.linus.linuswars.logic.Position;
-import se.lolektivet.linus.linuswars.logic.pathfinding.Path;
-import se.lolektivet.linus.linuswars.logic.pathfinding.PathFactory;
+import se.lolektivet.linus.linuswars.core.enums.Direction;
+import se.lolektivet.linus.linuswars.core.Position;
+import se.lolektivet.linus.linuswars.core.pathfinding.Path;
+import se.lolektivet.linus.linuswars.core.pathfinding.PathFactory;
 
 import java.util.ArrayList;
 import java.util.List;

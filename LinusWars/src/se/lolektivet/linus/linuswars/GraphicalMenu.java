@@ -3,8 +3,8 @@ package se.lolektivet.linus.linuswars;
 import org.newdawn.slick.*;
 import org.newdawn.slick.fills.GradientFill;
 import org.newdawn.slick.geom.RoundedRectangle;
-import se.lolektivet.linus.linuswars.logic.enums.Direction;
-import se.lolektivet.linus.linuswars.logic.Position;
+import se.lolektivet.linus.linuswars.core.enums.Direction;
+import se.lolektivet.linus.linuswars.core.Position;
 
 import java.util.ArrayList;
 import java.util.List;

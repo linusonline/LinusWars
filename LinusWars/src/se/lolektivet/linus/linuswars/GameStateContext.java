@@ -1,7 +1,7 @@
 package se.lolektivet.linus.linuswars;
 
-import se.lolektivet.linus.linuswars.logic.game.WarGameMoves;
-import se.lolektivet.linus.linuswars.logic.game.WarGameQueries;
+import se.lolektivet.linus.linuswars.core.game.WarGameMoves;
+import se.lolektivet.linus.linuswars.core.game.WarGameQueries;
 
 /**
  * Created by Linus on 2015-12-28.

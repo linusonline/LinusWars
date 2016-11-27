@@ -3,9 +3,9 @@ package se.lolektivet.linus.linuswars.graphicalgame;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import se.lolektivet.linus.linuswars.logic.Position;
-import se.lolektivet.linus.linuswars.logic.enums.TerrainTile;
-import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
+import se.lolektivet.linus.linuswars.core.Position;
+import se.lolektivet.linus.linuswars.core.enums.TerrainTile;
+import se.lolektivet.linus.linuswars.core.enums.TerrainType;
 
 /**
  * Created by Linus on 2015-12-18.

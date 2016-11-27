@@ -1,12 +1,12 @@
 package se.lolektivet.linus.linuswars.pathfinding;
 
 import junit.framework.TestCase;
-import se.lolektivet.linus.linuswars.logic.*;
-import se.lolektivet.linus.linuswars.logic.enums.Faction;
-import se.lolektivet.linus.linuswars.logic.game.LogicalWarGame;
-import se.lolektivet.linus.linuswars.logic.game.LogicalWarMapImpl;
-import se.lolektivet.linus.linuswars.logic.game.ModuleBuildings;
-import se.lolektivet.linus.linuswars.logic.maps.Map1;
+import se.lolektivet.linus.linuswars.core.*;
+import se.lolektivet.linus.linuswars.core.enums.Faction;
+import se.lolektivet.linus.linuswars.core.game.LogicalWarGame;
+import se.lolektivet.linus.linuswars.core.game.LogicalWarMapImpl;
+import se.lolektivet.linus.linuswars.core.game.ModuleBuildings;
+import se.lolektivet.linus.linuswars.core.maps.Map1;
 
 import java.util.ArrayList;
 import java.util.Collection;

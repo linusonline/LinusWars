@@ -2,9 +2,8 @@ package se.lolektivet.linus.linuswars.graphics;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.Renderable;
 import org.newdawn.slick.SpriteSheet;
-import se.lolektivet.linus.linuswars.logic.enums.Direction;
+import se.lolektivet.linus.linuswars.core.enums.Direction;
 
 /**
  * Created by Linus on 2014-09-26.

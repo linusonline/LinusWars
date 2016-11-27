@@ -2,13 +2,13 @@ package se.lolektivet.linus.linuswars.graphicalgame;
 
 import org.newdawn.slick.*;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.logic.game.Building;
-import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
-import se.lolektivet.linus.linuswars.logic.Position;
-import se.lolektivet.linus.linuswars.logic.game.WarGameListener;
-import se.lolektivet.linus.linuswars.logic.game.WarGameQueries;
-import se.lolektivet.linus.linuswars.logic.enums.Direction;
-import se.lolektivet.linus.linuswars.logic.enums.Faction;
+import se.lolektivet.linus.linuswars.core.game.Building;
+import se.lolektivet.linus.linuswars.core.game.LogicalUnit;
+import se.lolektivet.linus.linuswars.core.Position;
+import se.lolektivet.linus.linuswars.core.game.WarGameListener;
+import se.lolektivet.linus.linuswars.core.game.WarGameQueries;
+import se.lolektivet.linus.linuswars.core.enums.Direction;
+import se.lolektivet.linus.linuswars.core.enums.Faction;
 
 import java.util.HashMap;
 import java.util.HashSet;

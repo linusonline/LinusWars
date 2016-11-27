@@ -1,8 +1,8 @@
 package se.lolektivet.linus.linuswars.pathfinding;
 
 import junit.framework.TestCase;
-import se.lolektivet.linus.linuswars.logic.pathfinding.Cost;
-import se.lolektivet.linus.linuswars.logic.pathfinding.InfiniteInteger;
+import se.lolektivet.linus.linuswars.core.pathfinding.Cost;
+import se.lolektivet.linus.linuswars.core.pathfinding.InfiniteInteger;
 
 /**
  * Created by Linus on 2014-09-24.

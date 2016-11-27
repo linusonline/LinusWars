@@ -1,10 +1,10 @@
 package se.lolektivet.linus.linuswars.graphics;
 
 import org.newdawn.slick.*;
-import se.lolektivet.linus.linuswars.logic.enums.Faction;
-import se.lolektivet.linus.linuswars.logic.enums.TerrainTile;
-import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
-import se.lolektivet.linus.linuswars.logic.enums.UnitType;
+import se.lolektivet.linus.linuswars.core.enums.Faction;
+import se.lolektivet.linus.linuswars.core.enums.TerrainTile;
+import se.lolektivet.linus.linuswars.core.enums.TerrainType;
+import se.lolektivet.linus.linuswars.core.enums.UnitType;
 
 /**
  * Created by Linus on 2015-11-22.

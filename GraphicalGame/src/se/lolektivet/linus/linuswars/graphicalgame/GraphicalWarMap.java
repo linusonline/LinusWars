@@ -1,8 +1,8 @@
 package se.lolektivet.linus.linuswars.graphicalgame;
 
 import org.newdawn.slick.Renderable;
-import se.lolektivet.linus.linuswars.logic.game.LogicalWarMap;
-import se.lolektivet.linus.linuswars.logic.Position;
+import se.lolektivet.linus.linuswars.core.game.LogicalWarMap;
+import se.lolektivet.linus.linuswars.core.Position;
 
 import java.util.HashMap;
 import java.util.Map;

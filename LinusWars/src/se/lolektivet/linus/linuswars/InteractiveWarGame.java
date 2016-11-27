@@ -8,10 +8,10 @@ import se.lolektivet.linus.linuswars.graphicalgame.GraphicalWarGame;
 import se.lolektivet.linus.linuswars.graphicalgame.ScrollingTileView;
 import se.lolektivet.linus.linuswars.graphicalgame.TileView;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
-import se.lolektivet.linus.linuswars.logic.Position;
-import se.lolektivet.linus.linuswars.logic.game.WarGameQueries;
-import se.lolektivet.linus.linuswars.logic.enums.Direction;
+import se.lolektivet.linus.linuswars.core.game.LogicalUnit;
+import se.lolektivet.linus.linuswars.core.Position;
+import se.lolektivet.linus.linuswars.core.game.WarGameQueries;
+import se.lolektivet.linus.linuswars.core.enums.Direction;
 
 import java.util.Collection;
 import java.util.HashSet;

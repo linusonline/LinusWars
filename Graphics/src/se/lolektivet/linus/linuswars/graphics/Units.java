@@ -2,8 +2,8 @@ package se.lolektivet.linus.linuswars.graphics;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
-import se.lolektivet.linus.linuswars.logic.enums.Faction;
-import se.lolektivet.linus.linuswars.logic.enums.UnitType;
+import se.lolektivet.linus.linuswars.core.enums.Faction;
+import se.lolektivet.linus.linuswars.core.enums.UnitType;
 
 import java.util.HashMap;
 import java.util.Map;

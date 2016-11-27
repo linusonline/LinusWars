@@ -1,7 +1,7 @@
 package se.lolektivet.linus.linuswars.graphicalgame;
 
-import se.lolektivet.linus.linuswars.logic.Position;
-import se.lolektivet.linus.linuswars.logic.enums.TerrainTile;
+import se.lolektivet.linus.linuswars.core.Position;
+import se.lolektivet.linus.linuswars.core.enums.TerrainTile;
 
 import java.util.HashMap;
 

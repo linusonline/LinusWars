@@ -3,7 +3,7 @@ package se.lolektivet.linus.linuswars;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.logic.enums.Direction;
+import se.lolektivet.linus.linuswars.core.enums.Direction;
 
 /**
  * Created by Linus on 2014-09-19.

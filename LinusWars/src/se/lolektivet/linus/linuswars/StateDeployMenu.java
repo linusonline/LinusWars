@@ -4,9 +4,9 @@ import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.logic.enums.Direction;
-import se.lolektivet.linus.linuswars.logic.enums.UnitType;
-import se.lolektivet.linus.linuswars.logic.game.Building;
+import se.lolektivet.linus.linuswars.core.enums.Direction;
+import se.lolektivet.linus.linuswars.core.enums.UnitType;
+import se.lolektivet.linus.linuswars.core.game.Building;
 
 import java.util.List;
 

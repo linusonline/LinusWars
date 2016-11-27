@@ -1,11 +1,10 @@
 package se.lolektivet.linus.linuswars.graphicalgame;
 
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Renderable;
 import se.lolektivet.linus.linuswars.graphics.UnitSprite;
-import se.lolektivet.linus.linuswars.logic.enums.Direction;
-import se.lolektivet.linus.linuswars.logic.Position;
+import se.lolektivet.linus.linuswars.core.enums.Direction;
+import se.lolektivet.linus.linuswars.core.Position;
 
 /**
  * Created by Linus on 2014-09-18.

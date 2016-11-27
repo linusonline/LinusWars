@@ -2,15 +2,15 @@ package se.lolektivet.linus.linuswars.graphicalgame;
 
 import org.newdawn.slick.Renderable;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.logic.InitializationException;
-import se.lolektivet.linus.linuswars.logic.LogicalMapMaker;
-import se.lolektivet.linus.linuswars.logic.MapMaker;
-import se.lolektivet.linus.linuswars.logic.Position;
-import se.lolektivet.linus.linuswars.logic.enums.Faction;
-import se.lolektivet.linus.linuswars.logic.enums.TerrainTile;
-import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
-import se.lolektivet.linus.linuswars.logic.game.LogicalWarMapImpl;
-import se.lolektivet.linus.linuswars.logic.game.ModuleBuildings;
+import se.lolektivet.linus.linuswars.core.InitializationException;
+import se.lolektivet.linus.linuswars.core.LogicalMapMaker;
+import se.lolektivet.linus.linuswars.core.MapMaker;
+import se.lolektivet.linus.linuswars.core.Position;
+import se.lolektivet.linus.linuswars.core.enums.Faction;
+import se.lolektivet.linus.linuswars.core.enums.TerrainTile;
+import se.lolektivet.linus.linuswars.core.enums.TerrainType;
+import se.lolektivet.linus.linuswars.core.game.LogicalWarMapImpl;
+import se.lolektivet.linus.linuswars.core.game.ModuleBuildings;
 
 import java.util.HashMap;
 import java.util.Map;
