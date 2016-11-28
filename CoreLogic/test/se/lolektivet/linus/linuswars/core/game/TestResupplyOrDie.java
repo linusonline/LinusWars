@@ -160,7 +160,6 @@ public class TestResupplyOrDie extends LinusWarsTest {
    private void testUnitIsDestroyedOnTurnStart(Position unitPosition) {
       LogicalUnit unit = _gameQueries.getUnitAtPosition(unitPosition);
       _gameMoves.endTurn();
-      assertUnitIsInActiveFaction(unitPosition);
       assertTrue(unit.isUnitDestroyed());
    }
 

@@ -6,10 +6,7 @@ import se.lolektivet.linus.linuswars.core.enums.TerrainType;
 import se.lolektivet.linus.linuswars.core.enums.UnitType;
 import se.lolektivet.linus.linuswars.core.pathfinding.InfiniteInteger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Linus on 2014-09-20.
@@ -17,10 +14,12 @@ import java.util.Map;
 public class FuelLogic {
    private Map<UnitType, Integer> _maxFuelByUnitType = new HashMap<>(UnitType.values().length);
    private final Map<TerrainType, List<UnitType>> _unitsResuppliableFromBuildingType = new HashMap<>(5);
+   private final Set<UnitType> _unitTypesDestroyedWhenOutOfFuel = new HashSet<>();
 
    public FuelLogic() {
       initUnitsresuppliableFromBuildings();
       initMaxFuel();
+      initUnitTypesDestroyedWhenOutOfFuel();
    }
 
    private void initMaxFuel() {
@@ -76,6 +75,17 @@ public class FuelLogic {
       _unitsResuppliableFromBuildingType.put(TerrainType.PORT, portTypes);
    }
 
+   private void initUnitTypesDestroyedWhenOutOfFuel() {
+      _unitTypesDestroyedWhenOutOfFuel.add(UnitType.FIGHTER);
+      _unitTypesDestroyedWhenOutOfFuel.add(UnitType.BOMBER);
+      _unitTypesDestroyedWhenOutOfFuel.add(UnitType.T_COPTER);
+      _unitTypesDestroyedWhenOutOfFuel.add(UnitType.B_COPTER);
+      _unitTypesDestroyedWhenOutOfFuel.add(UnitType.B_SHIP);
+      _unitTypesDestroyedWhenOutOfFuel.add(UnitType.SUB);
+      _unitTypesDestroyedWhenOutOfFuel.add(UnitType.CRUISER);
+      _unitTypesDestroyedWhenOutOfFuel.add(UnitType.LANDER);
+   }
+
    int getFuelCostPerTurn(LogicalUnit unit) {
       if (unit.isLand()) {
          return 0;
@@ -122,5 +132,9 @@ public class FuelLogic {
 
    boolean buildingCanResupplyUnit(TerrainType building, UnitType unitType) {
       return _unitsResuppliableFromBuildingType.get(building).contains(unitType);
+   }
+
+   boolean unitTypeIsDestroyedWhenOutOfFuel(UnitType unitType) {
+      return _unitTypesDestroyedWhenOutOfFuel.contains(unitType);
    }
 }

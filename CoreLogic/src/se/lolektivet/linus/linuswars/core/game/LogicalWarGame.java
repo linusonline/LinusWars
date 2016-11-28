@@ -349,15 +349,6 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       _unitModule.expendUnitsTurn(movingUnit);
    }
 
-   private void resupplyFromAllAtcs(Faction faction) {
-      Set<LogicalUnit> apcsInActiveFaction = _unitModule.getAllUnitsFromFactionOfType(faction, UnitType.APC);
-      for (LogicalUnit apc : apcsInActiveFaction) {
-         try {
-            internalExecuteSupply(apc);
-         } catch (NoSuppliableUnitsInRangeException ignore) {}
-      }
-   }
-
    private void internalExecuteSupply(LogicalUnit supplier) {
       Position supplierPosition = getPositionOfUnit(supplier);
       Set<LogicalUnit> suppliedUnits = getUnitsSuppliableFromPosition(supplier, supplierPosition);
@@ -560,43 +551,61 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       _unitModule.refreshUnitsInFaction(_turnOrderModule.currentlyActiveFaction());
       invalidateOptimalPathsCache();
       addIncomeFromProperties(_turnOrderModule.currentlyActiveFaction());
-      resupplyFromAllAtcs(_turnOrderModule.currentlyActiveFaction());
 
-      // Subtract per-day fuel consumptions
-      subtractPerDayFuelConsumption();
-      // Repair units on friendly buildings
-      // Resupply all units on appropriate buildings or adjacent to resupply units
-      repairAndResupplyUnitsOnFriendlyBuildings();
+      handleHealAndFuelEventsAtTurnStart();
 
       // Check for crashing aircraft or ships
-
-      // Question: Should resupply or healing be prioritized when not enough funds for both?
    }
 
-   private void subtractPerDayFuelConsumption() {
-      // TODO: This will not work. This consumption needs to be weighed in with resupplying, to get the right final amount, *before* checking for destroyed naval/air units.
+   private void addIncomeFromProperties(Faction faction) {
+      _moneyModule.addMoneyForFaction(faction, INCOME_PER_PROPERTY * _buildingsModule.getBuildingsForFaction(faction).size());
+   }
+
+   private void handleHealAndFuelEventsAtTurnStart() {
+      Faction faction = getCurrentlyActiveFaction();
+      Set<LogicalUnit> unitsThatWillBeResupplied = new HashSet<>();
+
+      // Check resupply by APC
+      Set<LogicalUnit> apcsInActiveFaction = _unitModule.getAllUnitsFromFactionOfType(faction, UnitType.APC);
+      for (LogicalUnit apc : apcsInActiveFaction) {
+         Position supplierPosition = getPositionOfUnit(apc);
+         unitsThatWillBeResupplied.addAll(getUnitsSuppliableFromPosition(apc, supplierPosition));
+      }
+
+      // Repair and resupply units on appropriate friendly buildings
+      for (LogicalUnit unit : _unitModule.getAllUnitsFromFaction(faction)) {
+         if (unitIsOnResupplyingBuilding(unit)) {
+            unitsThatWillBeResupplied.add(unit);
+            if (_moneyModule.factionCanAfford(faction, 200)) {
+               unit.healHpPercent(20);
+               _moneyModule.subtractMoneyForFaction(getCurrentlyActiveFaction(), 200);
+            }
+         }
+      }
+
+      // Subtract per-day fuel consumptions, except for units that will be resupplied
+      subtractPerDayFuelConsumption(unitsThatWillBeResupplied);
+
+      // Perform resupply
+      for (LogicalUnit resuppliedUnit : unitsThatWillBeResupplied) {
+         resuppliedUnit.resupply();
+      }
+   }
+
+   private void subtractPerDayFuelConsumption(Set<LogicalUnit> excusedUnits) {
       Set<LogicalUnit> units = getAllUnitsInActiveFaction();
+      units.removeAll(excusedUnits);
       for (LogicalUnit unit : units) {
          int costPerTurn = _fuelLogic.getFuelCostPerTurn(unit);
          unit.subtractFuel(costPerTurn);
+         if (unit.getFuel() <= 0 && _fuelLogic.unitTypeIsDestroyedWhenOutOfFuel(unit.getType())) {
+            destroyUnit(unit);
+         }
          _logger.fine("Unit " + unit + " consumed " + costPerTurn + " fuel at start of turn.");
       }
    }
 
-   private void repairAndResupplyUnitsOnFriendlyBuildings() {
-      Set<LogicalUnit> units = getAllUnitsInActiveFaction();
-      for (LogicalUnit unit : units) {
-         if (unitWillBeResuppliedOnTurnStart(unit)) {
-            if (_moneyModule.factionCanAfford(getCurrentlyActiveFaction(), 200)) {
-               unit.healHpPercent(20);
-               _moneyModule.subtractMoneyForFaction(getCurrentlyActiveFaction(), 200);
-            }
-            unit.resupply();
-         }
-      }
-   }
-
-   private boolean unitWillBeResuppliedOnTurnStart(LogicalUnit unit) {
+   private boolean unitIsOnResupplyingBuilding(LogicalUnit unit) {
       Position unitPosition = getPositionOfUnit(unit);
       if (!_buildingsModule.hasBuildingAtPosition(unitPosition)) {
          return false;
@@ -604,10 +613,6 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       Building building = _buildingsModule.getBuildingAtPosition(unitPosition);
       return building.getFaction() == _unitModule.getFactionForUnit(unit) &&
             _fuelLogic.buildingCanResupplyUnit(building.getBuildingType(), unit.getType());
-   }
-
-   private void addIncomeFromProperties(Faction faction) {
-      _moneyModule.addMoneyForFaction(faction, INCOME_PER_PROPERTY * _buildingsModule.getBuildingsForFaction(faction).size());
    }
 
    public LogicalWarMap getLogicalWarMap() {
