@@ -10,5 +10,6 @@ import se.lolektivet.linus.linuswars.core.enums.TerrainType;
 public interface WarGameSetup {
    void addBuilding(Position position, TerrainType terrainType, Faction faction);
    void addUnit(LogicalUnit unit, Position position, Faction faction);
+   void setFundsForFaction(Faction faction, int money);
    void callGameStart();
 }

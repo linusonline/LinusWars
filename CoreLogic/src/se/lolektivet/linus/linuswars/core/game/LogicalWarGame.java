@@ -141,6 +141,11 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    }
 
    @Override
+   public void setFundsForFaction(Faction faction, int money) {
+      _moneyModule.addMoneyForFaction(faction, money);
+   }
+
+   @Override
    public void callGameStart() {
       if (_buildingsModule.getFactions().size() != _turnOrderModule.numberOfFactions()) {
          throw new InitializationException("BuildingsModule had wrong number of factions! (" + _buildingsModule.getFactions().size() + " instead of " + _turnOrderModule.numberOfFactions() + ")");
@@ -470,18 +475,18 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    @Override
    public void executeDeployMove(Position position, UnitType unitType) {
       if (!hasBuildingAtPosition(position)) {
-         throw new LogicException();
+         throw new LogicException("Can't deploy unit on tile without appropriate building!");
       }
       if (hasUnitAtPosition(position)) {
-         throw new LogicException();
+         throw new LogicException("Can't deploy unit on occupied tile!");
       }
       Building building = getBuildingAtPosition(position);
       if (!_deployLogic.isTypeDeployableFromBuilding(building.getBuildingType(), unitType)) {
-         throw new LogicException();
+         throw new LogicException("Can't deploy unit on tile without appropriate building!");
       }
       Faction faction = getCurrentlyActiveFaction();
       if (building.getFaction() != faction) {
-         throw new LogicException();
+         throw new LogicException("Can't deploy unit on tile without appropriate building!");
       }
       int cost = _deployLogic.getCostForUnitType(unitType);
       int money = _moneyModule.getMoneyForFaction(faction);
@@ -576,10 +581,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       for (LogicalUnit unit : _unitModule.getAllUnitsFromFaction(faction)) {
          if (unitIsOnResupplyingBuilding(unit)) {
             unitsThatWillBeResupplied.add(unit);
-            if (_moneyModule.factionCanAfford(faction, 200)) {
-               unit.healHpPercent(20);
-               _moneyModule.subtractMoneyForFaction(getCurrentlyActiveFaction(), 200);
-            }
+            doHeal(unit);
          }
       }
 
@@ -590,6 +592,18 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       for (LogicalUnit resuppliedUnit : unitsThatWillBeResupplied) {
          resuppliedUnit.resupply();
       }
+   }
+
+   private void doHeal(LogicalUnit unit) {
+      Faction faction = _unitModule.getFactionForUnit(unit);
+      int wantHealingBy = Math.min(2, 10 - unit.getHp1To10());
+      if (wantHealingBy == 0) {
+         return;
+      }
+      int moneyFactionCanAfford = Math.min(_moneyModule.getMoneyForFaction(faction), wantHealingBy*100);
+      int amountToHealInPercent = moneyFactionCanAfford / 10;
+      unit.healHpPercent(amountToHealInPercent);
+      _moneyModule.subtractMoneyForFaction(faction, moneyFactionCanAfford);
    }
 
    private void subtractPerDayFuelConsumption(Set<LogicalUnit> excusedUnits) {

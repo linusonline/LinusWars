@@ -128,7 +128,7 @@ public class LogicalUnit {
 
    public int getHp1To10() {
       // TODO: Find out about actual math here!
-      return _hp / 10;
+      return _hp == 0 ? 0 : Math.max(1, _hp / 10);
    }
 
    // Core method

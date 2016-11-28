@@ -14,6 +14,8 @@ import java.util.List;
  */
 public class TestMap4x4Plains extends WarMapAdapter {
 
+   public static final int BLUE_MOON_STARTING_FUNDS = 2000;
+
    @Override
    public int getNrOfFactions() {
       return 2;
