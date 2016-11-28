@@ -91,7 +91,10 @@ public class TestMap3 extends WarMapAdapter {
       mm.addBuilding(TerrainType.PORT, Faction.BLUE_MOON, 0, 1);
       mm.addBuilding(TerrainType.PORT, Faction.BLUE_MOON, 1, 1);
       mm.addBuilding(TerrainType.PORT, Faction.BLUE_MOON, 2, 1);
+      mm.addBuilding(TerrainType.PORT, Faction.BLUE_MOON, 3, 1);
+      mm.addBuilding(TerrainType.AIRPORT, Faction.BLUE_MOON, 4, 1);
+      mm.addBuilding(TerrainType.AIRPORT, Faction.BLUE_MOON, 5, 1);
 
-      mm.addBuilding(TerrainType.HQ, Faction.ORANGE_STAR, 0, 3);
+      mm.addBuilding(TerrainType.HQ, Faction.ORANGE_STAR, 10, 1);
    }
 }

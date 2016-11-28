@@ -32,6 +32,8 @@ public interface BasicWarGameQueries {
    LogicalUnit getUnitAtPosition(Position position);
    Position getPositionOfUnit(LogicalUnit logicalUnit);
 
+   boolean isUnitDestroyed(LogicalUnit logicalUnit);
+
    List<Faction> getFactionsInGame();
    Faction getCurrentlyActiveFaction();
    Faction getFactionForUnit(LogicalUnit logicalUnit);

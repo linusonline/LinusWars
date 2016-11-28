@@ -3,6 +3,7 @@ package se.lolektivet.linus.linuswars.graphicalgame;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import se.lolektivet.linus.linuswars.core.LinusWarsTest;
 import se.lolektivet.linus.linuswars.core.Position;
 import se.lolektivet.linus.linuswars.core.enums.TerrainTile;
 import se.lolektivet.linus.linuswars.core.enums.TerrainType;
@@ -10,7 +11,7 @@ import se.lolektivet.linus.linuswars.core.enums.TerrainType;
 /**
  * Created by Linus on 2015-12-18.
  */
-public class TestTerrainMapCreator {
+public class TestTerrainMapCreator extends LinusWarsTest {
    private TerrainMapCreator _terrainMapCreator;
 
    @Before

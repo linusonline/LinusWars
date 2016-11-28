@@ -1,6 +1,7 @@
 package se.lolektivet.linus.linuswars.core.pathfinding;
 
 import org.junit.Test;
+import se.lolektivet.linus.linuswars.core.LinusWarsTest;
 import se.lolektivet.linus.linuswars.core.Position;
 import se.lolektivet.linus.linuswars.core.enums.Direction;
 
@@ -9,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by Linus on 2016-11-23.
  */
-public class TestPathFactory {
+public class TestPathFactory extends LinusWarsTest {
 
    @Test
    public void testCreatePathWithOneDir() {

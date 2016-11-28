@@ -3,6 +3,7 @@ package se.lolektivet.linus.linuswars.core.game;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import se.lolektivet.linus.linuswars.core.LinusWarsTest;
 import se.lolektivet.linus.linuswars.core.enums.UnitType;
 
 import static org.junit.Assert.*;
@@ -10,7 +11,7 @@ import static org.junit.Assert.*;
 /**
  * Created by Linus on 2016-11-21.
  */
-public class TestFuelLogic {
+public class TestFuelLogic extends LinusWarsTest {
 
    private final LogicalUnitFactory _unitFactory;
    private final FuelLogic _fuelLogic;

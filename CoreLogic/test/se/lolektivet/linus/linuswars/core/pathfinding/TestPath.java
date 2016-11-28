@@ -2,12 +2,13 @@ package se.lolektivet.linus.linuswars.core.pathfinding;
 
 import org.junit.Assert;
 import org.junit.Test;
+import se.lolektivet.linus.linuswars.core.LinusWarsTest;
 import se.lolektivet.linus.linuswars.core.Position;
 
 /**
  * Created by Linus on 2015-12-04.
  */
-public class TestPath {
+public class TestPath extends LinusWarsTest {
 
    @Test
    public void testAddPointMakesCopy() {

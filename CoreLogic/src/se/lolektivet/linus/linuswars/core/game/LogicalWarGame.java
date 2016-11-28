@@ -431,11 +431,13 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    }
 
    private void destroyUnit(LogicalUnit destroyedUnit) {
+      destroyedUnit.setUnitDestroyed();
+      _unitModule.destroyUnit(destroyedUnit);
       fireUnitDestroyed(destroyedUnit);
-      _unitModule.removeUnit(destroyedUnit);
       for (LogicalUnit transportedUnit : getTransportedUnits(destroyedUnit)) {
+         transportedUnit.setUnitDestroyed();
+         _unitModule.destroyUnitOnTransport(destroyedUnit, transportedUnit);
          fireTransportedUnitDestroyed(transportedUnit);
-         _unitModule.removeUnitFromTransport(destroyedUnit, transportedUnit);
       }
       invalidateOptimalPathsCache();
    }
@@ -655,6 +657,11 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
          throw new UnitNotFoundException();
       }
       return _unitModule.getPositionOfUnit(logicalUnit);
+   }
+
+   @Override
+   public boolean isUnitDestroyed(LogicalUnit logicalUnit) {
+      return _unitModule.isUnitDestroyed(logicalUnit);
    }
 
    @Override

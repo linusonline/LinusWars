@@ -1,13 +1,18 @@
 package se.lolektivet.linus.linuswars.pathfinding;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+import se.lolektivet.linus.linuswars.core.LinusWarsTest;
 import se.lolektivet.linus.linuswars.core.pathfinding.Cost;
 import se.lolektivet.linus.linuswars.core.pathfinding.InfiniteInteger;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Linus on 2014-09-24.
  */
-public class TestCost extends TestCase {
+public class TestCost extends LinusWarsTest {
+
+   @Test
    public void testCost() {
       final InfiniteInteger infinity = InfiniteInteger.infinite();
       final InfiniteInteger finite = InfiniteInteger.create(3);
@@ -53,6 +58,5 @@ public class TestCost extends TestCase {
       total = Cost.add(cost1, cost2);
       assertTrue(total.getMovementCost().isInfinite());
       assertTrue(total.getFuelCost().isInfinite());
-
    }
 }

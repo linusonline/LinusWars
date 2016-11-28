@@ -3,6 +3,7 @@ package se.lolektivet.linus.linuswars.core.game;
 import org.junit.Assert;
 import org.junit.Test;
 import se.lolektivet.linus.linuswars.core.InitializationException;
+import se.lolektivet.linus.linuswars.core.LinusWarsTest;
 import se.lolektivet.linus.linuswars.core.Position;
 import se.lolektivet.linus.linuswars.core.enums.Faction;
 import se.lolektivet.linus.linuswars.core.enums.TerrainType;
@@ -12,7 +13,7 @@ import java.util.Collection;
 /**
  * Created by Linus on 2015-11-27.
  */
-public class TestModuleBuildings {
+public class TestModuleBuildings extends LinusWarsTest {
 
    @Test
    public void getBuildingsForFactionReturnsEmptyByDefault() {

@@ -3,6 +3,7 @@ package se.lolektivet.linus.linuswars.core.game;
 import org.junit.Before;
 import org.junit.Test;
 import se.lolektivet.linus.linuswars.core.GamePredeployer;
+import se.lolektivet.linus.linuswars.core.LinusWarsTest;
 import se.lolektivet.linus.linuswars.core.LogicalGameFactory;
 import se.lolektivet.linus.linuswars.core.Position;
 import se.lolektivet.linus.linuswars.core.enums.Faction;
@@ -15,7 +16,7 @@ import static org.junit.Assert.assertNotEquals;
 /**
  * Created by Linus on 2016-11-24.
  */
-public class TestResupply {
+public class TestResupply extends LinusWarsTest {
    private static class TestGameSetup extends GameSetupAdapterForTest {
       @Override
       public void preDeploy(GamePredeployer predeployer) {

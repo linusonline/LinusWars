@@ -26,6 +26,7 @@ public class LogicalUnit {
    private int _ammo;
    private int _hp;
 
+   private boolean _unitIsDestroyed = false;
    private boolean _subIsSubmerged = false;
 
    static LogicalUnit createTransportUnit(UnitType type, MovementType movement, int cost, int maxFuel, int baseVision, int baseMovementRange) {
@@ -132,6 +133,7 @@ public class LogicalUnit {
 
    // Core method
    public void setHp1To100(int hp) {
+      throwIfUnitDestroyed();
       _hp = hp;
    }
 
@@ -145,19 +147,19 @@ public class LogicalUnit {
 
    // Core method
    public void subtractFuel(int fuelCost) {
-      if (_fuel - fuelCost < 0) {
-         throw new LogicException("Fuel was set to less than zero!");
-      }
-      _fuel -= fuelCost;
+      throwIfUnitDestroyed();
+      _fuel = Math.max(0, _fuel - fuelCost);
    }
 
    // Core method
    public void addFuel(int extraFuel) {
+      throwIfUnitDestroyed();
       _fuel = Math.min(extraFuel + _fuel, _maxFuel);
    }
 
    // Core method
    public void resupply() {
+      throwIfUnitDestroyed();
       _fuel = _maxFuel;
       _ammo = _maxAmmo;
    }
@@ -169,7 +171,23 @@ public class LogicalUnit {
    }
 
    public void healHpPercent(int hpPercent) {
+      throwIfUnitDestroyed();
       _hp = Math.min(hpPercent + _hp, MAX_HP);
+   }
+
+   public void setUnitDestroyed() {
+      throwIfUnitDestroyed();
+      _unitIsDestroyed = true;
+   }
+
+   public boolean isUnitDestroyed() {
+      return _unitIsDestroyed;
+   }
+
+   private void throwIfUnitDestroyed() {
+      if (_unitIsDestroyed) {
+         throw new LogicException("An operation was called on an already destroyed unit!");
+      }
    }
 
    public boolean subIsSubmerged() {
@@ -179,6 +197,7 @@ public class LogicalUnit {
 
    public void setSubSubmerged(boolean submerged) {
       throwIfNotSub();
+      throwIfUnitDestroyed();
       _subIsSubmerged = submerged;
    }
 

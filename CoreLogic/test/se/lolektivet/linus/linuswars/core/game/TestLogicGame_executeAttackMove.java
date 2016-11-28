@@ -3,6 +3,7 @@ package se.lolektivet.linus.linuswars.core.game;
 import org.junit.Before;
 import org.junit.Test;
 import se.lolektivet.linus.linuswars.core.GamePredeployer;
+import se.lolektivet.linus.linuswars.core.LinusWarsTest;
 import se.lolektivet.linus.linuswars.core.LogicalGameFactory;
 import se.lolektivet.linus.linuswars.core.Position;
 import se.lolektivet.linus.linuswars.core.enums.Direction;
@@ -19,7 +20,7 @@ import static org.junit.Assert.*;
 /**
  * Created by Linus on 2015-12-04.
  */
-public class TestLogicGame_executeAttackMove {
+public class TestLogicGame_executeAttackMove extends LinusWarsTest {
 
    private static class TestGameSetup extends GameSetupAdapterForTest {
       @Override

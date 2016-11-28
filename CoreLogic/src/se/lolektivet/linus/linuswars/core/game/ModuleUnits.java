@@ -18,6 +18,8 @@ public class ModuleUnits {
    private final Map<LogicalUnit, List<LogicalUnit>> _transportedUnits;
    private final Map<Faction, Collection<LogicalUnit>> _transportedUnitsInFaction;
    private final Collection<LogicalUnit> _unitsLeftToMoveThisTurn;
+   private final Map<Faction, Collection<LogicalUnit>> _destroyedUnitsByFaction;
+   private final Collection<LogicalUnit> _destroyedUnits;
 
    public ModuleUnits(List<Faction> factionsInTurnOrder) {
       _positionsOfUnits = new HashMap<>();
@@ -27,10 +29,13 @@ public class ModuleUnits {
       _unitsInFaction = new HashMap<>();
       _transportedUnitsInFaction = new HashMap<>(0);
       _unitsLeftToMoveThisTurn = new HashSet<>();
+      _destroyedUnitsByFaction = new HashMap<>();
+      _destroyedUnits = new HashSet<>();
 
       for (Faction faction : factionsInTurnOrder) {
          _unitsInFaction.put(faction, new HashSet<>());
          _transportedUnitsInFaction.put(faction, new HashSet<>(0));
+         _destroyedUnitsByFaction.put(faction, new HashSet<>());
       }
    }
 
@@ -44,6 +49,12 @@ public class ModuleUnits {
 
       _unitsInFaction.get(faction).add(unit);
       _factionsOfUnits.put(unit, faction);
+   }
+
+   void destroyUnit(LogicalUnit unit) {
+      Faction faction = getFactionForUnit(unit);
+      removeUnit(unit);
+      addDestroyedUnit(unit, faction);
    }
 
    void removeUnit(LogicalUnit unit) {
@@ -113,6 +124,12 @@ public class ModuleUnits {
       _positionsOfUnits.put(unloadingUnit, unloadPosition);
    }
 
+   void destroyUnitOnTransport(LogicalUnit transport, LogicalUnit transportedUnit) {
+      Faction faction = getFactionForUnit(transport);
+      removeUnitFromTransport(transport, transportedUnit);
+      addDestroyedUnit(transportedUnit, faction);
+   }
+
    void removeUnitFromTransport(LogicalUnit transport, LogicalUnit transportedUnit) {
       List<LogicalUnit> unitsOnThisTransport = _transportedUnits.get(transport);
       if (!unitsOnThisTransport.contains(transportedUnit)) {
@@ -155,6 +172,19 @@ public class ModuleUnits {
       Collection<LogicalUnit> nonTransportedUnitsInFaction = new HashSet<>(_unitsInFaction.get(faction));
       nonTransportedUnitsInFaction.removeAll(_transportedUnitsInFaction.get(faction));
       _unitsLeftToMoveThisTurn.addAll(nonTransportedUnitsInFaction);
+   }
+
+   void addDestroyedUnit(LogicalUnit unit, Faction faction) {
+      _destroyedUnitsByFaction.get(faction).add(unit);
+      _destroyedUnits.add(unit);
+   }
+
+   Collection<LogicalUnit> getDestroyedUnitsInFaction(Faction faction) {
+      return new HashSet<>(_destroyedUnitsByFaction.get(faction));
+   }
+
+   boolean isUnitDestroyed(LogicalUnit unit) {
+      return _destroyedUnits.contains(unit);
    }
 
    boolean areEnemies(LogicalUnit oneUnit, LogicalUnit anotherUnit) {

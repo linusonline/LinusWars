@@ -2,6 +2,7 @@ package se.lolektivet.linus.linuswars.core.game;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
+import se.lolektivet.linus.linuswars.core.LinusWarsTest;
 import se.lolektivet.linus.linuswars.core.LogicException;
 import se.lolektivet.linus.linuswars.core.Position;
 import se.lolektivet.linus.linuswars.core.enums.Faction;
@@ -10,7 +11,7 @@ import se.lolektivet.linus.linuswars.core.enums.TerrainType;
 /**
  * Created by Linus on 2015-11-29.
  */
-public class TestBuilding {
+public class TestBuilding extends LinusWarsTest {
 
    private Building createBlueMoonBuilding() {
       return Building.create(new Position(2, 2), TerrainType.BASE, Faction.BLUE_MOON);

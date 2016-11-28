@@ -13,7 +13,7 @@ import se.lolektivet.linus.linuswars.core.pathfinding.PathFactory;
 /**
  * Created by Linus on 2015-12-04.
  */
-public class TestLogicGame_executeMove {
+public class TestLogicGame_executeMove extends LinusWarsTest {
 
    private static class TestGameSetup extends GameSetupAdapterForTest {
       @Override
