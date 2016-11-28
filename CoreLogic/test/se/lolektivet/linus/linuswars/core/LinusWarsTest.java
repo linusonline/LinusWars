@@ -9,8 +9,6 @@ import java.util.logging.Level;
  */
 public class LinusWarsTest {
    public LinusWarsTest() {
-      new LoggingConfiguration();
-      LoggingConfiguration.setGlobalLevel(Level.OFF);
-      LoggingConfiguration.logToFile(false);
+      new LoggingConfiguration(false, Level.OFF);
    }
 }
