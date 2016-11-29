@@ -13,39 +13,39 @@ import se.lolektivet.linus.linuswars.core.enums.TerrainType;
  */
 public class TestBuilding extends LinusWarsTest {
 
-   private Building createBlueMoonBuilding() {
-      return Building.create(new Position(2, 2), TerrainType.BASE, Faction.BLUE_MOON);
+   private BuildingImpl createBlueMoonBuilding() {
+      return BuildingImpl.create(new Position(2, 2), TerrainType.BASE, Faction.BLUE_MOON);
    }
 
    @Test
    public void testNewBuildingIsNotBeingCaptured() {
-      Building building = createBlueMoonBuilding();
+      BuildingImpl building = createBlueMoonBuilding();
       assertFalse(building.isCapturing());
    }
 
    @Test
    public void testBuildingIsBeingCapturedAfterDoCapture() {
-      Building building = createBlueMoonBuilding();
+      BuildingImpl building = createBlueMoonBuilding();
       building.doCapture(10, Faction.GREEN_EARTH);
       assertTrue(building.isCapturing());
    }
 
    @Test (expected = LogicException.class)
    public void testThrowOnCaptureByOwningFaction() {
-      Building building = createBlueMoonBuilding();
+      BuildingImpl building = createBlueMoonBuilding();
       building.doCapture(10, Faction.BLUE_MOON);
    }
 
    @Test
    public void testCompleteCaptureChangesFaction() {
-      Building building = createBlueMoonBuilding();
+      BuildingImpl building = createBlueMoonBuilding();
       building.doCapture(20, Faction.GREEN_EARTH);
       assertTrue(building.getFaction() == Faction.GREEN_EARTH);
    }
 
    @Test
    public void testIsNotBeingCapturedAfterReset() {
-      Building building = createBlueMoonBuilding();
+      BuildingImpl building = createBlueMoonBuilding();
       building.doCapture(10, Faction.GREEN_EARTH);
       building.resetCapture();
       assertFalse(building.isCapturing());
@@ -53,14 +53,14 @@ public class TestBuilding extends LinusWarsTest {
 
    @Test (expected = LogicException.class)
    public void throwOnCaptureByOtherFactionThanCapturing() {
-      Building building = createBlueMoonBuilding();
+      BuildingImpl building = createBlueMoonBuilding();
       building.doCapture(10, Faction.GREEN_EARTH);
       building.doCapture(10, Faction.ORANGE_STAR);
    }
 
    @Test
    public void cannotKeepCapturingAfterReset() {
-      Building building = createBlueMoonBuilding();
+      BuildingImpl building = createBlueMoonBuilding();
       building.doCapture(10, Faction.GREEN_EARTH);
       building.resetCapture();
       building.doCapture(10, Faction.GREEN_EARTH);
@@ -69,7 +69,7 @@ public class TestBuilding extends LinusWarsTest {
 
    @Test
    public void testIsNotCapturingAfterCompleteCapture() {
-      Building building = createBlueMoonBuilding();
+      BuildingImpl building = createBlueMoonBuilding();
       building.doCapture(20, Faction.GREEN_EARTH);
       assertFalse(building.isCapturing());
    }

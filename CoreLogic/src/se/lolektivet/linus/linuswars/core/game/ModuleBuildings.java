@@ -15,7 +15,7 @@ public class ModuleBuildings implements BuildingsSetup {
    private static final Logger _logger = Logger.getLogger(ModuleBuildings.class.getName());
 
    private final Map<Faction, Collection<Building>> _buildingsForFaction;
-   private final Map<Position, Building> _buildingAtPosition;
+   private final Map<Position, BuildingImpl> _buildingAtPosition;
    private final Map<Faction, Position> _hqsOfFactions;
 
    private List<Faction> _listOfFactions;
@@ -38,7 +38,7 @@ public class ModuleBuildings implements BuildingsSetup {
          }
          _hqsOfFactions.put(faction, position);
       }
-      Building newBuilding = Building.create(position, buildingType, faction);
+      BuildingImpl newBuilding = BuildingImpl.create(position, buildingType, faction);
       getBuildingListForFaction(faction).add(newBuilding);
       _buildingAtPosition.put(position, newBuilding);
    }
@@ -65,7 +65,7 @@ public class ModuleBuildings implements BuildingsSetup {
       return allBuildings;
    }
 
-   public Building getBuildingAtPosition(Position position) {
+   public BuildingImpl getBuildingAtPosition(Position position) {
       return _buildingAtPosition.get(position);
    }
 

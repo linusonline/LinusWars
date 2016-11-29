@@ -15,6 +15,11 @@ import se.lolektivet.linus.linuswars.core.pathfinding.PathFactory;
  */
 public class TestLogicGame_executeMove extends LinusWarsTest {
 
+   // TODO: Test Load moves
+   // TODO: Test Unload moves
+   // TODO: Test Supply moves
+   // TODO: Test Join moves
+
    private static class TestGameSetup extends GameSetupAdapterForTest {
       @Override
       public void preDeploy(GamePredeployer predeployer) {

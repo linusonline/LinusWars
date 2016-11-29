@@ -9,7 +9,6 @@ import se.lolektivet.linus.linuswars.core.pathfinding.Path;
  */
 public interface WarGameMoves {
    // Move sub X along path Y and then submerge/surface
-   // Move infantry X along path Y and then capture property W
    void executeMove(LogicalUnit logicalUnit, Path path);
    void executeAttackMove(LogicalUnit movingUnit, Path path, LogicalUnit attackedUnit);
    void executeSupplyMove(LogicalUnit movingUnit, Path path);

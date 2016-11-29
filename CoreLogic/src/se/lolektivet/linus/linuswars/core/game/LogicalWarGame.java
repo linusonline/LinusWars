@@ -504,7 +504,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    }
 
    private void internalExecuteCapture(LogicalUnit movingUnit, Path movementPath) {
-      Building building = _buildingsModule.getBuildingAtPosition(movementPath.getFinalPosition());
+      BuildingImpl building = _buildingsModule.getBuildingAtPosition(movementPath.getFinalPosition());
       building.doCapture(movingUnit.getHp1To10(), _unitModule.getFactionForUnit(movingUnit));
       boolean completedCapture = !building.isCapturing();
       if (completedCapture) {
