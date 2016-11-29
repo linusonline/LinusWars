@@ -15,8 +15,9 @@ public class ModuleUnits {
    private final Map<Position, LogicalUnit> _unitsAtPositions;
    private final Map<LogicalUnit, Faction> _factionsOfUnits;
    private final Map<Faction, Collection<LogicalUnit>> _unitsInFaction;
-   private final Map<LogicalUnit, List<LogicalUnit>> _transportedUnits;
+   private final Map<LogicalUnit, List<LogicalUnit>> _transportedUnitsPerTransport;
    private final Map<Faction, Collection<LogicalUnit>> _transportedUnitsInFaction;
+   private final Set<LogicalUnit> _allTransportedUnits;
    private final Collection<LogicalUnit> _unitsLeftToMoveThisTurn;
    private final Map<Faction, Collection<LogicalUnit>> _destroyedUnitsByFaction;
    private final Collection<LogicalUnit> _destroyedUnits;
@@ -24,13 +25,14 @@ public class ModuleUnits {
    public ModuleUnits(List<Faction> factionsInTurnOrder) {
       _positionsOfUnits = new HashMap<>();
       _unitsAtPositions = new HashMap<>();
-      _transportedUnits = new HashMap<>(0);
+      _transportedUnitsPerTransport = new HashMap<>(0);
       _factionsOfUnits = new HashMap<>();
       _unitsInFaction = new HashMap<>();
       _transportedUnitsInFaction = new HashMap<>(0);
       _unitsLeftToMoveThisTurn = new HashSet<>();
       _destroyedUnitsByFaction = new HashMap<>();
       _destroyedUnits = new HashSet<>();
+      _allTransportedUnits = new HashSet<>();
 
       for (Faction faction : factionsInTurnOrder) {
          _unitsInFaction.put(faction, new HashSet<>());
@@ -71,6 +73,10 @@ public class ModuleUnits {
       return _positionsOfUnits.containsKey(logicalUnit);
    }
 
+   boolean unitIsBeingTransported(LogicalUnit logicalUnit) {
+      return _allTransportedUnits.contains(logicalUnit);
+   }
+
    Position getPositionOfUnit(LogicalUnit logicalUnit) {
       return _positionsOfUnits.get(logicalUnit);
    }
@@ -95,7 +101,7 @@ public class ModuleUnits {
    }
 
    List<LogicalUnit> getTransportedUnits(LogicalUnit transporter) {
-      List<LogicalUnit> unitsOnTransport = _transportedUnits.get(transporter);
+      List<LogicalUnit> unitsOnTransport = _transportedUnitsPerTransport.get(transporter);
       if (unitsOnTransport == null) {
          return new ArrayList<>(0);
       } else {
@@ -104,17 +110,14 @@ public class ModuleUnits {
    }
 
    void loadUnitOntoTransport(LogicalUnit movingUnit, LogicalUnit transport) {
-      List<LogicalUnit> unitsOnThisTransport = _transportedUnits.get(transport);
-      if (unitsOnThisTransport == null) {
-         unitsOnThisTransport = new ArrayList<>(1);
-         _transportedUnits.put(transport, unitsOnThisTransport);
-      }
+      List<LogicalUnit> unitsOnThisTransport = _transportedUnitsPerTransport.computeIfAbsent(transport, k -> new ArrayList<>(1));
       unitsOnThisTransport.add(movingUnit);
       _transportedUnitsInFaction.get(_factionsOfUnits.get(movingUnit)).add(movingUnit);
 
       Position oldPositionOfMovingUnit = _positionsOfUnits.get(movingUnit);
       _unitsAtPositions.remove(oldPositionOfMovingUnit);
       _positionsOfUnits.remove(movingUnit);
+      _allTransportedUnits.add(movingUnit);
    }
 
    void unloadUnitFromTransport(LogicalUnit transport, LogicalUnit unloadingUnit, Position unloadPosition) {
@@ -130,16 +133,17 @@ public class ModuleUnits {
       addDestroyedUnit(transportedUnit, faction);
    }
 
-   void removeUnitFromTransport(LogicalUnit transport, LogicalUnit transportedUnit) {
-      List<LogicalUnit> unitsOnThisTransport = _transportedUnits.get(transport);
+   private void removeUnitFromTransport(LogicalUnit transport, LogicalUnit transportedUnit) {
+      List<LogicalUnit> unitsOnThisTransport = _transportedUnitsPerTransport.get(transport);
       if (!unitsOnThisTransport.contains(transportedUnit)) {
          throw new LogicException();
       }
       unitsOnThisTransport.remove(transportedUnit);
       if (unitsOnThisTransport.isEmpty()) {
-         _transportedUnits.remove(transport);
+         _transportedUnitsPerTransport.remove(transport);
       }
       _transportedUnitsInFaction.get(_factionsOfUnits.get(transportedUnit)).remove(transportedUnit);
+      _allTransportedUnits.remove(transportedUnit);
    }
 
    Set<LogicalUnit> getAllUnitsFromFaction(Faction faction) {

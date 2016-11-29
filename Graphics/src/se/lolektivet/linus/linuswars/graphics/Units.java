@@ -34,12 +34,7 @@ class Units {
 
    private SpriteSheet getSpriteSheet(Faction unitFaction, UnitType unitType) {
       Map<UnitType, SpriteSheet> map = _unitSpriteSheetCache.get(unitFaction);
-      SpriteSheet unitSpriteSheet = map.get(unitType);
-      if (unitSpriteSheet == null) {
-         unitSpriteSheet = loadSpriteSheet(unitFaction, unitType);
-         map.put(unitType, unitSpriteSheet);
-      }
-      return unitSpriteSheet;
+      return map.computeIfAbsent(unitType, k -> loadSpriteSheet(unitFaction, unitType));
    }
 
    private SpriteSheet loadSpriteSheet(Faction unitFaction, UnitType unitType) {

@@ -20,6 +20,7 @@ public class GameSetup1 extends GameSetupAdapter {
    public void preDeploy(GamePredeployer predeployer, List<Faction> factions) {
       Faction factionOne = factions.get(0);
 
+      predeployer.addNewUnit(UnitType.ROCKETS, factionOne, 0, 0);
       predeployer.addNewUnit(UnitType.MD_TANK, factionOne, 3, 1);
       predeployer.addNewUnit(UnitType.APC, factionOne, 4, 2);
       predeployer.addNewUnit(UnitType.ARTILLERY, factionOne, 5, 3);
@@ -34,5 +35,9 @@ public class GameSetup1 extends GameSetupAdapter {
       predeployer.addNewUnit(UnitType.ARTILLERY, factionTwo, 10, 3);
       predeployer.addNewUnit(UnitType.INFANTRY, factionTwo, 11, 4);
       predeployer.addNewUnit(UnitType.MECH, factionTwo, 12, 3);
+      predeployer.addNewUnit(UnitType.MISSILES, factionTwo, 14, 9);
+      predeployer.addNewUnit(UnitType.TANK, factionTwo, 14, 8);
+      predeployer.addNewUnit(UnitType.RECON, factionTwo, 13, 9);
+      predeployer.addNewUnit(UnitType.ANTI_AIR, factionTwo, 12, 9);
    }
 }

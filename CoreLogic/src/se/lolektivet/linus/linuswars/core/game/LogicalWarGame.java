@@ -620,6 +620,9 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    }
 
    private boolean unitIsOnResupplyingBuilding(LogicalUnit unit) {
+      if (_unitModule.unitIsBeingTransported(unit)) {
+         return false;
+      }
       Position unitPosition = getPositionOfUnit(unit);
       if (!_buildingsModule.hasBuildingAtPosition(unitPosition)) {
          return false;

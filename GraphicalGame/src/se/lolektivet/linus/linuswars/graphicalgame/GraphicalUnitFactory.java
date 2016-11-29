@@ -33,12 +33,7 @@ public class GraphicalUnitFactory {
 
    private UnitSprite getUnitSprite(Faction unitFaction, UnitType unitType) {
       Map<UnitType, UnitSprite> map = _unitSpriteCache.get(unitFaction);
-      UnitSprite unitSprite = map.get(unitType);
-      if (unitSprite == null) {
-         unitSprite = loadUnitSprite(unitFaction, unitType);
-         map.put(unitType, unitSprite);
-      }
-      return unitSprite;
+      return map.computeIfAbsent(unitType, k -> loadUnitSprite(unitFaction, unitType));
    }
 
    private UnitSprite loadUnitSprite(Faction unitFaction, UnitType unitType) {

@@ -66,7 +66,7 @@ public class StateDeployMenu implements GameState {
          _theMenu = new GraphicalMenu<>(sprites.getMenuCursor());
          for (UnitType unitType : unitTypes) {
             Image icon = sprites.getUnitSprite(_context.warGameQueries.getCurrentlyActiveFaction(), unitType).getUnitSprite(Direction.RIGHT, false).getCurrentFrame();
-            _theMenu.addItem(unitType.getName(), icon,unitType);
+            _theMenu.addItem(unitType.getName(), icon, unitType);
          }
          _theMenu.addItem("Cancel");
       }

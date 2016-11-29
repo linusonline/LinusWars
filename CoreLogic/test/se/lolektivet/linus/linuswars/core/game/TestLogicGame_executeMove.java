@@ -19,6 +19,7 @@ public class TestLogicGame_executeMove extends LinusWarsTest {
    // TODO: Test Unload moves
    // TODO: Test Supply moves
    // TODO: Test Join moves
+   // TODO: Test: Turn start works with loaded units.
 
    private static class TestGameSetup extends GameSetupAdapterForTest {
       @Override
