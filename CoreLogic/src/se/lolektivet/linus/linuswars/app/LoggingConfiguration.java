@@ -1,5 +1,7 @@
 package se.lolektivet.linus.linuswars.app;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Date;
 import java.util.logging.*;
 
@@ -48,7 +50,18 @@ public class LoggingConfiguration {
       @Override
       public String format(LogRecord record) {
          // TODO: Proper date format.
-         return new Date(record.getMillis()).toString() + " - " + record.getLevel() + ": " + record.getMessage() + "\n";
+         return new Date(record.getMillis()).toString() + " - " + record.getLevel() + ": " + record.getMessage() + "\n" + getStacktrace(record);
       }
    };
+
+   private static String getStacktrace(LogRecord record) {
+      String stacktrace = "";
+      Throwable t = record.getThrown();
+      if (t != null) {
+         StringWriter sw = new StringWriter();
+         t.printStackTrace(new PrintWriter(sw));
+         stacktrace = sw.toString();
+      }
+      return stacktrace;
+   }
 }
