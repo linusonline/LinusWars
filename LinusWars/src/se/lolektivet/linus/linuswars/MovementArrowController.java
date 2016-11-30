@@ -1,5 +1,6 @@
 package se.lolektivet.linus.linuswars;
 
+import se.lolektivet.linus.linuswars.core.Position;
 import se.lolektivet.linus.linuswars.graphicalgame.TileView;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
 
@@ -11,6 +12,7 @@ public interface MovementArrowController {
 
    void setMovementArrow(MovementArrow movementArrow);
 
+   boolean canExtendMovementArrowToPosition(Position position);
    boolean canExtendMovementArrowToCursorPosition();
 
    void draw(int x, int y, TileView tileView);

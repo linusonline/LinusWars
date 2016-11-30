@@ -837,7 +837,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    }
 
    private Map<Position, PathWithCost> getOptimalPathsToAllReachablePoints(LogicalUnit travellingUnit) {
-      PathFinder pathFinder = new PathFinder(travellingUnit, this, createCostCalculatorForUnit(travellingUnit));
+      PathFinder pathFinder = new PathFinder(travellingUnit, this, CostCalculator.createForUnitAndGame(travellingUnit, this));
       return pathFinder.getOptimalPathsToAllReachablePoints(getCostLimitForUnit(travellingUnit));
    }
 

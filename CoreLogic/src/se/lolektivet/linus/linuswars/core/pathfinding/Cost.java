@@ -8,7 +8,15 @@ public class Cost {
    private final InfiniteInteger _fuelCost;
 
    public Cost() {
-      this(InfiniteInteger.create(0), InfiniteInteger.create(0));
+      this(0, 0);
+   }
+
+   public Cost(Cost otherCost) {
+      this(InfiniteInteger.copy(otherCost._movementCost), InfiniteInteger.copy(otherCost._fuelCost));
+   }
+
+   public Cost(int movementCost, int fuelCost) {
+      this(InfiniteInteger.create(movementCost), InfiniteInteger.create(fuelCost));
    }
 
    public Cost(InfiniteInteger movementCost, InfiniteInteger fuelCost) {

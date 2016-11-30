@@ -9,8 +9,8 @@ import java.util.HashSet;
  * Created by Linus on 2014-09-19.
  */
 public class Position {
-   private int _x;
-   private int _y;
+   private final int _x;
+   private final int _y;
 
    public Position(Position position) {
       this(position.getX(), position.getY());
@@ -25,16 +25,8 @@ public class Position {
       return _x;
    }
 
-   public void setX(int x) {
-      _x = x;
-   }
-
    public int getY() {
       return _y;
-   }
-
-   public void setY(int y) {
-      _y = y;
    }
 
    public Collection<Position> getAdjacentPositions() {
@@ -73,9 +65,12 @@ public class Position {
    @Override
    public boolean equals(Object obj) {
       return
-            obj instanceof Position &&
+            (obj instanceof Position &&
                   ((Position) obj).getX() == getX() &&
-                  ((Position) obj).getY() == getY();
+                  ((Position) obj).getY() == getY()) ||
+                  (obj instanceof MutablePosition &&
+                        ((MutablePosition) obj).getX() == getX() &&
+                        ((MutablePosition) obj).getY() == getY());
    }
 
    @Override

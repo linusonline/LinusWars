@@ -24,11 +24,11 @@ public class Path {
       this(origin, new ArrayList<>(0), isAutoBackTrack);
    }
 
-   Path(Path otherPath) {
-      this(otherPath._origin, otherPath._pointsOnPath, otherPath._isAutoBackTrack);
+   public Path(Path otherPath) {
+      this(otherPath._origin, new ArrayList<>(otherPath._pointsOnPath), otherPath._isAutoBackTrack);
    }
 
-   Path(Path otherPath, boolean isAutoBackTrack) {
+   public Path(Path otherPath, boolean isAutoBackTrack) {
       this(otherPath._origin, otherPath._pointsOnPath, isAutoBackTrack);
    }
 
@@ -100,6 +100,6 @@ public class Path {
       }
    }
 
-   static class IllegalPathException extends RuntimeException {
+   public static class IllegalPathException extends RuntimeException {
    }
 }

@@ -1,6 +1,7 @@
 package se.lolektivet.linus.linuswars.graphicalgame;
 
 import org.newdawn.slick.Renderable;
+import se.lolektivet.linus.linuswars.core.MutablePosition;
 import se.lolektivet.linus.linuswars.core.game.LogicalWarMap;
 import se.lolektivet.linus.linuswars.core.Position;
 
@@ -14,7 +15,7 @@ public class GraphicalWarMap {
    private final LogicalWarMap _logicalWarMap;
    private final Map<Position, Renderable> _buildingSprites;
    // TODO: Make this a list of lists to speed up lookup.
-   private final Map<Position, Renderable> _terrainSprites;
+   private final Map<MutablePosition, Renderable> _terrainSprites;
 
    private TileView _tileView;
 
@@ -33,7 +34,7 @@ public class GraphicalWarMap {
    }
 
    public void addTerrain(Renderable terrainImage, int x, int y) {
-      _terrainSprites.put(new Position(x, y), terrainImage);
+      _terrainSprites.put(new MutablePosition(x, y), terrainImage);
    }
 
    public void addBuilding(Renderable buildingImage, int x, int y) {
@@ -42,7 +43,7 @@ public class GraphicalWarMap {
 
    public void draw(TileView tileView) {
       _tileView = tileView;
-      Position currentPosition = new Position(0, 0);
+      MutablePosition currentPosition = new MutablePosition(0, 0);
       for (int mapy = 0; mapy < _logicalWarMap.getHeight(); mapy++) {
          currentPosition.setY(mapy);
          for (int mapx = 0; mapx < _logicalWarMap.getWidth(); mapx++) {

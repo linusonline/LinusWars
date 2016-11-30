@@ -10,12 +10,12 @@ import se.lolektivet.linus.linuswars.core.Position;
  */
 public class TestPath extends LinusWarsTest {
 
-   @Test
-   public void testAddPointMakesCopy() {
-      Path path = PathFactory.create(new Position(0, 0));
-      Position position = new Position(0, 1);
-      path.addPoint(position);
-      position.setX(1);
-      Assert.assertFalse(path.getFinalPosition().equals(position));
-   }
+//   @Test
+//   public void testAddPointMakesCopy() {
+//      Path path = PathFactory.create(new Position(0, 0));
+//      Position position = new Position(0, 1);
+//      path.addPoint(position);
+//      position.setX(1);
+//      Assert.assertFalse(path.getFinalPosition().equals(position));
+//   }
 }

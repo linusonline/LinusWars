@@ -12,17 +12,20 @@ public class InfiniteInteger {
    }
 
    public static InfiniteInteger create(int cost) {
-      return new InfiniteInteger(cost);
+      return new InfiniteInteger(false, cost);
    }
 
-   private InfiniteInteger(int specificCost) {
-      _isInfinite = false;
+   public static InfiniteInteger copy(InfiniteInteger other) {
+      return new InfiniteInteger(other._isInfinite, other._specificInteger);
+   }
+
+   private InfiniteInteger(boolean isInfinite, int specificCost) {
+      _isInfinite = isInfinite;
       _specificInteger = specificCost;
    }
 
    private InfiniteInteger() {
-      _specificInteger = 0;
-      _isInfinite = true;
+      this(true, 0);
    }
 
    public boolean isInfinite() {

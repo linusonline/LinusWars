@@ -16,7 +16,7 @@ public class PathWithCost {
 
    private PathWithCost(Path thePath, List<Cost> costs) {
       _thePath = thePath;
-      _costsForPoints = new ArrayList<Cost>(costs);
+      _costsForPoints = new ArrayList<>(costs);
       calculateTotalCost();
    }
 

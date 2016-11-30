@@ -1,5 +1,6 @@
 package se.lolektivet.linus.linuswars;
 
+import se.lolektivet.linus.linuswars.core.Position;
 import se.lolektivet.linus.linuswars.graphicalgame.TileView;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
 
@@ -16,6 +17,11 @@ public class NullMovementArrowController implements MovementArrowController {
 
    @Override
    public void setMovementArrow(MovementArrow movementArrow) {
+   }
+
+   @Override
+   public boolean canExtendMovementArrowToPosition(Position position) {
+      return false;
    }
 
    @Override
