@@ -551,15 +551,12 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    }
 
    private void doBeginningOfTurn() {
-      // TODO: Do beginning-of-turn stuff for next faction.
       _logger.info("Current Faction is " + _turnOrderModule.currentlyActiveFaction());
       _unitModule.refreshUnitsInFaction(_turnOrderModule.currentlyActiveFaction());
       invalidateOptimalPathsCache();
       addIncomeFromProperties(_turnOrderModule.currentlyActiveFaction());
 
       handleHealAndFuelEventsAtTurnStart();
-
-      // Check for crashing aircraft or ships
    }
 
    private void addIncomeFromProperties(Faction faction) {
@@ -586,6 +583,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       }
 
       // Subtract per-day fuel consumptions, except for units that will be resupplied
+      // Check for crashing aircraft or ships
       subtractPerDayFuelConsumption(unitsThatWillBeResupplied);
 
       // Perform resupply

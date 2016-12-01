@@ -16,7 +16,7 @@ public class DeployLogic {
    private final LogicalUnitFactory _unitFactory;
 
    DeployLogic(FuelLogic fuelLogic) {
-      // TODO: Create sprite sheets for remaining types.
+      // TODO: Create sprite sheets for air and naval types.
       _unitFactory = new LogicalUnitFactory(fuelLogic);
       _deployableTypes = new HashMap<>();
 

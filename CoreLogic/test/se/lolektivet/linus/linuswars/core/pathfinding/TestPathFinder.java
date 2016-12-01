@@ -54,8 +54,7 @@ public class TestPathFinder extends LinusWarsTest {
       LogicalUnit recon = _gameQueries.getUnitAtPosition(new Position(0, 6));
       Map<Position, PathWithCost> paths = getAllPathsForUnit(recon);
       assertTrue(paths.containsKey(new Position(4, 6)));
-      Path forbiddenPath = PathFactory.create(new Position(0, 6),
-            Direction.DOWN, Direction.RIGHT, Direction.RIGHT, Direction.RIGHT, Direction.RIGHT, Direction.UP);
+      Path forbiddenPath = PathFactory.create(new Position(0, 6), Direction.RIGHT, Direction.RIGHT, Direction.RIGHT, Direction.RIGHT);
       _gameMoves.executeMove(recon, forbiddenPath);
    }
 
