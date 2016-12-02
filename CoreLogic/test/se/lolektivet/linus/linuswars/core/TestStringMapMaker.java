@@ -2,9 +2,6 @@ package se.lolektivet.linus.linuswars.core;
 
 import org.junit.Before;
 import org.junit.Test;
-import se.lolektivet.linus.linuswars.core.InitializationException;
-import se.lolektivet.linus.linuswars.core.MapMaker;
-import se.lolektivet.linus.linuswars.core.StringMapMaker;
 import se.lolektivet.linus.linuswars.core.enums.Faction;
 import se.lolektivet.linus.linuswars.core.enums.TerrainType;
 
@@ -16,7 +13,7 @@ import static org.mockito.Mockito.verify;
 /**
  * Created by Linus on 2015-11-23.
  */
-public class TestStringMapMaker {
+public class TestStringMapMaker extends LinusWarsTest {
 
    private MapMaker _mapMakerMock;
    private StringMapMaker _stringMapMaker;

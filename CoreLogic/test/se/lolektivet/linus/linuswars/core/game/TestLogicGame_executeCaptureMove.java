@@ -15,6 +15,8 @@ import static org.junit.Assert.assertEquals;
  */
 public class TestLogicGame_executeCaptureMove extends LinusWarsTest {
 
+   // TODO: Test capture is reset when capturing unit destroyed.
+
    private static class TestGameSetup extends GameSetupAdapterForTest {
       @Override
       public void preDeploy(GamePredeployer predeployer) {

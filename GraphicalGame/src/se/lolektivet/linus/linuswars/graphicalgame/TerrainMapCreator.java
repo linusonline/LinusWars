@@ -26,6 +26,7 @@ public class TerrainMapCreator {
       _defaults.put(TerrainType.WOODS, TerrainTile.WOODS_SINGLE);
       _defaults.put(TerrainType.BRIDGE, TerrainTile.BRIDGE_HORIZONTAL);
       _defaults.put(TerrainType.MOUNTAINS, TerrainTile.MOUNTAIN_SMALL);
+      _defaults.put(TerrainType.SEA, TerrainTile.SEA_SINGLE);
 
       // There are no terrain tiles for buildings, since they look different according to faction.
       // Expected to be replaced by actual buildings later.

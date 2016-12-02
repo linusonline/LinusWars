@@ -99,7 +99,7 @@ public class LogicalUnit {
       return _isRanged;
    }
 
-   boolean isCombat() {
+   boolean isMelee() {
       return !_isRanged && !_isTransport;
    }
 
@@ -127,8 +127,13 @@ public class LogicalUnit {
    }
 
    public int getHp1To10() {
-      // TODO: Find out about actual math here!
-      return _hp == 0 ? 0 : Math.max(1, _hp / 10);
+      // TODO: Find out about actual math here! Always round up?
+
+      // Round down, except when below 10
+//      return _hp <= 0 ? 0 : Math.max(1, _hp / 10);
+
+      // Always round up
+      return _hp % 10 > 0 ? (_hp + 1) / 10 : _hp / 10;
    }
 
    // Core method

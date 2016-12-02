@@ -11,9 +11,12 @@ import se.lolektivet.linus.linuswars.core.enums.Direction;
 public class StateTurnTransition implements GameState {
 
    private final GameStateContext _context;
+   private static final int TRANSITION_DURATION_MS = 2000;
+   private final long _startTime;
 
    public StateTurnTransition(GameStateContext context) {
       _context = context;
+      _startTime = System.currentTimeMillis();
    }
 
    @Override
@@ -38,8 +41,7 @@ public class StateTurnTransition implements GameState {
 
    @Override
    public GameState update() {
-      // TODO: This should probably be based on real time, and ignore the number of calls.
-      if (++steps > 2000) {
+      if (System.currentTimeMillis() > _startTime + TRANSITION_DURATION_MS) {
          return new StateStarting(_context);
       } else {
          return this;

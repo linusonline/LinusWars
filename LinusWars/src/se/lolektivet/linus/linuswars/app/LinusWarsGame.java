@@ -3,6 +3,7 @@ package se.lolektivet.linus.linuswars.app;
 import org.newdawn.slick.*;
 import se.lolektivet.linus.linuswars.*;
 import se.lolektivet.linus.linuswars.core.MapFile;
+import se.lolektivet.linus.linuswars.core.maps.EmptyGameSetup;
 import se.lolektivet.linus.linuswars.graphicalgame.GraphicalWarGame;
 import se.lolektivet.linus.linuswars.graphicalgame.GraphicalWarMap;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
@@ -17,6 +18,7 @@ import se.lolektivet.linus.linuswars.core.maps.Map3;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -73,17 +75,12 @@ public class LinusWarsGame extends BasicGame {
       _allSprites = Sprites.createSprites();
       _mainFont = _allSprites.getMainFont();
 
-      List<Faction> factions = new ArrayList<>(2);
-      factions.add(Faction.BLUE_MOON);
-      factions.add(Faction.ORANGE_STAR);
-
-      Map3 map = new Map3();
       GameSetup gameSetup = new GameSetup1();
 
       try {
-         startGameFromFile("maps/startmap.lwmap", gameSetup, factions);
+         startGameFromFile("maps/Spann Island.lwmap", new EmptyGameSetup(), Arrays.asList(Faction.ORANGE_STAR, Faction.BLUE_MOON));
       } catch (IOException e) {
-         throw new RuntimeException("Couldn't load map file!");
+         throw new RuntimeException("Couldn't load map file!", e);
       }
    }
 

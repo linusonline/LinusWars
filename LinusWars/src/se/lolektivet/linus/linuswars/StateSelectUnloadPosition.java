@@ -24,6 +24,8 @@ public class StateSelectUnloadPosition implements GameState {
    private final GameState _previousState;
    private int _currentlySelectedPositionIndex;
 
+   // TODO: Do not suggest illegal positions!
+
    public StateSelectUnloadPosition(GameStateContext context,
                                     LogicalUnit logicalUnit,
                                     MovementArrow movementArrow,

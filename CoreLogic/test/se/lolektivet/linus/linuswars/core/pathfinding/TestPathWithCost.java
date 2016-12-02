@@ -1,6 +1,7 @@
 package se.lolektivet.linus.linuswars.core.pathfinding;
 
 import org.junit.Test;
+import se.lolektivet.linus.linuswars.core.LinusWarsTest;
 import se.lolektivet.linus.linuswars.core.Position;
 
 import static org.junit.Assert.assertEquals;
@@ -8,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by Linus on 2016-11-30.
  */
-public class TestPathWithCost {
+public class TestPathWithCost extends LinusWarsTest {
 
    @Test
    public void testTrivial() {

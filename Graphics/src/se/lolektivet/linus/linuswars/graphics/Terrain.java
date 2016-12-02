@@ -43,9 +43,10 @@ class Terrain {
       setSpriteCoordinatesForTile(TerrainTile.ROAD_BEND_SE, 19, 0);
       setSpriteCoordinatesForTile(TerrainTile.ROAD_BEND_NW, 20, 0);
       setSpriteCoordinatesForTile(TerrainTile.BRIDGE_HORIZONTAL, 21, 0);
+      setSpriteCoordinatesForTile(TerrainTile.SEA_SINGLE, 0, 1);
 
       // No sprites for these yet.
-      setSpriteCoordinatesForTile(TerrainTile.BRIDGE_VERTICAL, 0, 0);
+      setSpriteCoordinatesForTile(TerrainTile.BRIDGE_VERTICAL, 21, 0);
       setSpriteCoordinatesForTile(TerrainTile.ROAD_T_SOUTH, 0, 0);
       setSpriteCoordinatesForTile(TerrainTile.ROAD_T_NORTH, 0, 0);
       setSpriteCoordinatesForTile(TerrainTile.ROAD_T_WEST, 0, 0);
@@ -62,6 +63,9 @@ class Terrain {
 
    Renderable getTerrainSprite(TerrainTile terrainTile) {
       Position spritePosition = _spritePositionForTile.get(terrainTile);
+      if (spritePosition == null) {
+         throw new RuntimeException("Sprite not found!");
+      }
       return _spriteSheet.getSubImage(spritePosition.getX(), spritePosition.getY());
    }
 }

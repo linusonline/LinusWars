@@ -264,11 +264,15 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       }
    }
 
-   @Override
-   public void executeMove(LogicalUnit logicalUnit, Path path) {
+   private void checkExecuteMove(LogicalUnit logicalUnit, Path path) {
       throwOnGameNotStarted();
       throwOnUnitNotMovable(logicalUnit);
       throwOnIllegalPath(logicalUnit, path);
+   }
+
+   @Override
+   public void executeMove(LogicalUnit logicalUnit, Path path) {
+      checkExecuteMove(logicalUnit, path);
       internalExecuteMove(logicalUnit, path);
       _unitModule.expendUnitsTurn(logicalUnit);
    }
@@ -303,12 +307,23 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
       logicalUnit.subtractFuel(cost.getFuelCost().getInteger());
    }
 
-   @Override
-   public void executeAttackMove(LogicalUnit movingUnit, Path path, LogicalUnit attackedUnit) {
+   private void checkAttackMove(LogicalUnit movingUnit, Path path, LogicalUnit attackedUnit) {
       throwOnGameNotStarted();
       throwOnUnitNotMovable(movingUnit);
       throwOnIllegalPath(movingUnit, path);
       // TODO: Check if move + attack is allowed
+      throwOnIllegalAttack(movingUnit, path.getFinalPosition(), attackedUnit);
+   }
+
+   private void throwOnIllegalAttack(LogicalUnit attackingUnit, Position attackPosition, LogicalUnit targetUnit) {
+      if (!getUnitsAttackableFromPosition(attackingUnit, attackPosition).contains(targetUnit)) {
+         throw new LogicException("Unit is not allowed to attack that target!");
+      }
+   }
+
+   @Override
+   public void executeAttackMove(LogicalUnit movingUnit, Path path, LogicalUnit attackedUnit) {
+      checkAttackMove(movingUnit, path, attackedUnit);
       internalExecuteMove(movingUnit, path);
       internalExecuteAttack(movingUnit, attackedUnit);
       _unitModule.expendUnitsTurn(movingUnit);
@@ -864,7 +879,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    private Set<LogicalUnit> getUnitsAttackableFromPosition(LogicalUnit attacker, Position attackingPosition) {
       if (attacker.isRanged()) {
          return getUnitsRemotelyAttackableFromPosition(attacker, attackingPosition);
-      } else if (attacker.isCombat()) {
+      } else if (attacker.isMelee()) {
          return getUnitsDirectlyAttackableFromPosition(attacker, attackingPosition);
       } else {
          return new HashSet<>(0);

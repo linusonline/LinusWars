@@ -1,6 +1,5 @@
 package se.lolektivet.linus.linuswars.core;
 
-import org.junit.Before;
 import org.junit.Test;
 import se.lolektivet.linus.linuswars.core.enums.Faction;
 import se.lolektivet.linus.linuswars.core.enums.TerrainType;
@@ -13,12 +12,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
 
 /**
  * Created by Linus on 2016-12-02.
  */
-public class TestMapFile {
+public class TestMapFile extends LinusWarsTest {
 
    @Test
    public void testReadMapFile() throws IOException {

@@ -422,6 +422,199 @@ class AttackLogic {
       return baseDamageChart;
    }
 
+   // Note: Only those combinations that have different values than standard chart are included here.
+   private Map<UnitType, Map<UnitType, BaseDamage>> createOutOfAmmoBaseDamageChart() {
+      Map<UnitType, BaseDamage> damageFromInfantry = new HashMap<UnitType, BaseDamage>(0);
+
+      Map<UnitType, BaseDamage> damageFromMech = new HashMap<UnitType, BaseDamage>(UnitType.values().length);
+      damageFromMech.put(UnitType.RECON, BaseDamage.create(18));
+      damageFromMech.put(UnitType.TANK, BaseDamage.create(6));
+      damageFromMech.put(UnitType.MD_TANK, BaseDamage.create(1));
+      damageFromMech.put(UnitType.APC, BaseDamage.create(20));
+      damageFromMech.put(UnitType.ARTILLERY, BaseDamage.create(32));
+      damageFromMech.put(UnitType.ROCKETS, BaseDamage.create(35));
+      damageFromMech.put(UnitType.ANTI_AIR, BaseDamage.create(6));
+      damageFromMech.put(UnitType.MISSILES, BaseDamage.create(35));
+
+      Map<UnitType, BaseDamage> damageFromRecon = new HashMap<UnitType, BaseDamage>(UnitType.values().length);
+
+      Map<UnitType, BaseDamage> damageFromTank = new HashMap<UnitType, BaseDamage>(UnitType.values().length);
+      damageFromTank.put(UnitType.RECON, BaseDamage.create(40));
+      damageFromTank.put(UnitType.TANK, BaseDamage.create(6));
+      damageFromTank.put(UnitType.MD_TANK, BaseDamage.create(1));
+      damageFromTank.put(UnitType.APC, BaseDamage.create(45));
+      damageFromTank.put(UnitType.ARTILLERY, BaseDamage.create(45));
+      damageFromTank.put(UnitType.ROCKETS, BaseDamage.create(55));
+      damageFromTank.put(UnitType.ANTI_AIR, BaseDamage.create(5));
+      damageFromTank.put(UnitType.MISSILES, BaseDamage.create(30));
+      damageFromTank.put(UnitType.LANDER, BaseDamage.cannotAttack());
+      damageFromTank.put(UnitType.CRUISER, BaseDamage.cannotAttack());
+      damageFromTank.put(UnitType.SUB, BaseDamage.cannotAttack());
+      damageFromTank.put(UnitType.B_SHIP, BaseDamage.cannotAttack());
+
+      Map<UnitType, BaseDamage> damageFromMdTank = new HashMap<UnitType, BaseDamage>(UnitType.values().length);
+      damageFromMdTank.put(UnitType.RECON, BaseDamage.cannotAttack()); //?
+      damageFromMdTank.put(UnitType.TANK, BaseDamage.create(8));
+      damageFromMdTank.put(UnitType.MD_TANK, BaseDamage.cannotAttack()); //?
+      damageFromMdTank.put(UnitType.APC, BaseDamage.cannotAttack()); //?
+      damageFromMdTank.put(UnitType.ARTILLERY, BaseDamage.create(45));
+      damageFromMdTank.put(UnitType.ROCKETS, BaseDamage.cannotAttack()); //?
+      damageFromMdTank.put(UnitType.ANTI_AIR, BaseDamage.create(7));
+      damageFromMdTank.put(UnitType.MISSILES, BaseDamage.cannotAttack()); //?
+      damageFromMdTank.put(UnitType.LANDER, BaseDamage.cannotAttack()); //?
+      damageFromMdTank.put(UnitType.CRUISER, BaseDamage.cannotAttack()); //?
+      damageFromMdTank.put(UnitType.SUB, BaseDamage.cannotAttack()); //?
+      damageFromMdTank.put(UnitType.B_SHIP, BaseDamage.cannotAttack()); //?
+
+      Map<UnitType, BaseDamage> damageFromAPC = new HashMap<UnitType, BaseDamage>(UnitType.values().length);
+
+      Map<UnitType, BaseDamage> damageFromArtillery = new HashMap<UnitType, BaseDamage>(UnitType.values().length);
+      damageFromArtillery.put(UnitType.INFANTRY, BaseDamage.cannotAttack());
+      damageFromArtillery.put(UnitType.MECH, BaseDamage.cannotAttack());
+      damageFromArtillery.put(UnitType.RECON, BaseDamage.cannotAttack());
+      damageFromArtillery.put(UnitType.TANK, BaseDamage.cannotAttack());
+      damageFromArtillery.put(UnitType.MD_TANK, BaseDamage.cannotAttack());
+      damageFromArtillery.put(UnitType.APC, BaseDamage.cannotAttack());
+      damageFromArtillery.put(UnitType.ARTILLERY, BaseDamage.cannotAttack());
+      damageFromArtillery.put(UnitType.ROCKETS, BaseDamage.cannotAttack());
+      damageFromArtillery.put(UnitType.ANTI_AIR, BaseDamage.cannotAttack());
+      damageFromArtillery.put(UnitType.MISSILES, BaseDamage.cannotAttack());
+      damageFromArtillery.put(UnitType.LANDER, BaseDamage.cannotAttack());
+      damageFromArtillery.put(UnitType.CRUISER, BaseDamage.cannotAttack());
+      damageFromArtillery.put(UnitType.SUB, BaseDamage.cannotAttack());
+      damageFromArtillery.put(UnitType.B_SHIP, BaseDamage.cannotAttack());
+
+      Map<UnitType, BaseDamage> damageFromRockets = new HashMap<UnitType, BaseDamage>(UnitType.values().length);
+      damageFromRockets.put(UnitType.INFANTRY, BaseDamage.cannotAttack());
+      damageFromRockets.put(UnitType.MECH, BaseDamage.cannotAttack());
+      damageFromRockets.put(UnitType.RECON, BaseDamage.cannotAttack());
+      damageFromRockets.put(UnitType.TANK, BaseDamage.cannotAttack());
+      damageFromRockets.put(UnitType.MD_TANK, BaseDamage.cannotAttack());
+      damageFromRockets.put(UnitType.APC, BaseDamage.cannotAttack());
+      damageFromRockets.put(UnitType.ARTILLERY, BaseDamage.cannotAttack());
+      damageFromRockets.put(UnitType.ROCKETS, BaseDamage.cannotAttack());
+      damageFromRockets.put(UnitType.ANTI_AIR, BaseDamage.cannotAttack());
+      damageFromRockets.put(UnitType.MISSILES, BaseDamage.cannotAttack());
+      damageFromRockets.put(UnitType.LANDER, BaseDamage.cannotAttack());
+      damageFromRockets.put(UnitType.CRUISER, BaseDamage.cannotAttack());
+      damageFromRockets.put(UnitType.SUB, BaseDamage.cannotAttack());
+      damageFromRockets.put(UnitType.B_SHIP, BaseDamage.cannotAttack());
+
+      Map<UnitType, BaseDamage> damageFromAntiAir = new HashMap<UnitType, BaseDamage>(UnitType.values().length);
+      damageFromAntiAir.put(UnitType.INFANTRY, BaseDamage.cannotAttack());
+      damageFromAntiAir.put(UnitType.MECH, BaseDamage.cannotAttack());
+      damageFromAntiAir.put(UnitType.RECON, BaseDamage.cannotAttack());
+      damageFromAntiAir.put(UnitType.TANK, BaseDamage.cannotAttack());
+      damageFromAntiAir.put(UnitType.MD_TANK, BaseDamage.cannotAttack());
+      damageFromAntiAir.put(UnitType.APC, BaseDamage.cannotAttack());
+      damageFromAntiAir.put(UnitType.ARTILLERY, BaseDamage.cannotAttack());
+      damageFromAntiAir.put(UnitType.ROCKETS, BaseDamage.cannotAttack());
+      damageFromAntiAir.put(UnitType.ANTI_AIR, BaseDamage.cannotAttack());
+      damageFromAntiAir.put(UnitType.MISSILES, BaseDamage.cannotAttack());
+      damageFromAntiAir.put(UnitType.B_COPTER, BaseDamage.cannotAttack());
+      damageFromAntiAir.put(UnitType.T_COPTER, BaseDamage.cannotAttack());
+      damageFromAntiAir.put(UnitType.FIGHTER, BaseDamage.cannotAttack());
+      damageFromAntiAir.put(UnitType.BOMBER, BaseDamage.cannotAttack());
+
+      Map<UnitType, BaseDamage> damageFromMissiles = new HashMap<UnitType, BaseDamage>(UnitType.values().length);
+      damageFromMissiles.put(UnitType.B_COPTER, BaseDamage.cannotAttack());
+      damageFromMissiles.put(UnitType.T_COPTER, BaseDamage.cannotAttack());
+      damageFromMissiles.put(UnitType.FIGHTER, BaseDamage.cannotAttack());
+      damageFromMissiles.put(UnitType.BOMBER, BaseDamage.cannotAttack());
+
+      Map<UnitType, BaseDamage> damageFromBattleCopter = new HashMap<UnitType, BaseDamage>(UnitType.values().length);
+      damageFromBattleCopter.put(UnitType.RECON, BaseDamage.cannotAttack()); //?
+      damageFromBattleCopter.put(UnitType.TANK, BaseDamage.create(6));
+      damageFromBattleCopter.put(UnitType.MD_TANK, BaseDamage.cannotAttack()); //?
+      damageFromBattleCopter.put(UnitType.APC, BaseDamage.cannotAttack()); //?
+      damageFromBattleCopter.put(UnitType.ARTILLERY, BaseDamage.create(25));
+      damageFromBattleCopter.put(UnitType.ROCKETS, BaseDamage.cannotAttack()); //?
+      damageFromBattleCopter.put(UnitType.ANTI_AIR, BaseDamage.create(6));
+      damageFromBattleCopter.put(UnitType.MISSILES, BaseDamage.cannotAttack()); //?
+      damageFromBattleCopter.put(UnitType.B_COPTER, BaseDamage.cannotAttack()); //?
+      damageFromBattleCopter.put(UnitType.T_COPTER, BaseDamage.cannotAttack()); //?
+      damageFromBattleCopter.put(UnitType.LANDER, BaseDamage.cannotAttack()); //?
+      damageFromBattleCopter.put(UnitType.CRUISER, BaseDamage.cannotAttack()); //?
+      damageFromBattleCopter.put(UnitType.SUB, BaseDamage.cannotAttack()); //?
+      damageFromBattleCopter.put(UnitType.B_SHIP, BaseDamage.cannotAttack()); //?
+
+      Map<UnitType, BaseDamage> damageFromTransportCopter = new HashMap<UnitType, BaseDamage>(UnitType.values().length);
+
+      Map<UnitType, BaseDamage> damageFromFighter = new HashMap<UnitType, BaseDamage>(UnitType.values().length);
+      damageFromFighter.put(UnitType.B_COPTER, BaseDamage.cannotAttack());
+      damageFromFighter.put(UnitType.T_COPTER, BaseDamage.cannotAttack());
+      damageFromFighter.put(UnitType.FIGHTER, BaseDamage.cannotAttack());
+      damageFromFighter.put(UnitType.BOMBER, BaseDamage.cannotAttack());
+
+      Map<UnitType, BaseDamage> damageFromBomber = new HashMap<UnitType, BaseDamage>(UnitType.values().length);
+      damageFromBomber.put(UnitType.INFANTRY, BaseDamage.cannotAttack());
+      damageFromBomber.put(UnitType.MECH, BaseDamage.cannotAttack());
+      damageFromBomber.put(UnitType.RECON, BaseDamage.cannotAttack());
+      damageFromBomber.put(UnitType.TANK, BaseDamage.cannotAttack());
+      damageFromBomber.put(UnitType.MD_TANK, BaseDamage.cannotAttack());
+      damageFromBomber.put(UnitType.APC, BaseDamage.cannotAttack());
+      damageFromBomber.put(UnitType.ARTILLERY, BaseDamage.cannotAttack());
+      damageFromBomber.put(UnitType.ROCKETS, BaseDamage.cannotAttack());
+      damageFromBomber.put(UnitType.ANTI_AIR, BaseDamage.cannotAttack());
+      damageFromBomber.put(UnitType.MISSILES, BaseDamage.cannotAttack());
+      damageFromBomber.put(UnitType.LANDER, BaseDamage.cannotAttack());
+      damageFromBomber.put(UnitType.CRUISER, BaseDamage.cannotAttack());
+      damageFromBomber.put(UnitType.SUB, BaseDamage.cannotAttack());
+      damageFromBomber.put(UnitType.B_SHIP, BaseDamage.cannotAttack());
+
+      Map<UnitType, BaseDamage> damageFromLander = new HashMap<UnitType, BaseDamage>(UnitType.values().length);
+
+      Map<UnitType, BaseDamage> damageFromCruiser = new HashMap<UnitType, BaseDamage>(UnitType.values().length);
+      damageFromCruiser.put(UnitType.B_COPTER, BaseDamage.cannotAttack()); //?
+      damageFromCruiser.put(UnitType.T_COPTER, BaseDamage.cannotAttack()); //?
+      damageFromCruiser.put(UnitType.FIGHTER, BaseDamage.cannotAttack()); //?
+      damageFromCruiser.put(UnitType.BOMBER, BaseDamage.cannotAttack()); //?
+
+      Map<UnitType, BaseDamage> damageFromSub = new HashMap<UnitType, BaseDamage>(UnitType.values().length);
+      damageFromSub.put(UnitType.LANDER, BaseDamage.cannotAttack());
+      damageFromSub.put(UnitType.CRUISER, BaseDamage.cannotAttack());
+      damageFromSub.put(UnitType.SUB, BaseDamage.cannotAttack());
+      damageFromSub.put(UnitType.B_SHIP, BaseDamage.cannotAttack());
+
+      Map<UnitType, BaseDamage> damageFromBattleShip = new HashMap<UnitType, BaseDamage>(UnitType.values().length);
+      damageFromBattleShip.put(UnitType.INFANTRY, BaseDamage.cannotAttack());
+      damageFromBattleShip.put(UnitType.MECH, BaseDamage.cannotAttack());
+      damageFromBattleShip.put(UnitType.RECON, BaseDamage.cannotAttack());
+      damageFromBattleShip.put(UnitType.TANK, BaseDamage.cannotAttack());
+      damageFromBattleShip.put(UnitType.MD_TANK, BaseDamage.cannotAttack());
+      damageFromBattleShip.put(UnitType.APC, BaseDamage.cannotAttack());
+      damageFromBattleShip.put(UnitType.ARTILLERY, BaseDamage.cannotAttack());
+      damageFromBattleShip.put(UnitType.ROCKETS, BaseDamage.cannotAttack());
+      damageFromBattleShip.put(UnitType.ANTI_AIR, BaseDamage.cannotAttack());
+      damageFromBattleShip.put(UnitType.MISSILES, BaseDamage.cannotAttack());
+      damageFromBattleShip.put(UnitType.LANDER, BaseDamage.cannotAttack());
+      damageFromBattleShip.put(UnitType.CRUISER, BaseDamage.cannotAttack());
+      damageFromBattleShip.put(UnitType.SUB, BaseDamage.cannotAttack());
+      damageFromBattleShip.put(UnitType.B_SHIP, BaseDamage.cannotAttack());
+
+      Map<UnitType, Map<UnitType, BaseDamage>> baseDamageChart = new HashMap<UnitType, Map<UnitType, BaseDamage>>(UnitType.values().length);
+      baseDamageChart.put(UnitType.INFANTRY, damageFromInfantry);
+      baseDamageChart.put(UnitType.MECH, damageFromMech);
+      baseDamageChart.put(UnitType.RECON, damageFromRecon);
+      baseDamageChart.put(UnitType.TANK, damageFromTank);
+      baseDamageChart.put(UnitType.MD_TANK, damageFromMdTank);
+      baseDamageChart.put(UnitType.APC, damageFromAPC);
+      baseDamageChart.put(UnitType.ARTILLERY, damageFromArtillery);
+      baseDamageChart.put(UnitType.ROCKETS, damageFromRockets);
+      baseDamageChart.put(UnitType.ANTI_AIR, damageFromAntiAir);
+      baseDamageChart.put(UnitType.MISSILES, damageFromMissiles);
+      baseDamageChart.put(UnitType.B_COPTER, damageFromBattleCopter);
+      baseDamageChart.put(UnitType.T_COPTER, damageFromTransportCopter);
+      baseDamageChart.put(UnitType.FIGHTER, damageFromFighter);
+      baseDamageChart.put(UnitType.BOMBER, damageFromBomber);
+      baseDamageChart.put(UnitType.LANDER, damageFromLander);
+      baseDamageChart.put(UnitType.CRUISER, damageFromCruiser);
+      baseDamageChart.put(UnitType.SUB, damageFromSub);
+      baseDamageChart.put(UnitType.B_SHIP, damageFromBattleShip);
+
+      return baseDamageChart;
+   }
+
    boolean canAttack(UnitType attackerType, UnitType defenderType) {
       return _baseDamageChart.get(attackerType).get(defenderType).canAttack();
    }

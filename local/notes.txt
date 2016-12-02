@@ -59,3 +59,16 @@ Unit sprites
 
 http://www.gamefaqs.com/gba/471043-advance-wars/faqs/25744
 http://www.gamefaqs.com/gba/471043-advance-wars/faqs/14765
+
+Secondary weapon damage chart
+
+Only secondary weapon:
+	Infantry, Recon
+No secondary weapon:
+	Artillery
+	APC
+	Rocket Launcher
+	Fighter
+Mech:
+	Defaults (always uses secondary):
+		Infantry, Mech, B_Copter, T_Copter
