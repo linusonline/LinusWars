@@ -1,0 +1,41 @@
+## Test map for unit test.
+## This is a comment line.
+#This is also a comment.
+
+## Empty lines are allowed.
+
+## L = PLAINS
+## W = WOODS
+## M = MOUNTAINS
+## V = RIVER
+## R = ROAD
+## H = SHOAL
+## D = BRIDGE
+## S = SEA
+## E = REEF
+##
+## C = CITY
+## B = BASE
+## A = AIRPORT
+## P = PORT
+## Q = HQ
+## 1 = Faction 1
+## 2 = Faction 2
+## 3 = Faction 3
+## 4 = Faction 4
+## 5 = Faction 5
+## n = NEUTRAL
+##
+## Examples:
+##
+## C1 = CITY, Faction 1
+## B2 = BASE, Faction 2
+## A3 = AIRPORT, Faction 3
+## P4 = PORT, Faction 4
+## Q5 = HQ, Faction 5
+## Bn = BASE, NEUTRAL
+
+## LINUSMAP:<NrFactions>
+LINUSMAP:2
+Q1L
+LQ2

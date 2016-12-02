@@ -25,9 +25,9 @@ public class MapTestCase {
       when(mapMock.getHeight()).thenReturn(height);
    }
 
-   public void addTerrain(Position position, TerrainType type, TerrainTile tile) {
+   public void addTerrain(Position position, TerrainType type, TerrainTile expectedTerrain) {
       when(mapMock.getTerrainForTile(position)).thenReturn(type);
-      expectedTerrainMap.put(position, tile);
+      expectedTerrainMap.put(position, expectedTerrain);
    }
 
    public LogicalWarMap getLogicalMapMock() {

@@ -2,6 +2,7 @@ package se.lolektivet.linus.linuswars.app;
 
 import org.newdawn.slick.*;
 import se.lolektivet.linus.linuswars.*;
+import se.lolektivet.linus.linuswars.core.MapFile;
 import se.lolektivet.linus.linuswars.graphicalgame.GraphicalWarGame;
 import se.lolektivet.linus.linuswars.graphicalgame.GraphicalWarMap;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
@@ -59,7 +60,15 @@ public class LinusWarsGame extends BasicGame {
 
    @Override
    public void init(GameContainer gc) throws SlickException {
-       _logger.config("Container: [ " + gc.getWidth() + "," + gc.getHeight() + "], Screen: [" + gc.getScreenWidth() + "," + gc.getScreenHeight() + "]");
+      try {
+         initInternal(gc);
+      } catch (RuntimeException e) {
+         handleRuntimeException("Uncaught RuntimeException during init(" + gc + "):", e);
+      }
+   }
+
+   private void initInternal(GameContainer gc) {
+      _logger.config("Container: [ " + gc.getWidth() + "," + gc.getHeight() + "], Screen: [" + gc.getScreenWidth() + "," + gc.getScreenHeight() + "]");
 
       _allSprites = Sprites.createSprites();
       _mainFont = _allSprites.getMainFont();
@@ -71,7 +80,17 @@ public class LinusWarsGame extends BasicGame {
       Map3 map = new Map3();
       GameSetup gameSetup = new GameSetup1();
 
-      startGame(map, gameSetup, factions);
+      try {
+         startGameFromFile("maps/startmap.lwmap", gameSetup, factions);
+      } catch (IOException e) {
+         throw new RuntimeException("Couldn't load map file!");
+      }
+   }
+
+   private void startGameFromFile(String mapFileName, GameSetup gameSetup, List<Faction> factions) throws IOException {
+      MapFile mapFile = new MapFile(mapFileName);
+      mapFile.readFileFully();
+      startGame(mapFile, gameSetup, factions);
    }
 
    private void startGame(WarMap warMap, GameSetup gameSetup, List<Faction> factions) {

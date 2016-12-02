@@ -41,6 +41,7 @@ public class GraphicalMapMaker implements MapMaker {
          throw new InitializationException("GraphicalWarMap may be built on-the-fly or not, but not both!");
       }
       _buildOnTheFly = false;
+      _onTheFlyDetermined = true;
       _graphicalWarMap.addTerrain(_sprites.getTerrainSprite(terrainTile), x, y);
    }
 
@@ -50,13 +51,19 @@ public class GraphicalMapMaker implements MapMaker {
          throw new InitializationException("GraphicalWarMap may be built on-the-fly or not, but not both!");
       }
       _buildOnTheFly = true;
+      _onTheFlyDetermined = true;
       _logicalMapMaker.addTerrain(terrainType, x, y);
    }
 
    @Override
    public void addBuilding(TerrainType buildingType, Faction faction, int x, int y) {
+      if (!_onTheFlyDetermined) {
+         _buildOnTheFly = true;
+         _onTheFlyDetermined = true;
+      }
       if (_buildOnTheFly) {
          _buildings.put(new Position(x, y), _sprites.getBuildingSprite(buildingType, faction));
+         _logicalMapMaker.addBuilding(buildingType, faction, x, y);
       } else {
          _graphicalWarMap.addBuilding(_sprites.getBuildingSprite(buildingType, faction), x, y);
       }
