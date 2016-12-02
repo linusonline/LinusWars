@@ -3,20 +3,21 @@ package se.lolektivet.linus.linuswars;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.logic.Position;
-import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
-import se.lolektivet.linus.linuswars.logic.game.WarGameMoves;
-import se.lolektivet.linus.linuswars.logic.game.WarGameQueries;
-import se.lolektivet.linus.linuswars.logic.enums.Direction;
+import se.lolektivet.linus.linuswars.core.Position;
+import se.lolektivet.linus.linuswars.core.game.LogicalUnit;
+import se.lolektivet.linus.linuswars.core.enums.Direction;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * Created by Linus on 2014-09-20.
  */
 public class StateSelectAttack implements GameState {
+
+   private static final Logger _logger = Logger.getLogger(StateSelectAttack.class.getName());
 
    private final GameStateContext _context;
 
@@ -45,7 +46,7 @@ public class StateSelectAttack implements GameState {
 
    private void printAttackInfo() {
       int damage = _context.warGameQueries.calculateDamageInPercent(_logicalUnit, getTargetUnit());
-      System.out.println("Damage: " + damage + "%");
+      _logger.info("Damage: " + damage + "%");
    }
 
    private LogicalUnit getTargetUnit() {

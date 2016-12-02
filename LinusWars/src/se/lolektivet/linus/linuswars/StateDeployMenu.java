@@ -4,9 +4,9 @@ import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.logic.enums.Direction;
-import se.lolektivet.linus.linuswars.logic.enums.UnitType;
-import se.lolektivet.linus.linuswars.logic.game.Building;
+import se.lolektivet.linus.linuswars.core.enums.Direction;
+import se.lolektivet.linus.linuswars.core.enums.UnitType;
+import se.lolektivet.linus.linuswars.core.game.Building;
 
 import java.util.List;
 
@@ -66,7 +66,7 @@ public class StateDeployMenu implements GameState {
          _theMenu = new GraphicalMenu<>(sprites.getMenuCursor());
          for (UnitType unitType : unitTypes) {
             Image icon = sprites.getUnitSprite(_context.warGameQueries.getCurrentlyActiveFaction(), unitType).getUnitSprite(Direction.RIGHT, false).getCurrentFrame();
-            _theMenu.addItem(unitType.getName(), icon,unitType);
+            _theMenu.addItem(unitType.getName(), icon, unitType);
          }
          _theMenu.addItem("Cancel");
       }

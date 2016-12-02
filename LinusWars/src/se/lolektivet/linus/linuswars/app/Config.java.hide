@@ -1,0 +1,51 @@
+package se.lolektivet.linus.linuswars.app;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ * Created by Linus on 2016-11-22.
+ */
+public class Config extends Properties {
+   private static final Logger _logger = Logger.getLogger(Config.class.getName());
+   private static final String DEFAULT_CONFIG_FILE = "LinusWars.settings";
+
+   public static final String PREFIX = "se.lolektivet.linus.linuswars.";
+   public static final String PROP_LOG_TO_FILE = PREFIX + "logToFile";
+
+   private Config() {}
+
+   public static Config loadFromDefaultFile() {
+      Config config = new Config();
+      config.loadDefaults();
+      try {
+         FileInputStream inputStream = new FileInputStream(DEFAULT_CONFIG_FILE);
+         try {
+            config.load(inputStream);
+         } catch (IOException e) {
+            _logger.log(Level.WARNING, "Could not read from configuration file!", e);
+         }
+      } catch (FileNotFoundException ignored) {
+         writeToDefaultFile(config);
+      }
+      return config;
+   }
+
+   private static void writeToDefaultFile(Config config) {
+      try {
+         FileOutputStream outputStream = new FileOutputStream(DEFAULT_CONFIG_FILE);
+         config.store(outputStream, "Comment");
+      } catch (IOException e) {
+         _logger.log(Level.WARNING, "Could not write config file!", e);
+      }
+   }
+
+   private void loadDefaults() {
+      setProperty(PROP_LOG_TO_FILE, "true");
+   }
+}

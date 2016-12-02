@@ -2,8 +2,8 @@ package se.lolektivet.linus.linuswars.graphics;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
-import se.lolektivet.linus.linuswars.logic.enums.Faction;
-import se.lolektivet.linus.linuswars.logic.enums.UnitType;
+import se.lolektivet.linus.linuswars.core.enums.Faction;
+import se.lolektivet.linus.linuswars.core.enums.UnitType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,12 +34,7 @@ class Units {
 
    private SpriteSheet getSpriteSheet(Faction unitFaction, UnitType unitType) {
       Map<UnitType, SpriteSheet> map = _unitSpriteSheetCache.get(unitFaction);
-      SpriteSheet unitSpriteSheet = map.get(unitType);
-      if (unitSpriteSheet == null) {
-         unitSpriteSheet = loadSpriteSheet(unitFaction, unitType);
-         map.put(unitType, unitSpriteSheet);
-      }
-      return unitSpriteSheet;
+      return map.computeIfAbsent(unitType, k -> loadSpriteSheet(unitFaction, unitType));
    }
 
    private SpriteSheet loadSpriteSheet(Faction unitFaction, UnitType unitType) {

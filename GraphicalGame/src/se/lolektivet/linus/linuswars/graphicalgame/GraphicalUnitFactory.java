@@ -2,8 +2,8 @@ package se.lolektivet.linus.linuswars.graphicalgame;
 
 import se.lolektivet.linus.linuswars.graphics.Sprites;
 import se.lolektivet.linus.linuswars.graphics.UnitSprite;
-import se.lolektivet.linus.linuswars.logic.enums.Faction;
-import se.lolektivet.linus.linuswars.logic.enums.UnitType;
+import se.lolektivet.linus.linuswars.core.enums.Faction;
+import se.lolektivet.linus.linuswars.core.enums.UnitType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,12 +33,7 @@ public class GraphicalUnitFactory {
 
    private UnitSprite getUnitSprite(Faction unitFaction, UnitType unitType) {
       Map<UnitType, UnitSprite> map = _unitSpriteCache.get(unitFaction);
-      UnitSprite unitSprite = map.get(unitType);
-      if (unitSprite == null) {
-         unitSprite = loadUnitSprite(unitFaction, unitType);
-         map.put(unitType, unitSprite);
-      }
-      return unitSprite;
+      return map.computeIfAbsent(unitType, k -> loadUnitSprite(unitFaction, unitType));
    }
 
    private UnitSprite loadUnitSprite(Faction unitFaction, UnitType unitType) {

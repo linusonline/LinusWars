@@ -8,18 +8,21 @@ import se.lolektivet.linus.linuswars.graphicalgame.GraphicalWarGame;
 import se.lolektivet.linus.linuswars.graphicalgame.ScrollingTileView;
 import se.lolektivet.linus.linuswars.graphicalgame.TileView;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
-import se.lolektivet.linus.linuswars.logic.Position;
-import se.lolektivet.linus.linuswars.logic.game.WarGameQueries;
-import se.lolektivet.linus.linuswars.logic.enums.Direction;
+import se.lolektivet.linus.linuswars.core.game.LogicalUnit;
+import se.lolektivet.linus.linuswars.core.Position;
+import se.lolektivet.linus.linuswars.core.game.WarGameQueries;
+import se.lolektivet.linus.linuswars.core.enums.Direction;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.logging.Logger;
 
 /**
  * Created by Linus on 2014-09-19.
  */
 public class InteractiveWarGame {
+
+   private static final Logger _logger = Logger.getLogger(InteractiveWarGame.class.getName());
 
    static class CursorOutsideMapException extends Exception {}
 
@@ -82,9 +85,9 @@ public class InteractiveWarGame {
       _scrollingTileView.cursorMoved(newPosition, _warGameQueries.getMapWidth(), _warGameQueries.getMapHeight());
       adjustHudToCursor();
       if (_warGameQueries.hasUnitAtPosition(_cursorPosition)) {
-         System.out.println(_warGameQueries.getUnitAtPosition(_cursorPosition));
+         _logger.info(_warGameQueries.getUnitAtPosition(_cursorPosition).toString());
          for (LogicalUnit transportedUnit : _warGameQueries.getTransportedUnits(_warGameQueries.getUnitAtPosition(_cursorPosition))) {
-            System.out.println("   Transporting " + transportedUnit.getType());
+            _logger.info("   Transporting " + transportedUnit.getType());
          }
       }
    }

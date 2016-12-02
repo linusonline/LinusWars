@@ -31,13 +31,31 @@ Attack Selection
 
 
 Start of Day
-   Add income from properties
-   Repair units on friendly bases
-   Subtract per-day fuel consumptions
-   Resupply all units on appropriate bases or adjacent to resupply units
-   Check for crashing aircraft or ships
+	Add income from properties
+	Repair units on friendly bases
+	Subtract per-day fuel consumptions
+	Resupply all units on appropriate bases or adjacent to resupply units
+	Check for crashing aircraft or ships
 
-   
+		Fuel does not cost money
+		Are air units only healed on air bases? HQ? Resupplied?
+		Same for naval units and ports. Same for land units and bases.
+		City, Base, Airport, Port, HQ
+		Land units
+			Refuelled on: city, base, HQ (not on airport, port)
+			Healed on: city, base, HQ (not on airport, port)
+		Air units
+			Refuelled on airport (not on city, base, HQ, port)
+			Healed on: airport (not on city, base, HQ, port)
+		Sea units
+			Refuelled on: port
+			Healed on: port
+
+
 Unit sprites
     16 x 20
-        
+
+
+
+http://www.gamefaqs.com/gba/471043-advance-wars/faqs/25744
+http://www.gamefaqs.com/gba/471043-advance-wars/faqs/14765

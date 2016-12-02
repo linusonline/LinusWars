@@ -1,9 +1,9 @@
 package se.lolektivet.linus.linuswars;
 
-import se.lolektivet.linus.linuswars.logic.Position;
-import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
-import se.lolektivet.linus.linuswars.logic.game.WarGameQueries;
-import se.lolektivet.linus.linuswars.logic.pathfinding.Path;
+import se.lolektivet.linus.linuswars.core.Position;
+import se.lolektivet.linus.linuswars.core.game.LogicalUnit;
+import se.lolektivet.linus.linuswars.core.game.WarGameQueries;
+import se.lolektivet.linus.linuswars.core.pathfinding.Path;
 
 import java.util.Set;
 

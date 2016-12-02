@@ -1,10 +1,10 @@
 package se.lolektivet.linus.linuswars.graphicalgame;
 
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.logic.GamePredeployer;
-import se.lolektivet.linus.linuswars.logic.Position;
-import se.lolektivet.linus.linuswars.logic.enums.Faction;
-import se.lolektivet.linus.linuswars.logic.enums.UnitType;
+import se.lolektivet.linus.linuswars.core.GamePredeployer;
+import se.lolektivet.linus.linuswars.core.Position;
+import se.lolektivet.linus.linuswars.core.enums.Faction;
+import se.lolektivet.linus.linuswars.core.enums.UnitType;
 
 /**
  * Created by Linus on 2014-09-22.
@@ -31,5 +31,14 @@ public class GraphicalGamePreDeployer implements GamePredeployer {
    @Override
    public void addNewUnit(UnitType type, Faction faction, int x, int y, int hpPercent) {
       addNewUnit(type, faction, x, y);
+   }
+
+   public void addNewUnit(UnitType type, Faction faction, int x, int y, int hpPercent, int fuel) {
+      addNewUnit(type, faction, x, y);
+   }
+
+   @Override
+   public void addNewSubmergedSub(Faction faction, int x, int y, int hpPercent, int fuel) {
+      addNewUnit(UnitType.SUB, faction, x, y);
    }
 }

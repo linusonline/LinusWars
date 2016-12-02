@@ -1,9 +1,9 @@
 package se.lolektivet.linus.linuswars.graphicalgame;
 
-import se.lolektivet.linus.linuswars.logic.LogicException;
-import se.lolektivet.linus.linuswars.logic.Position;
-import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
-import se.lolektivet.linus.linuswars.logic.game.LogicalWarMap;
+import se.lolektivet.linus.linuswars.core.LogicException;
+import se.lolektivet.linus.linuswars.core.Position;
+import se.lolektivet.linus.linuswars.core.enums.TerrainType;
+import se.lolektivet.linus.linuswars.core.game.LogicalWarMap;
 
 /**
  * Created by Linus on 2015-12-20.

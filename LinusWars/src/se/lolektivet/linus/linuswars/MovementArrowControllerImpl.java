@@ -1,10 +1,11 @@
 package se.lolektivet.linus.linuswars;
 
+import se.lolektivet.linus.linuswars.core.pathfinding.Path;
 import se.lolektivet.linus.linuswars.graphicalgame.TileView;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.logic.game.LogicalUnit;
-import se.lolektivet.linus.linuswars.logic.Position;
-import se.lolektivet.linus.linuswars.logic.game.WarGameQueries;
+import se.lolektivet.linus.linuswars.core.game.LogicalUnit;
+import se.lolektivet.linus.linuswars.core.Position;
+import se.lolektivet.linus.linuswars.core.game.WarGameQueries;
 
 import java.util.Collection;
 
@@ -36,23 +37,29 @@ public class MovementArrowControllerImpl implements MovementArrowController {
    }
 
    @Override
-   public boolean canExtendMovementArrowToCursorPosition() {
-      Position cursorPosition = _interactiveWarGame.getCursorPosition();
+   public boolean canExtendMovementArrowToPosition(Position position) {
       Collection<Position> positionsAdjacentToArrowHead =
             _warGameQueries.getAdjacentPositions(_movementArrow.getFinalPosition());
-      if (!positionsAdjacentToArrowHead.contains(cursorPosition)) {
+      if (!positionsAdjacentToArrowHead.contains(position)) {
          return false;
       }
       if (!_movementArrow.isEmpty()) {
          Position backtrackPosition = _movementArrow.getBacktrackPosition();
-         if (cursorPosition.equals(backtrackPosition)) {
+         if (position.equals(backtrackPosition)) {
             return true;
          }
       }
-      if (positionIsOnArrowPath(cursorPosition)) {
+      if (positionIsOnArrowPath(position)) {
          return false;
       }
-      return _warGameQueries.isPathAllowedForUnit(_movementArrow.getPath(), _movingUnit);
+      Path newPath = new Path(_movementArrow.getPath());
+      newPath.addPoint(position);
+      return _warGameQueries.isPathAllowedForUnit(newPath, _movingUnit);
+   }
+
+   @Override
+   public boolean canExtendMovementArrowToCursorPosition() {
+      return canExtendMovementArrowToPosition(_interactiveWarGame.getCursorPosition());
    }
 
    private boolean positionIsOnArrowPath(Position position) {

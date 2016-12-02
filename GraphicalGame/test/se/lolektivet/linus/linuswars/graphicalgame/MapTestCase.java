@@ -1,9 +1,9 @@
 package se.lolektivet.linus.linuswars.graphicalgame;
 
-import se.lolektivet.linus.linuswars.logic.Position;
-import se.lolektivet.linus.linuswars.logic.enums.TerrainTile;
-import se.lolektivet.linus.linuswars.logic.enums.TerrainType;
-import se.lolektivet.linus.linuswars.logic.game.LogicalWarMap;
+import se.lolektivet.linus.linuswars.core.Position;
+import se.lolektivet.linus.linuswars.core.enums.TerrainTile;
+import se.lolektivet.linus.linuswars.core.enums.TerrainType;
+import se.lolektivet.linus.linuswars.core.game.LogicalWarMap;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -25,9 +25,9 @@ public class MapTestCase {
       when(mapMock.getHeight()).thenReturn(height);
    }
 
-   public void addTerrain(Position position, TerrainType type, TerrainTile tile) {
+   public void addTerrain(Position position, TerrainType type, TerrainTile expectedTerrain) {
       when(mapMock.getTerrainForTile(position)).thenReturn(type);
-      expectedTerrainMap.put(position, tile);
+      expectedTerrainMap.put(position, expectedTerrain);
    }
 
    public LogicalWarMap getLogicalMapMock() {

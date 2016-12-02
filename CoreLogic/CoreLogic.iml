@@ -9,6 +9,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="TEST" name="junit" level="project" />
+    <orderEntry type="library" scope="TEST" name="mockito" level="project" />
   </component>
   <component name="org.twodividedbyzero.idea.findbugs">
     <option name="_basePreferences">
@@ -216,4 +217,3 @@
     </option>
   </component>
 </module>
-

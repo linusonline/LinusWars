@@ -1,0 +1,90 @@
+package se.lolektivet.linus.linuswars.core;
+
+import se.lolektivet.linus.linuswars.core.enums.Faction;
+import se.lolektivet.linus.linuswars.core.game.LogicalWarMap;
+import se.lolektivet.linus.linuswars.core.game.LogicalWarMapImpl;
+import se.lolektivet.linus.linuswars.core.game.ModuleBuildings;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ * Created by Linus on 2016-12-01.
+ */
+public class MapFile implements WarMap {
+
+   public static class MapFileException extends RuntimeException {}
+
+   private static final Logger _logger = Logger.getLogger(MapFile.class.getName());
+
+   private final String _fileName;
+   private boolean _headerRead = false;
+   private boolean _fileRead = false;
+   private int _nrFactions = 0;
+   private List<String> _rowsInFile = new ArrayList<>();
+
+   public MapFile(String fileName) {
+      _fileName = fileName;
+   }
+
+   public void readFileFully() throws IOException {
+      try (BufferedReader bufferedReader = new BufferedReader(new FileReader(_fileName))) {
+         String line = bufferedReader.readLine();
+         while (line != null) {
+            if (!line.isEmpty() && !line.startsWith("#")) {
+               if (!_headerRead) {
+                  readHeader(line);
+               } else {
+                  _rowsInFile.add(line);
+               }
+            }
+            line = bufferedReader.readLine();
+         }
+         _fileRead = true;
+      }
+   }
+
+   private void readHeader(String line) throws IOException {
+      String headerStart = "LINUSMAP:";
+      if (!line.startsWith(headerStart)) {
+         throw new IOException(_fileName + " is not a valid LinusWars map file!");
+      }
+      _nrFactions = Integer.valueOf(line.substring(headerStart.length()));
+      _headerRead = true;
+   }
+
+   private void throwIfFileNotRead() {
+      if (!_fileRead) {
+         throw new MapFileException();
+      }
+   }
+
+   @Override
+   public int getNrOfFactions() {
+      throwIfFileNotRead();
+      return _nrFactions;
+   }
+
+   @Override
+   public void create(MapMaker mapMaker) {
+      throwIfFileNotRead();
+      readWithMapMaker(new StringMapMaker(mapMaker));
+   }
+
+   @Override
+   public void create(MapMaker mapMaker, List<Faction> factions) {
+      throwIfFileNotRead();
+      readWithMapMaker(new StringMapMaker(mapMaker, factions));
+   }
+
+   private void readWithMapMaker(StringMapMaker stringMapMaker) {
+      for (String row : _rowsInFile) {
+         stringMapMaker.readRow(row);
+      }
+      stringMapMaker.finish();
+   }
+
+}
