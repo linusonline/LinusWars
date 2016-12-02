@@ -6,7 +6,7 @@ import se.lolektivet.linus.linuswars.core.GamePredeployer;
 import se.lolektivet.linus.linuswars.core.LogicalGameFactory;
 import se.lolektivet.linus.linuswars.core.enums.Faction;
 import se.lolektivet.linus.linuswars.core.enums.UnitType;
-import se.lolektivet.linus.linuswars.core.game.maps.TestMap4x4Plains;
+import se.lolektivet.linus.linuswars.core.game.maps.TestMap4x4PlainsString;
 
 import static org.junit.Assert.assertEquals;
 
@@ -28,7 +28,7 @@ public class TestAutoHealCostsMoney {
 
    @Before
    public void setup() {
-      LogicalWarGame theGame = new LogicalGameFactory().createLogicalWarGame(new TestMap4x4Plains(), new TestGameSetup(), Faction.ORANGE_STAR, Faction.BLUE_MOON);
+      LogicalWarGame theGame = new LogicalGameFactory().createLogicalWarGame(TestMap4x4PlainsString.create(), new TestGameSetup(), Faction.ORANGE_STAR, Faction.BLUE_MOON);
 
       _gameMoves = theGame;
       _gameQueries = theGame;
@@ -45,6 +45,6 @@ public class TestAutoHealCostsMoney {
       int moneyBefore = _gameQueries.getMoneyForFaction(Faction.BLUE_MOON);
       _gameMoves.endTurn();
       int moneyAfter = _gameQueries.getMoneyForFaction(Faction.BLUE_MOON);
-      assertEquals(moneyBefore + TestMap4x4Plains.BLUE_MOON_STARTING_FUNDS - 200, moneyAfter);
+      assertEquals(moneyBefore + TestMap4x4PlainsString.BLUE_MOON_STARTING_FUNDS - 200, moneyAfter);
    }
 }

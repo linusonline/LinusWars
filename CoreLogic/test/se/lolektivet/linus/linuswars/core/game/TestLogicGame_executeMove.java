@@ -3,9 +3,12 @@ package se.lolektivet.linus.linuswars.core.game;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import se.lolektivet.linus.linuswars.core.*;
+import se.lolektivet.linus.linuswars.core.GamePredeployer;
+import se.lolektivet.linus.linuswars.core.LinusWarsTest;
+import se.lolektivet.linus.linuswars.core.LogicException;
+import se.lolektivet.linus.linuswars.core.LogicalGameFactory;
 import se.lolektivet.linus.linuswars.core.enums.*;
-import se.lolektivet.linus.linuswars.core.game.maps.TestMap4x4Plains;
+import se.lolektivet.linus.linuswars.core.game.maps.TestMap4x4PlainsString;
 import se.lolektivet.linus.linuswars.core.pathfinding.InfiniteInteger;
 import se.lolektivet.linus.linuswars.core.pathfinding.Path;
 import se.lolektivet.linus.linuswars.core.pathfinding.PathFactory;
@@ -35,7 +38,7 @@ public class TestLogicGame_executeMove extends LinusWarsTest {
 
    @Before
    public void setup() {
-      _theGame = new LogicalGameFactory().createLogicalWarGame(new TestMap4x4Plains(), new TestGameSetup(), Faction.ORANGE_STAR, Faction.BLUE_MOON);
+      _theGame = new LogicalGameFactory().createLogicalWarGame(TestMap4x4PlainsString.create(), new TestGameSetup(), Faction.ORANGE_STAR, Faction.BLUE_MOON);
 
       _gameMoves = _theGame;
       _gameQueries = _theGame;

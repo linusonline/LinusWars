@@ -1,14 +1,12 @@
 package se.lolektivet.linus.linuswars.core;
 
 import se.lolektivet.linus.linuswars.core.enums.Faction;
-import se.lolektivet.linus.linuswars.core.game.LogicalWarMap;
-import se.lolektivet.linus.linuswars.core.game.LogicalWarMapImpl;
-import se.lolektivet.linus.linuswars.core.game.ModuleBuildings;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**

@@ -60,6 +60,11 @@ public class StringMapMaker {
       for (int f = 0; f < factions.size(); f++) {
          _factions.put(_factionCodes.get(f), factions.get(f));
       }
+      _factions.put('o', Faction.ORANGE_STAR);
+      _factions.put('b', Faction.BLUE_MOON);
+      _factions.put('g', Faction.GREEN_EARTH);
+      _factions.put('y', Faction.YELLOW_COMET);
+      _factions.put('l', Faction.BLACK_HOLE);
       _factions.put('n', Faction.NEUTRAL);
    }
 
@@ -89,6 +94,10 @@ public class StringMapMaker {
    public void readRow(String row) {
       int index = 0;
       while (index < row.length()) {
+         if (' ' == row.charAt(index)) {
+            index++;
+            continue;
+         }
          TerrainType type = _terrainMap.get(row.charAt(index));
          if (type.isBuilding()) {
             index++;

@@ -9,7 +9,7 @@ import se.lolektivet.linus.linuswars.core.Position;
 import se.lolektivet.linus.linuswars.core.enums.Direction;
 import se.lolektivet.linus.linuswars.core.enums.Faction;
 import se.lolektivet.linus.linuswars.core.enums.UnitType;
-import se.lolektivet.linus.linuswars.core.game.maps.TestMap4x4Plains;
+import se.lolektivet.linus.linuswars.core.game.maps.TestMap4x4PlainsString;
 import se.lolektivet.linus.linuswars.core.pathfinding.Path;
 import se.lolektivet.linus.linuswars.core.pathfinding.PathFactory;
 
@@ -40,7 +40,7 @@ public class TestLogicGame_executeAttackMove extends LinusWarsTest {
 
    @Before
    public void setup() {
-      _theGame = new LogicalGameFactory().createLogicalWarGame(new TestMap4x4Plains(), new TestGameSetup(), Faction.ORANGE_STAR, Faction.BLUE_MOON);
+      _theGame = new LogicalGameFactory().createLogicalWarGame(TestMap4x4PlainsString.create(), new TestGameSetup(), Faction.ORANGE_STAR, Faction.BLUE_MOON);
 
       _gameMoves = _theGame;
       _gameQueries = _theGame;
