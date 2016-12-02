@@ -18,31 +18,43 @@ public class MapFile implements WarMap {
 
    private static final Logger _logger = Logger.getLogger(MapFile.class.getName());
 
+   private static final String NO_FILE = "<No file>";
    private final String _fileName;
    private boolean _headerRead = false;
    private boolean _fileRead = false;
    private int _nrFactions = 0;
    private List<String> _rowsInFile = new ArrayList<>();
 
+   public MapFile() {
+      _fileName = NO_FILE;
+   }
+
    public MapFile(String fileName) {
       _fileName = fileName;
    }
 
    public void readFileFully() throws IOException {
-      try (BufferedReader bufferedReader = new BufferedReader(new FileReader(_fileName))) {
-         String line = bufferedReader.readLine();
-         while (line != null) {
-            if (!line.isEmpty() && !line.startsWith("#")) {
-               if (!_headerRead) {
-                  readHeader(line);
-               } else {
-                  _rowsInFile.add(line);
-               }
-            }
-            line = bufferedReader.readLine();
-         }
-         _fileRead = true;
+      if (NO_FILE.equals(_fileName)) {
+         throw new MapFileException();
       }
+      try (BufferedReader bufferedReader = new BufferedReader(new FileReader(_fileName))) {
+         readBufferFully(bufferedReader);
+      }
+   }
+
+   public void readBufferFully(BufferedReader bufferedReader) throws IOException {
+      String line = bufferedReader.readLine();
+      while (line != null) {
+         if (!line.isEmpty() && !line.startsWith("#")) {
+            if (!_headerRead) {
+               readHeader(line);
+            } else {
+               _rowsInFile.add(line);
+            }
+         }
+         line = bufferedReader.readLine();
+      }
+      _fileRead = true;
    }
 
    private void readHeader(String line) throws IOException {

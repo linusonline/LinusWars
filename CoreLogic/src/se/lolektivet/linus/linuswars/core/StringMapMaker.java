@@ -93,15 +93,18 @@ public class StringMapMaker {
 
    public void readRow(String row) {
       int index = 0;
+      if (row.trim().isEmpty()) {
+         throw new InitializationException("Map definition contained empty row!");
+      }
       while (index < row.length()) {
          if (' ' == row.charAt(index)) {
             index++;
             continue;
          }
-         TerrainType type = _terrainMap.get(row.charAt(index));
+         TerrainType type = getTerrainOrThrow(row.charAt(index));
          if (type.isBuilding()) {
             index++;
-            Faction faction = _factions.get(row.charAt(index));
+            Faction faction = getFactionOrThrow(row.charAt(index));
             addSingleBuilding(type, faction);
          } else {
             addSingleTile(type);
@@ -109,6 +112,22 @@ public class StringMapMaker {
          index++;
       }
       nextRow();
+   }
+
+   private TerrainType getTerrainOrThrow(Character character) {
+      TerrainType terrainType = _terrainMap.get(character);
+      if (terrainType == null) {
+         throw new InitializationException("Unknown terrain code in map definition!");
+      }
+      return terrainType;
+   }
+
+   private Faction getFactionOrThrow(Character character) {
+      Faction faction = _factions.get(character);
+      if (faction == null) {
+         throw new InitializationException("Unknown terrain code in map definition!");
+      }
+      return faction;
    }
 
    public void finish() {
