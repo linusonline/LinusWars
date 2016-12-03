@@ -87,24 +87,10 @@ public class TestMovementArrowController extends LinusWarsTest {
       assertMacDisallowsAllExtensionsToAllPathsThePathFinderFinds(new Position(0, 6));
    }
 
-   private Set<Position> generateAllPositionsInSquare(Position topLeft, Position bottomRight) {
-      int topLeftX = topLeft.getX();
-      int topLeftY = topLeft.getY();
-      int bottomRightX = bottomRight.getX();
-      int bottomRightY = bottomRight.getY();
-      Set<Position> allPositions = new HashSet<>((bottomRightX - topLeftX + 1) * (bottomRightY - topLeftY + 1));
-      for (int y = topLeftY; y <= bottomRightY; y++) {
-         for (int x = topLeftX; x <= bottomRightX; x++) {
-            allPositions.add(new Position(x, y));
-         }
-      }
-      return allPositions;
-   }
-
    private void assertMacDisallowsAllExtensionsToAllPathsThePathFinderFinds(Position origin) {
       LogicalUnit unit = _gameQueries.getUnitAtPosition(origin);
       Map<Position, PathWithCost> allowedPaths = getAllPathsForUnit(unit);
-      Set<Position> unreachablePositions = generateAllPositionsInSquare(new Position(0, 0), new Position(7, 7));
+      Set<Position> unreachablePositions = Utils.generateAllPositionsInSquare(new Position(0, 0), new Position(7, 7));
       unreachablePositions.removeAll(allowedPaths.keySet());
 
       for (PathWithCost path : allowedPaths.values()) {

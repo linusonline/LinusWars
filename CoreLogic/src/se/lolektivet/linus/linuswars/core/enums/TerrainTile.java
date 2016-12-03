@@ -98,6 +98,11 @@ public enum TerrainTile {
    SHOAL_EDGE_SW(TerrainType.SHOAL),
    SHOAL_EDGE_SE(TerrainType.SHOAL),
 
+   SHOAL_CORNER_NW(TerrainType.SHOAL),
+   SHOAL_CORNER_NE(TerrainType.SHOAL),
+   SHOAL_CORNER_SW(TerrainType.SHOAL),
+   SHOAL_CORNER_SE(TerrainType.SHOAL),
+
    SHOAL_END_N(TerrainType.SHOAL),
    SHOAL_END_S(TerrainType.SHOAL),
    SHOAL_END_W(TerrainType.SHOAL),
@@ -106,7 +111,6 @@ public enum TerrainTile {
    REEF(TerrainType.REEF),
 
    BRIDGE_HORIZONTAL(TerrainType.BRIDGE),
-
    BRIDGE_VERTICAL(TerrainType.BRIDGE);
 
    private TerrainType _terrainType;

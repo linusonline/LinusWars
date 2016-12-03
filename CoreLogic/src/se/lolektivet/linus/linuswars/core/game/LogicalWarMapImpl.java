@@ -3,6 +3,7 @@ package se.lolektivet.linus.linuswars.core.game;
 import se.lolektivet.linus.linuswars.core.IllegalMapException;
 import se.lolektivet.linus.linuswars.core.LogicException;
 import se.lolektivet.linus.linuswars.core.Position;
+import se.lolektivet.linus.linuswars.core.Utils;
 import se.lolektivet.linus.linuswars.core.enums.Faction;
 import se.lolektivet.linus.linuswars.core.enums.TerrainType;
 
@@ -71,9 +72,17 @@ public class LogicalWarMapImpl implements LogicalWarMapSetup {
    @Override
    public void validate() {
       if (_mapSizeX * _mapSizeY != _terrainTiles.size()) {
-
+         Collection<Position> missingPositions = Utils.generateAllPositionsInSquare(
+               new Position(0, 0), new Position(_rightmostTile.getX(), _bottomTile.getY()));
+         missingPositions.removeAll(_terrainTiles.keySet());
+         String missingPosString = "";
+         for (Position position : missingPositions) {
+            missingPosString += position + ",";
+         }
+         missingPosString = missingPosString.substring(0, missingPosString.length() - 1);
          throw new IllegalMapException("Some tiles of the map were not set! Map size is " + _mapSizeX + " by " +
-               _mapSizeY + ", missing " + (_mapSizeX * _mapSizeY - _terrainTiles.size()) + " tiles. Rightmost tile is on " + _rightmostTile);
+               _mapSizeY + ", missing " + (_mapSizeX * _mapSizeY - _terrainTiles.size()) + " tiles. Rightmost tile is on " + _rightmostTile +
+         ". Missing tiles: " + missingPosString);
       }
       _buildingsModule.validateSetup();
    }

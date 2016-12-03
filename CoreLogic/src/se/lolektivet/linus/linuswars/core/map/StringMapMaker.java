@@ -118,7 +118,7 @@ public class StringMapMaker {
    private TerrainType getTerrainOrThrow(Character character) {
       TerrainType terrainType = _terrainMap.get(character);
       if (terrainType == null) {
-         throw new IllegalMapException("Unknown terrain code in map definition!");
+         throw new IllegalMapException("Unknown terrain code '" + character + "' in map definition!");
       }
       return terrainType;
    }

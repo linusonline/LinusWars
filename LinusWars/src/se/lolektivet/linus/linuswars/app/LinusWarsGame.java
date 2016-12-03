@@ -76,7 +76,7 @@ public class LinusWarsGame extends BasicGame {
       GameSetup gameSetup = new GameSetup1();
 
       try {
-         startGameFromFile("maps/Point Stormy.lwmap", new EmptyGameSetup(), Arrays.asList(Faction.ORANGE_STAR, Faction.BLUE_MOON));
+         startGameFromFile("maps/spritetest.lwmap", new EmptyGameSetup(), Arrays.asList(Faction.ORANGE_STAR, Faction.BLUE_MOON));
       } catch (IOException e) {
          throw new RuntimeException("Couldn't load map file!", e);
       }
