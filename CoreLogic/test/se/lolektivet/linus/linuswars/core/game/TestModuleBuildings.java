@@ -2,7 +2,8 @@ package se.lolektivet.linus.linuswars.core.game;
 
 import org.junit.Assert;
 import org.junit.Test;
-import se.lolektivet.linus.linuswars.core.IllegalMapOrSetupException;
+import se.lolektivet.linus.linuswars.core.IllegalMapException;
+import se.lolektivet.linus.linuswars.core.IllegalSetupException;
 import se.lolektivet.linus.linuswars.core.LinusWarsTest;
 import se.lolektivet.linus.linuswars.core.Position;
 import se.lolektivet.linus.linuswars.core.enums.Faction;
@@ -57,14 +58,14 @@ public class TestModuleBuildings extends LinusWarsTest {
       Assert.assertTrue(buildingsModule.hasBuildingAtPosition(hqPosition));
    }
 
-   @Test (expected = IllegalMapOrSetupException.class)
+   @Test (expected = IllegalSetupException.class)
    public void throwsOnTwoHqsForSameFaction() {
       ModuleBuildings buildingsModule = new ModuleBuildings();
       buildingsModule.addBuilding(new Position(1, 1), TerrainType.HQ, Faction.BLUE_MOON);
       buildingsModule.addBuilding(new Position(1, 2), TerrainType.HQ, Faction.BLUE_MOON);
    }
 
-   @Test (expected = IllegalMapOrSetupException.class)
+   @Test (expected = IllegalSetupException.class)
    public void throwsOnNeutralHq() {
       ModuleBuildings buildingsModule = new ModuleBuildings();
       buildingsModule.addBuilding(new Position(1, 1), TerrainType.HQ, Faction.NEUTRAL);
@@ -78,14 +79,14 @@ public class TestModuleBuildings extends LinusWarsTest {
       buildingsModule.validateSetup();
    }
 
-   @Test (expected = IllegalMapOrSetupException.class)
+   @Test (expected = IllegalSetupException.class)
    public void validationRejectsSingleHq() {
       ModuleBuildings buildingsModule = new ModuleBuildings();
       buildingsModule.addBuilding(new Position(1, 2), TerrainType.HQ, Faction.BLUE_MOON);
       buildingsModule.validateSetup();
    }
 
-   @Test (expected = IllegalMapOrSetupException.class)
+   @Test (expected = IllegalSetupException.class)
    public void validationRejectsOrphanBuilding() {
       ModuleBuildings basesModule = new ModuleBuildings();
       basesModule.addBuilding(new Position(1, 1), TerrainType.HQ, Faction.BLUE_MOON);

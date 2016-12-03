@@ -9,6 +9,7 @@ import se.lolektivet.linus.linuswars.core.LogicException;
 import se.lolektivet.linus.linuswars.core.LogicalGameFactory;
 import se.lolektivet.linus.linuswars.core.enums.*;
 import se.lolektivet.linus.linuswars.core.game.maps.TestMap4x4PlainsString;
+import se.lolektivet.linus.linuswars.core.map.GameSetupAdapterForTest;
 import se.lolektivet.linus.linuswars.core.pathfinding.InfiniteInteger;
 import se.lolektivet.linus.linuswars.core.pathfinding.Path;
 import se.lolektivet.linus.linuswars.core.pathfinding.PathFactory;

@@ -1,6 +1,6 @@
 package se.lolektivet.linus.linuswars.core.game.maps;
 
-import se.lolektivet.linus.linuswars.core.StringMap;
+import se.lolektivet.linus.linuswars.core.map.StringMap;
 
 /**
  * Created by Linus on 2016-12-02.

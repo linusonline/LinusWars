@@ -4,6 +4,7 @@ import org.junit.Test;
 import se.lolektivet.linus.linuswars.core.enums.Faction;
 import se.lolektivet.linus.linuswars.core.enums.TerrainType;
 import se.lolektivet.linus.linuswars.core.game.LogicalWarMap;
+import se.lolektivet.linus.linuswars.core.map.MapFile;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -70,7 +71,7 @@ public class TestMapFile extends LinusWarsTest {
       assertSimpleMap(logicalWarMap);
    }
 
-   @Test(expected = IllegalMapOrSetupException.class)
+   @Test(expected = IllegalSetupException.class)
    public void testThrowOnWrongNumberOfFactions() throws IOException {
       String mapFileContent = "# This is a comment\n" +
             "LINUSMAP:3\n" +

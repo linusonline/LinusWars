@@ -1,4 +1,4 @@
-package se.lolektivet.linus.linuswars.core;
+package se.lolektivet.linus.linuswars.core.map;
 
 import se.lolektivet.linus.linuswars.core.enums.Faction;
 

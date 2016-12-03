@@ -1,6 +1,5 @@
-package se.lolektivet.linus.linuswars.core.maps;
+package se.lolektivet.linus.linuswars.core.map;
 
-import se.lolektivet.linus.linuswars.core.DefaultFactions;
 import se.lolektivet.linus.linuswars.core.GamePredeployer;
 
 /**

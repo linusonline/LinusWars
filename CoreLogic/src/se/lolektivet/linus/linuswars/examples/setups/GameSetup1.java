@@ -1,8 +1,9 @@
-package se.lolektivet.linus.linuswars.core.maps;
+package se.lolektivet.linus.linuswars.examples.setups;
 
 import se.lolektivet.linus.linuswars.core.GamePredeployer;
 import se.lolektivet.linus.linuswars.core.enums.Faction;
 import se.lolektivet.linus.linuswars.core.enums.UnitType;
+import se.lolektivet.linus.linuswars.core.map.GameSetupAdapter;
 
 import java.util.List;
 

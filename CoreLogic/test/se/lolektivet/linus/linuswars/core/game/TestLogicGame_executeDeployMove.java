@@ -6,6 +6,7 @@ import se.lolektivet.linus.linuswars.core.*;
 import se.lolektivet.linus.linuswars.core.enums.Faction;
 import se.lolektivet.linus.linuswars.core.enums.UnitType;
 import se.lolektivet.linus.linuswars.core.game.maps.TestMap_executeDeployMove;
+import se.lolektivet.linus.linuswars.core.map.GameSetupAdapterForTest;
 
 import static org.junit.Assert.assertEquals;
 

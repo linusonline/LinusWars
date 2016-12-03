@@ -1,5 +1,6 @@
-package se.lolektivet.linus.linuswars.core;
+package se.lolektivet.linus.linuswars.core.map;
 
+import se.lolektivet.linus.linuswars.core.IllegalMapException;
 import se.lolektivet.linus.linuswars.core.enums.Faction;
 import se.lolektivet.linus.linuswars.core.enums.TerrainType;
 
@@ -94,7 +95,7 @@ public class StringMapMaker {
    public void readRow(String row) {
       int index = 0;
       if (row.trim().isEmpty()) {
-         throw new IllegalMapOrSetupException("Map definition contained empty row!");
+         throw new IllegalMapException("Map definition contained empty row!");
       }
       while (index < row.length()) {
          if (' ' == row.charAt(index)) {
@@ -117,7 +118,7 @@ public class StringMapMaker {
    private TerrainType getTerrainOrThrow(Character character) {
       TerrainType terrainType = _terrainMap.get(character);
       if (terrainType == null) {
-         throw new IllegalMapOrSetupException("Unknown terrain code in map definition!");
+         throw new IllegalMapException("Unknown terrain code in map definition!");
       }
       return terrainType;
    }
@@ -125,7 +126,7 @@ public class StringMapMaker {
    private Faction getFactionOrThrow(Character character) {
       Faction faction = _factions.get(character);
       if (faction == null) {
-         throw new IllegalMapOrSetupException("Unknown terrain code in map definition!");
+         throw new IllegalMapException("Unknown terrain code in map definition!");
       }
       return faction;
    }

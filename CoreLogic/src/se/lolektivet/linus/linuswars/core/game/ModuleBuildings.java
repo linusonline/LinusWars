@@ -1,6 +1,6 @@
 package se.lolektivet.linus.linuswars.core.game;
 
-import se.lolektivet.linus.linuswars.core.IllegalMapOrSetupException;
+import se.lolektivet.linus.linuswars.core.IllegalSetupException;
 import se.lolektivet.linus.linuswars.core.Position;
 import se.lolektivet.linus.linuswars.core.enums.Faction;
 import se.lolektivet.linus.linuswars.core.enums.TerrainType;
@@ -31,10 +31,10 @@ public class ModuleBuildings implements BuildingsSetup {
       _logger.info("Adding " + buildingType + " for " + faction + " at " + position);
       if (buildingType == TerrainType.HQ) {
          if (faction == Faction.NEUTRAL) {
-            throw new IllegalMapOrSetupException("HQs cannot be neutral!");
+            throw new IllegalSetupException("HQs cannot be neutral!");
          }
          if (_hqsOfFactions.get(faction) != null) {
-            throw new IllegalMapOrSetupException("Only one HQ per faction!");
+            throw new IllegalSetupException("Only one HQ per faction!");
          }
          _hqsOfFactions.put(faction, position);
       }
@@ -88,10 +88,10 @@ public class ModuleBuildings implements BuildingsSetup {
    @Override
    public void validateSetup() {
       if (getFactions().size() != _hqsOfFactions.size()) {
-         throw new IllegalMapOrSetupException("All participating factions must have an HQ!");
+         throw new IllegalSetupException("All participating factions must have an HQ!");
       }
       if (getFactions().size() < 2) {
-         throw new IllegalMapOrSetupException("Setup must have at least two factions with one HQ each!");
+         throw new IllegalSetupException("Setup must have at least two factions with one HQ each!");
       }
    }
 }

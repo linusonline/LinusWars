@@ -1,10 +1,12 @@
 package se.lolektivet.linus.linuswars.graphicalgame;
 
 import org.newdawn.slick.Renderable;
+import se.lolektivet.linus.linuswars.core.game.LogicalWarMap;
+import se.lolektivet.linus.linuswars.core.game.LogicalWarMapSetup;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.core.IllegalMapOrSetupException;
-import se.lolektivet.linus.linuswars.core.LogicalMapMaker;
-import se.lolektivet.linus.linuswars.core.MapMaker;
+import se.lolektivet.linus.linuswars.core.IllegalMapException;
+import se.lolektivet.linus.linuswars.core.map.LogicalMapMaker;
+import se.lolektivet.linus.linuswars.core.map.MapMaker;
 import se.lolektivet.linus.linuswars.core.Position;
 import se.lolektivet.linus.linuswars.core.enums.Faction;
 import se.lolektivet.linus.linuswars.core.enums.TerrainTile;
@@ -22,7 +24,7 @@ public class GraphicalMapMaker implements MapMaker {
    private final GraphicalWarMap _graphicalWarMap;
    private final LogicalMapMaker _logicalMapMaker;
    private final Sprites _sprites;
-   private final LogicalWarMapImpl _logicalWarMap;
+   private final LogicalWarMap _logicalWarMap;
    private final Map<Position, Renderable> _buildings = new HashMap<>();
 
    private boolean _onTheFlyDetermined = false;
@@ -31,14 +33,15 @@ public class GraphicalMapMaker implements MapMaker {
    public GraphicalMapMaker(Sprites sprites, GraphicalWarMap graphicalWarMap) {
       _graphicalWarMap = graphicalWarMap;
       _sprites = sprites;
-      _logicalWarMap = new LogicalWarMapImpl(new ModuleBuildings());
-      _logicalMapMaker = new LogicalMapMaker(_logicalWarMap);
+      LogicalWarMapSetup logicalWarMapSetup = new LogicalWarMapImpl(new ModuleBuildings());
+      _logicalWarMap = logicalWarMapSetup;
+      _logicalMapMaker = new LogicalMapMaker(logicalWarMapSetup);
    }
 
    @Override
    public void addTerrain(TerrainTile terrainTile, int x, int y) {
       if (_onTheFlyDetermined && _buildOnTheFly) {
-         throw new IllegalMapOrSetupException("GraphicalWarMap may be built on-the-fly or not, but not both!");
+         throw new IllegalMapException("GraphicalWarMap may be built on-the-fly or not, but not both!");
       }
       _buildOnTheFly = false;
       _onTheFlyDetermined = true;
@@ -48,7 +51,7 @@ public class GraphicalMapMaker implements MapMaker {
    @Override
    public void addTerrain(TerrainType terrainType, int x, int y) {
       if (_onTheFlyDetermined && !_buildOnTheFly) {
-         throw new IllegalMapOrSetupException("GraphicalWarMap may be built on-the-fly or not, but not both!");
+         throw new IllegalMapException("GraphicalWarMap may be built on-the-fly or not, but not both!");
       }
       _buildOnTheFly = true;
       _onTheFlyDetermined = true;

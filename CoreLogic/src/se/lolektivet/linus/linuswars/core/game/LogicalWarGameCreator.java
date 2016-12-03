@@ -1,6 +1,6 @@
 package se.lolektivet.linus.linuswars.core.game;
 
-import se.lolektivet.linus.linuswars.core.MapMaker;
+import se.lolektivet.linus.linuswars.core.map.MapMaker;
 import se.lolektivet.linus.linuswars.core.Position;
 import se.lolektivet.linus.linuswars.core.enums.Faction;
 import se.lolektivet.linus.linuswars.core.enums.TerrainTile;

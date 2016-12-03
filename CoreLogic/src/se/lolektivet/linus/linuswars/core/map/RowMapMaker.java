@@ -1,5 +1,6 @@
-package se.lolektivet.linus.linuswars.core;
+package se.lolektivet.linus.linuswars.core.map;
 
+import se.lolektivet.linus.linuswars.core.IllegalMapException;
 import se.lolektivet.linus.linuswars.core.enums.Faction;
 import se.lolektivet.linus.linuswars.core.enums.TerrainTile;
 import se.lolektivet.linus.linuswars.core.enums.TerrainType;
@@ -35,7 +36,7 @@ public class RowMapMaker {
 
    public void addTerrain(TerrainType terrainType) {
       if (_buildingAdded) {
-         throw new IllegalMapOrSetupException("You must add all terrain before you start adding buildings!");
+         throw new IllegalMapException("You must add all terrain before you start adding buildings!");
       }
       _mapMaker.addTerrain(terrainType, _currentPlaceInRow, _currentRow);
       _currentPlaceInRow++;
@@ -44,7 +45,7 @@ public class RowMapMaker {
    public void nextRow() {
       if (_widthDetermined) {
          if (_mapWidth != _currentPlaceInRow) {
-            throw new IllegalMapOrSetupException("All rows in map must be the same length!");
+            throw new IllegalMapException("All rows in map must be the same length!");
          }
       } else {
          _mapWidth = _currentPlaceInRow;
@@ -55,10 +56,10 @@ public class RowMapMaker {
 
    public void addBuilding(TerrainType buildingType, Faction faction, int x, int y) {
       if (!isValid()) {
-         throw new IllegalMapOrSetupException("You must complete the map (all rows the same length, end with nextRow) before you start adding buildings!");
+         throw new IllegalMapException("You must complete the map (all rows the same length, end with nextRow) before you start adding buildings!");
       }
       if (x < 0 || x > _mapWidth || y < 0 || y > _currentRow) {
-         throw new IllegalMapOrSetupException("Building is outside map!");
+         throw new IllegalMapException("Building is outside map!");
       }
       _mapMaker.addBuilding(buildingType, faction, x, y);
       _buildingAdded = true;
@@ -66,7 +67,7 @@ public class RowMapMaker {
 
    public void finish() {
       if (!isValid()) {
-         throw new IllegalMapOrSetupException("Map is invalid! All rows must be the same length, end with nextRow.");
+         throw new IllegalMapException("Map is invalid! All rows must be the same length, end with nextRow.");
       }
       _mapMaker.finish();
    }

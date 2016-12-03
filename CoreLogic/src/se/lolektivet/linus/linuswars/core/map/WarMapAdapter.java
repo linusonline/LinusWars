@@ -1,4 +1,4 @@
-package se.lolektivet.linus.linuswars.core;
+package se.lolektivet.linus.linuswars.core.map;
 
 /**
  * Created by Linus on 2015-12-21.

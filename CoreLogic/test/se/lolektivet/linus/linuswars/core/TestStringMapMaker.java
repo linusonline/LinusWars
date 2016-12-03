@@ -4,6 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import se.lolektivet.linus.linuswars.core.enums.Faction;
 import se.lolektivet.linus.linuswars.core.enums.TerrainType;
+import se.lolektivet.linus.linuswars.core.map.MapMaker;
+import se.lolektivet.linus.linuswars.core.map.StringMapMaker;
 
 import java.util.Arrays;
 
@@ -131,32 +133,32 @@ public class TestStringMapMaker extends LinusWarsTest {
       verify(_mapMakerMock).addTerrain(TerrainType.PLAINS, 1, 2);
    }
 
-   @Test(expected = IllegalMapOrSetupException.class)
+   @Test(expected = IllegalMapException.class)
    public void testThrowOnEmptyLine() {
       _stringMapMaker.readRow("");
    }
 
-   @Test(expected = IllegalMapOrSetupException.class)
+   @Test(expected = IllegalMapException.class)
    public void testThrowOnOnlySpace() {
       _stringMapMaker.readRow(" ");
    }
 
-   @Test(expected = IllegalMapOrSetupException.class)
+   @Test(expected = IllegalMapException.class)
    public void testThrowOnOnlyWhiteSpace() {
       _stringMapMaker.readRow(" \n\t\r");
    }
 
-   @Test(expected = IllegalMapOrSetupException.class)
+   @Test(expected = IllegalMapException.class)
    public void testThrowOnUnknownCode() {
       _stringMapMaker.readRow("LLLXLLL");
    }
 
-   @Test(expected = IllegalMapOrSetupException.class)
+   @Test(expected = IllegalMapException.class)
    public void testThrowOnUnknownFaction() {
       _stringMapMaker.readRow("LLLBxLLL");
    }
 
-   @Test(expected = IllegalMapOrSetupException.class)
+   @Test(expected = IllegalMapException.class)
    public void testThrowOnUnknownFactionNumber() {
       _stringMapMaker.readRow("LLLB9LLL");
    }

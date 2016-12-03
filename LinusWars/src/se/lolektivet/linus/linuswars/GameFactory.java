@@ -1,11 +1,12 @@
 package se.lolektivet.linus.linuswars;
 
+import se.lolektivet.linus.linuswars.core.map.WarMap;
 import se.lolektivet.linus.linuswars.graphicalgame.*;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
 import se.lolektivet.linus.linuswars.core.*;
 import se.lolektivet.linus.linuswars.core.enums.Faction;
 import se.lolektivet.linus.linuswars.core.game.*;
-import se.lolektivet.linus.linuswars.core.maps.GameSetup;
+import se.lolektivet.linus.linuswars.core.map.GameSetup;
 
 import java.util.List;
 

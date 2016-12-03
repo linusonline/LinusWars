@@ -7,18 +7,13 @@ import se.lolektivet.linus.linuswars.core.enums.Direction;
 import se.lolektivet.linus.linuswars.core.enums.Faction;
 import se.lolektivet.linus.linuswars.core.enums.UnitType;
 import se.lolektivet.linus.linuswars.core.game.*;
-import se.lolektivet.linus.linuswars.core.game.maps.TestMap3;
 import se.lolektivet.linus.linuswars.core.game.maps.TestMapPathfinder;
-import se.lolektivet.linus.linuswars.core.maps.Map1;
+import se.lolektivet.linus.linuswars.core.map.GameSetupAdapterForTest;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by Linus on 2014-09-24.

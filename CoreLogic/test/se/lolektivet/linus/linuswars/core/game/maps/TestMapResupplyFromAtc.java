@@ -1,8 +1,8 @@
 package se.lolektivet.linus.linuswars.core.game.maps;
 
-import se.lolektivet.linus.linuswars.core.MapMaker;
-import se.lolektivet.linus.linuswars.core.RowMapMaker;
-import se.lolektivet.linus.linuswars.core.WarMapAdapter;
+import se.lolektivet.linus.linuswars.core.map.MapMaker;
+import se.lolektivet.linus.linuswars.core.map.RowMapMaker;
+import se.lolektivet.linus.linuswars.core.map.WarMapAdapter;
 import se.lolektivet.linus.linuswars.core.enums.Faction;
 import se.lolektivet.linus.linuswars.core.enums.TerrainTile;
 import se.lolektivet.linus.linuswars.core.enums.TerrainType;

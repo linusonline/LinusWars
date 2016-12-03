@@ -12,8 +12,8 @@ import se.lolektivet.linus.linuswars.core.enums.Faction;
 import se.lolektivet.linus.linuswars.core.enums.UnitType;
 import se.lolektivet.linus.linuswars.core.game.*;
 import se.lolektivet.linus.linuswars.core.game.maps.TestMapPathfinder;
+import se.lolektivet.linus.linuswars.core.map.GameSetupAdapterForTest;
 import se.lolektivet.linus.linuswars.core.pathfinding.*;
-import se.lolektivet.linus.linuswars.pathfinding.maps.TestMapMovementArrowController;
 
 import java.util.HashSet;
 import java.util.Map;

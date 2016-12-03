@@ -2,8 +2,7 @@ package se.lolektivet.linus.linuswars.core;
 
 import se.lolektivet.linus.linuswars.core.enums.Faction;
 import se.lolektivet.linus.linuswars.core.game.*;
-import se.lolektivet.linus.linuswars.core.maps.EmptyGameSetup;
-import se.lolektivet.linus.linuswars.core.maps.GameSetup;
+import se.lolektivet.linus.linuswars.core.map.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,10 +26,10 @@ public class LogicalGameFactory {
 
    public LogicalWarMap createLogicalMap(WarMap warMap, List<Faction> factions) {
       if (warMap.getNrOfFactions() != factions.size()) {
-         throw new IllegalMapOrSetupException("This map needs " + warMap.getNrOfFactions() + " factions, but you supplied " + factions.size());
+         throw new IllegalSetupException("This map needs " + warMap.getNrOfFactions() + " factions, but you supplied " + factions.size());
       }
 
-      LogicalWarMapImpl logicalWarMap = new LogicalWarMapImpl(new ModuleBuildings());
+      LogicalWarMapSetup logicalWarMap = new LogicalWarMapImpl(new ModuleBuildings());
       MapMaker mapMaker = new LogicalMapMaker(logicalWarMap);
       warMap.create(mapMaker, factions);
       return logicalWarMap;
@@ -45,7 +44,7 @@ public class LogicalGameFactory {
 
    public void deployToLogicalGame(LogicalWarGame logicalWarGame, GameSetup gameSetup, List<Faction> factions) {
       if (gameSetup.getNrOfFactions() > factions.size()) {
-         throw new IllegalMapOrSetupException("This setup needs " + gameSetup.getNrOfFactions() + " factions, but you supplied " + factions.size());
+         throw new IllegalSetupException("This setup needs " + gameSetup.getNrOfFactions() + " factions, but you supplied " + factions.size());
       }
 
       gameSetup.preDeploy(new LogicalGamePredeployer(logicalWarGame, new LogicalUnitFactory(new FuelLogic())), factions);

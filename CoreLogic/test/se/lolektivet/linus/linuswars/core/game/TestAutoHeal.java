@@ -9,6 +9,7 @@ import se.lolektivet.linus.linuswars.core.Position;
 import se.lolektivet.linus.linuswars.core.enums.Faction;
 import se.lolektivet.linus.linuswars.core.enums.UnitType;
 import se.lolektivet.linus.linuswars.core.game.maps.TestMapAutoHeal;
+import se.lolektivet.linus.linuswars.core.map.GameSetupAdapterForTest;
 
 import static org.junit.Assert.assertEquals;
 
