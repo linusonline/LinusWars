@@ -131,32 +131,32 @@ public class TestStringMapMaker extends LinusWarsTest {
       verify(_mapMakerMock).addTerrain(TerrainType.PLAINS, 1, 2);
    }
 
-   @Test(expected = InitializationException.class)
+   @Test(expected = IllegalMapOrSetupException.class)
    public void testThrowOnEmptyLine() {
       _stringMapMaker.readRow("");
    }
 
-   @Test(expected = InitializationException.class)
+   @Test(expected = IllegalMapOrSetupException.class)
    public void testThrowOnOnlySpace() {
       _stringMapMaker.readRow(" ");
    }
 
-   @Test(expected = InitializationException.class)
+   @Test(expected = IllegalMapOrSetupException.class)
    public void testThrowOnOnlyWhiteSpace() {
       _stringMapMaker.readRow(" \n\t\r");
    }
 
-   @Test(expected = InitializationException.class)
+   @Test(expected = IllegalMapOrSetupException.class)
    public void testThrowOnUnknownCode() {
       _stringMapMaker.readRow("LLLXLLL");
    }
 
-   @Test(expected = InitializationException.class)
+   @Test(expected = IllegalMapOrSetupException.class)
    public void testThrowOnUnknownFaction() {
       _stringMapMaker.readRow("LLLBxLLL");
    }
 
-   @Test(expected = InitializationException.class)
+   @Test(expected = IllegalMapOrSetupException.class)
    public void testThrowOnUnknownFactionNumber() {
       _stringMapMaker.readRow("LLLB9LLL");
    }

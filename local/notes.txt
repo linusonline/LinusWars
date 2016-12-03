@@ -72,3 +72,26 @@ No secondary weapon:
 Mech:
 	Defaults (always uses secondary):
 		Infantry, Mech, B_Copter, T_Copter
+
+
+Standard War Room Maps
+	Spann Island
+	Moji Island
+	Duo Falls
+	Sole Harbor
+	Pivot Isle
+	Land's End
+	Kita Straight
+	Point Stormy
+	Ridge Island
+	Mial's Hope
+	Bounty River
+	Toil Ferry
+	Twin Isle
+	Dire Range
+	Egg Islands
+	Terra Maw
+	Stamp Islands
+	Rivers Four
+	Ring Islands
+	Last Mission

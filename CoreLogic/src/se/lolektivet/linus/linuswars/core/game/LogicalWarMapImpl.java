@@ -1,5 +1,6 @@
 package se.lolektivet.linus.linuswars.core.game;
 
+import se.lolektivet.linus.linuswars.core.IllegalMapOrSetupException;
 import se.lolektivet.linus.linuswars.core.LogicException;
 import se.lolektivet.linus.linuswars.core.Position;
 import se.lolektivet.linus.linuswars.core.enums.Faction;
@@ -49,19 +50,27 @@ public class LogicalWarMapImpl implements LogicalWarMap {
       internalSetTerrainType(x, y, terrainType);
    }
 
+   private Position _rightmostTile = new Position(0, 0);
+   private Position _bottomTile = new Position(0, 0);
+
    private void internalSetTerrainType(int x, int y, TerrainType terrainType) {
-      _terrainTiles.put(new Position(x, y), terrainType);
+      Position newTilePosition = new Position(x, y);
+      _terrainTiles.put(newTilePosition, terrainType);
       if (x >= _mapSizeX) {
          _mapSizeX = x + 1;
+         _rightmostTile = newTilePosition;
       }
       if (y >= _mapSizeY) {
          _mapSizeY = y + 1;
+         _bottomTile = newTilePosition;
       }
    }
 
    public void validate() {
       if (_mapSizeX * _mapSizeY != _terrainTiles.size()) {
-         throw new MapUninitializedException("Some tiles of the map were not set!");
+
+         throw new IllegalMapOrSetupException("Some tiles of the map were not set! Map size is " + _mapSizeX + " by " +
+               _mapSizeY + ", missing " + (_mapSizeX * _mapSizeY - _terrainTiles.size()) + " tiles. Rightmost tile is on " + _rightmostTile);
       }
       _buildingsModule.validateSetup();
    }
@@ -90,11 +99,5 @@ public class LogicalWarMapImpl implements LogicalWarMap {
             position.getX() < getWidth() &&
             position.getY() >= 0 &&
             position.getY() < getHeight();
-   }
-
-   static class MapUninitializedException extends RuntimeException {
-      public MapUninitializedException(String message) {
-         super(message);
-      }
    }
 }

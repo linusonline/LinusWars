@@ -70,7 +70,7 @@ public class TestMapFile extends LinusWarsTest {
       assertSimpleMap(logicalWarMap);
    }
 
-   @Test(expected = InitializationException.class)
+   @Test(expected = IllegalMapOrSetupException.class)
    public void testThrowOnWrongNumberOfFactions() throws IOException {
       String mapFileContent = "# This is a comment\n" +
             "LINUSMAP:3\n" +

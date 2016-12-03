@@ -27,7 +27,7 @@ public class LogicalGameFactory {
 
    public LogicalWarMap createLogicalMap(WarMap warMap, List<Faction> factions) {
       if (warMap.getNrOfFactions() != factions.size()) {
-         throw new InitializationException("This map needs " + warMap.getNrOfFactions() + " factions, but you supplied " + factions.size());
+         throw new IllegalMapOrSetupException("This map needs " + warMap.getNrOfFactions() + " factions, but you supplied " + factions.size());
       }
 
       LogicalWarMapImpl logicalWarMap = new LogicalWarMapImpl(new ModuleBuildings());
@@ -45,7 +45,7 @@ public class LogicalGameFactory {
 
    public void deployToLogicalGame(LogicalWarGame logicalWarGame, GameSetup gameSetup, List<Faction> factions) {
       if (gameSetup.getNrOfFactions() > factions.size()) {
-         throw new InitializationException("This setup needs " + gameSetup.getNrOfFactions() + " factions, but you supplied " + factions.size());
+         throw new IllegalMapOrSetupException("This setup needs " + gameSetup.getNrOfFactions() + " factions, but you supplied " + factions.size());
       }
 
       gameSetup.preDeploy(new LogicalGamePredeployer(logicalWarGame, new LogicalUnitFactory(new FuelLogic())), factions);

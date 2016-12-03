@@ -13,7 +13,7 @@ import java.util.*;
  */
 public class PathFinder {
    private final LogicalUnit _travellingUnit;
-   private WarGameQueries _warGameQueries;
+   private final WarGameQueries _warGameQueries;
    private final CostCalculator _costCalculator;
    private Cost _limit;
 

@@ -2,7 +2,7 @@ package se.lolektivet.linus.linuswars.graphicalgame;
 
 import org.newdawn.slick.Renderable;
 import se.lolektivet.linus.linuswars.graphics.Sprites;
-import se.lolektivet.linus.linuswars.core.InitializationException;
+import se.lolektivet.linus.linuswars.core.IllegalMapOrSetupException;
 import se.lolektivet.linus.linuswars.core.LogicalMapMaker;
 import se.lolektivet.linus.linuswars.core.MapMaker;
 import se.lolektivet.linus.linuswars.core.Position;
@@ -38,7 +38,7 @@ public class GraphicalMapMaker implements MapMaker {
    @Override
    public void addTerrain(TerrainTile terrainTile, int x, int y) {
       if (_onTheFlyDetermined && _buildOnTheFly) {
-         throw new InitializationException("GraphicalWarMap may be built on-the-fly or not, but not both!");
+         throw new IllegalMapOrSetupException("GraphicalWarMap may be built on-the-fly or not, but not both!");
       }
       _buildOnTheFly = false;
       _onTheFlyDetermined = true;
@@ -48,7 +48,7 @@ public class GraphicalMapMaker implements MapMaker {
    @Override
    public void addTerrain(TerrainType terrainType, int x, int y) {
       if (_onTheFlyDetermined && !_buildOnTheFly) {
-         throw new InitializationException("GraphicalWarMap may be built on-the-fly or not, but not both!");
+         throw new IllegalMapOrSetupException("GraphicalWarMap may be built on-the-fly or not, but not both!");
       }
       _buildOnTheFly = true;
       _onTheFlyDetermined = true;

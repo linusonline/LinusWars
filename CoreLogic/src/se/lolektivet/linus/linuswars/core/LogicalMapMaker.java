@@ -23,7 +23,7 @@ public class LogicalMapMaker implements MapMaker {
    @Override
    public void addTerrain(TerrainType terrainTile, int x, int y) {
       if (terrainTile.isBuilding()) {
-         throw new InitializationException();
+         throw new IllegalMapOrSetupException();
       }
       Position tilePosition = new Position(x, y);
       if (_logicalWarMap.hasTerrainForTile(tilePosition)) {
@@ -35,13 +35,13 @@ public class LogicalMapMaker implements MapMaker {
    @Override
    public void addBuilding(TerrainType buildingType, Faction faction, int x, int y) {
       if (!buildingType.isBuilding()) {
-         throw new InitializationException();
+         throw new IllegalMapOrSetupException();
       }
       Position tilePosition = new Position(x, y);
       if (_logicalWarMap.hasTerrainForTile(tilePosition)) {
          TerrainType previousType = _logicalWarMap.getTerrainForTile(tilePosition);
          if (previousType.isBuilding()) {
-            throw new InitializationException("Tried to set two buildings at same position!");
+            throw new IllegalMapOrSetupException("Tried to set two buildings at same position!");
          }
       }
       _logicalWarMap.setBuilding(x, y, buildingType, faction);

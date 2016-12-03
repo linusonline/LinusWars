@@ -1,6 +1,6 @@
 package se.lolektivet.linus.linuswars.core.game;
 
-import se.lolektivet.linus.linuswars.core.InitializationException;
+import se.lolektivet.linus.linuswars.core.IllegalMapOrSetupException;
 import se.lolektivet.linus.linuswars.core.LogicException;
 import se.lolektivet.linus.linuswars.core.PathFinder;
 import se.lolektivet.linus.linuswars.core.Position;
@@ -148,7 +148,7 @@ public class LogicalWarGame implements WarGameMoves, WarGameSetup, WarGameQuerie
    @Override
    public void callGameStart() {
       if (_buildingsModule.getFactions().size() != _turnOrderModule.numberOfFactions()) {
-         throw new InitializationException("BuildingsModule had wrong number of factions! (" + _buildingsModule.getFactions().size() + " instead of " + _turnOrderModule.numberOfFactions() + ")");
+         throw new IllegalMapOrSetupException("BuildingsModule had wrong number of factions! (" + _buildingsModule.getFactions().size() + " instead of " + _turnOrderModule.numberOfFactions() + ")");
       }
       _gameStarted = true;
       doBeginningOfTurn();
